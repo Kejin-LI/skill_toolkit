@@ -1091,8 +1091,16 @@
     .inspector-pane[hidden] { display: none; }
     .skill-member-list { display: grid; gap: 7px; }
     .skill-member { padding: 10px; border: 1px solid var(--line); border-radius: 7px; background: #fff; }
-    .skill-member-head { display: flex; justify-content: space-between; gap: 8px; color: var(--text); font-size: 11.5px; font-weight: 650; }
-    .skill-member-head > span:first-child { flex: 1; }
+    .skill-member-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--text); font-size: 11.5px; font-weight: 650; }
+    .skill-member-head > span:first-child { min-width: 0; flex: 1; }
+    .skill-member-version { color: var(--faint); font-weight: 550; }
+    .skill-member-status { flex: 0 0 auto; padding: 3px 7px; border-radius: 999px; font-size: 10px; font-weight: 650; line-height: 1.2; }
+    .skill-member-status.completed { color: var(--green); background: var(--green-bg); }
+    .skill-member-status.debugging { color: #8b5b00; background: var(--amber-bg); }
+    .skill-member-status.debugging::before { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border: 1.5px solid currentColor; border-right-color: transparent; border-radius: 50%; content: ""; vertical-align: -1px; animation: skill-status-spin .8s linear infinite; }
+    .skill-member-status.queued { color: var(--muted); background: var(--surface-soft); border: 1px solid var(--line); }
+    .skill-member.targeted { border-color: var(--primary); background: var(--violet-bg); box-shadow: 0 0 0 3px rgba(108,92,231,.1); }
+    @keyframes skill-status-spin { to { transform: rotate(360deg); } }
     .skill-member-detail { display: inline-flex; align-items: center; gap: 4px; padding: 0; border: 0; background: transparent; color: var(--primary-ink); font: inherit; font-size: 10.5px; cursor: pointer; }
     .skill-member-detail:hover { text-decoration: underline; }
     .skill-member-copy { margin-top: 5px; color: var(--muted); font-size: 10.5px; line-height: 1.5; }
@@ -1103,15 +1111,19 @@
     .diff-badge.remove { color: #b44242; background: #fdf0f0; }
     .diff-badge.change { color: var(--primary-ink); background: var(--violet-bg); }
     .eval-module { min-width: 0; padding: 16px; overflow: hidden; background: rgba(255,255,255,.72); }
-    .result-task-strip { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 11px; border-bottom: 1px solid var(--line); }
+    .eval-module > .result-column-head { border-bottom: 0; padding-bottom: 0; }
+    .result-task-strip { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 11px; }
     .result-task-strip .source-value { flex: 1; margin-top: 0; }
     #resultTaskTextV2 { margin-top: 14px; }
     #modelResultRail { margin-top: 24px; }
     .result-task-nav { display: flex; gap: 5px; overflow-x: auto; }
     .result-task-nav button { flex: 0 0 auto; padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--muted); font: inherit; font-size: 10.5px; cursor: pointer; }
     .result-task-nav button.active { border-color: var(--primary); color: var(--primary-ink); background: var(--violet-bg); }
-    .model-result-rail { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
-    .model-result-card { flex: 0 0 min(330px, 78vw); min-height: 380px; padding: 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff; scroll-snap-align: start; }
+    .model-result-rail { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; touch-action: pan-y; }
+    .model-result-card { flex: 0 0 min(330px, 78vw); min-height: 380px; padding: 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff; scroll-snap-align: start; cursor: grab; user-select: none; }
+    .model-result-card:active { cursor: grabbing; }
+    .model-result-card.dragging { opacity: .45; }
+    .model-result-card.drag-over { border-color: var(--primary); background: var(--violet-bg); }
     .model-result-card:first-child { border-color: rgba(108,92,231,.42); background: #fbfaff; }
     .model-result-card .result-body { min-height: 210px; }
     .model-result-card .result-order { flex-wrap: wrap; }
@@ -1194,12 +1206,6 @@
     .feedback-note { width: 100%; margin-top: 16px; padding: 10px 0; border: 0; border-bottom: 1px solid var(--line-strong); outline: 0; resize: none; background: transparent; font-size: 13px; }
     .feedback-note:focus { border-color: var(--primary); }
     .tuning-actions { display: flex; justify-content: flex-end; margin-top: 20px; }
-    .iteration-result { display: flex; align-items: flex-start; gap: 12px; margin-top: 26px; padding: 15px; border-radius: 10px; background: var(--green-bg); }
-    .iteration-result-icon { width: 28px; height: 28px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 8px; color: var(--green); background: #fff; }
-    .iteration-result-title { color: #177d5f; font-size: 13px; font-weight: 700; }
-    .iteration-result-copy { margin-top: 3px; color: #39816d; font-size: 12px; line-height: 1.5; }
-    .iteration-result .btn { margin-left: auto; }
-
     .member-list { display: flex; flex-direction: column; gap: 8px; }
     .member-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--surface-soft); }
     .member-order { width: 22px; height: 22px; flex: 0 0 auto; border-radius: 7px; display: grid; place-items: center; font-size: 11.5px; font-weight: 600; color: var(--primary-ink); background: var(--violet-bg); }
@@ -1231,8 +1237,6 @@
       .debug-steps { gap: 10px; }
       .debug-step { font-size: 11px; }
       .tuning-head { align-items: flex-start; flex-direction: column; }
-      .iteration-result { flex-wrap: wrap; }
-      .iteration-result .btn { margin-left: 40px; }
     }
 
     /* studio: AI 对话式创建 */
@@ -2124,7 +2128,8 @@
                 <article class="result-model"><div class="result-column-head"><h3 class="result-column-title">A. 模型回答</h3><span class="result-column-meta">Seed-Base</span></div><div class="result-body" id="seedResult">识别到试点范围与预算状态；报价和预算已标记为人工确认，并生成下周三前的跟进任务。</div><span class="result-rank">当前第 1 名</span><div class="result-order"><button class="active" type="button" data-result-rank="seed">排第 1</button><button type="button" data-result-rank="gpt">排第 2</button></div></article>
                 <article class="result-model"><div class="result-column-head"><h3 class="result-column-title">B. 模型回答</h3><span class="result-column-meta">GPT-5</span></div><div class="result-body" id="gptResult">提取到试点计划和报价需求，但未明确预算确认责任人，也没有给出可执行的后续动作。</div><span class="result-rank muted">当前第 2 名</span><div class="result-order"><button type="button" data-result-rank="gpt">排第 1</button><button class="active" type="button" data-result-rank="seed">排第 2</button></div></article>
               </div>
-              <section class="tuning-card"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">这轮排序完成了吗？</h3><p class="tuning-sub" id="feedbackHint">确认最佳结果后，生成针对 Skill 或模型适配的迭代建议。</p></div></div><div class="feedback-area"><textarea class="feedback-note" id="feedbackNote" rows="2" placeholder="补充一句反馈（可选）"></textarea></div><div class="iteration-result" id="iterationResult" hidden><span class="iteration-result-icon"><svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12l4 4 9-10"/></svg></span><div><div class="iteration-result-title" id="planState">AI 迭代建议</div><div class="iteration-result-copy" id="planSummary">补全风险确认与下一步动作规则。</div></div><button class="btn btn-soft" id="applyIteration" type="button">继续调试</button><button class="btn btn-primary" id="confirmIteration" type="button">确认执行</button></div><div class="tuning-actions"><button class="btn btn-primary" id="generatePlan" type="button">生成迭代建议</button></div></section>
+              <section class="tuning-card"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">补充本轮反馈</h3><p class="tuning-sub" id="feedbackHint">记录模型排序中的判断依据，供后续技能迭代使用。</p></div></div><div class="feedback-area"><textarea class="feedback-note" id="feedbackNote" rows="2" placeholder="补充一句反馈（可选）"></textarea></div></section>
+              <div class="tuning-actions"><button class="btn btn-primary" id="submitFeedback" type="button">开始迭代</button></div>
             </section>
           </section>
         </div>
@@ -4050,6 +4055,7 @@
       "gemini-pro": { name: "Gemini Pro" }
     };
     const modelRanks = {};
+    let draggedModelId = "";
     const skillDetails = {
       extract_meeting_insights: {
         title: "extract_meeting_insights", purpose: "提取需求、预算、决策人与后续动作。",
@@ -4082,6 +4088,14 @@
       support: ["classify_customer_intent", "draft_customer_reply", "check_write_policy"],
       hr: ["extract_meeting_insights", "classify_customer_intent"],
       finance: ["check_write_policy", "sales_followup_flow"]
+    };
+    const skillMemberStatuses = {
+      extract_meeting_insights: ["已完成", "completed"],
+      match_customer_record: ["调试中", "debugging"],
+      sales_followup_flow: ["排队中", "queued"],
+      classify_customer_intent: ["已完成", "completed"],
+      draft_customer_reply: ["调试中", "debugging"],
+      check_write_policy: ["排队中", "queued"]
     };
 
     function addGeneratedSkillToDebug(id) {
@@ -4143,7 +4157,8 @@
         const formalMemberVersion = item?.querySelector(".debug-object-version")?.value || "V1";
         const major = Number.parseInt(formalMemberVersion.replace(/^V/i, ""), 10) || 1;
         const version = debugMinorVersion > 0 ? `V${major}.${debugMinorVersion}` : formalMemberVersion;
-        return `<article class="skill-member"><div class="skill-member-head"><span>${escapeHtml(name)}</span><span>${escapeHtml(version)}</span></div><div class="skill-member-copy">${escapeHtml(purpose)}</div><button class="skill-member-detail" type="button" data-skill-detail="${escapeHtml(id)}">查看全部内容 <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></article>`;
+        const [status, statusClass] = skillMemberStatuses[id] || ["排队中", "queued"];
+        return `<article class="skill-member" data-skill-member="${escapeHtml(id)}"><div class="skill-member-head"><span>${escapeHtml(name)}</span><span class="skill-member-version">${escapeHtml(version)}</span><span class="skill-member-status ${statusClass}">${status}</span></div><div class="skill-member-copy">${escapeHtml(purpose)}</div><button class="skill-member-detail" type="button" data-skill-detail="${escapeHtml(id)}">定位调试对象 <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></article>`;
       }).join("");
     }
 
@@ -4156,7 +4171,7 @@
       };
       const versions = item.versions || [];
       const selectedVersion = document.querySelector(`[data-debug-object="${CSS.escape(id)}"] .debug-object-version`)?.value
-        || document.querySelector(`[data-skill-detail="${CSS.escape(id)}"]`)?.closest(".skill-member")?.querySelector(".skill-member-head span:last-child")?.textContent
+        || document.querySelector(`[data-skill-detail="${CSS.escape(id)}"]`)?.closest(".skill-member")?.querySelector(".skill-member-version")?.textContent
         || "V1";
       const baseVersion = Number.parseInt(selectedVersion.replace(/^V/i, ""), 10) || 1;
       let activeVersionIndex = versions.length - 1;
@@ -4203,9 +4218,29 @@
       modal.classList.add("open");
     }
 
+    function focusDebugObject(id) {
+      const selectedByPackage = debugSelection.includes("sales_followup_package") && (debugSceneSkills[debugScene] || []).includes(id);
+      if (!debugSelection.includes(id) && !selectedByPackage) {
+        debugSelection = [id];
+        debugSource = "skills";
+        debugActiveId = id;
+        renderDebugSelection();
+      }
+      switchView("debug");
+      goToDebugStage(3);
+      window.requestAnimationFrame(() => {
+        document.querySelectorAll(".skill-member.targeted").forEach(card => card.classList.remove("targeted"));
+        const card = document.querySelector(`[data-skill-member="${CSS.escape(id)}"]`);
+        if (!card) return;
+        card.classList.add("targeted");
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        window.setTimeout(() => card.classList.remove("targeted"), 1800);
+      });
+    }
+
     document.getElementById("skillMemberList").addEventListener("click", event => {
       const button = event.target.closest("[data-skill-detail]");
-      if (button) openSkillDetail(button.dataset.skillDetail);
+      if (button) focusDebugObject(button.dataset.skillDetail);
     });
     document.querySelectorAll("[data-close-skill-detail]").forEach(button => button.addEventListener("click", () => {
       const modal = document.getElementById("skillDetailModal");
@@ -4381,12 +4416,21 @@
       document.getElementById("gptResult").textContent = item.gpt;
       document.getElementById("debugTaskCount").textContent = `评测集 3 条 · 当前 ${String(activeEvalIndex + 1).padStart(2, "0")}`;
       document.querySelectorAll("[data-eval-index]").forEach(button => button.classList.toggle("active", Number(button.dataset.evalIndex) === activeEvalIndex));
-      document.getElementById("iterationResult").hidden = true;
       renderModelResults();
     }
 
     function getSelectedDebugModels() {
-      return [...document.querySelectorAll(".model-chip input:checked")].map(input => input.value);
+      return [...document.querySelectorAll("#debugStage2 .model-chip input:checked")].map(input => input.value);
+    }
+
+    function moveModelToRank(selected, id, nextRank) {
+      const ordered = [...selected].sort((a, b) => modelRanks[a] - modelRanks[b]);
+      const currentIndex = ordered.indexOf(id);
+      if (currentIndex < 0) return;
+      ordered.splice(currentIndex, 1);
+      ordered.splice(Math.max(0, Math.min(nextRank - 1, ordered.length)), 0, id);
+      ordered.forEach((modelId, index) => { modelRanks[modelId] = index + 1; });
+      renderModelResults();
     }
 
     function renderModelResults() {
@@ -4396,24 +4440,84 @@
       const selected = getSelectedDebugModels();
       selected.forEach((id, index) => { if (!modelRanks[id]) modelRanks[id] = index + 1; });
       const ranked = [...selected].sort((a, b) => modelRanks[a] - modelRanks[b]);
-      rail.innerHTML = selected.map((id, index) => {
+      rail.innerHTML = ranked.map((id, index) => {
         const model = debugModels[id] || { name: id };
         const answer = model.answers?.[activeEvalIndex] || `${model.name} 已完成本条任务处理，输出了结构化结果和风险提示，等待人工排序确认。`;
-        const rank = modelRanks[id];
+        const rank = index + 1;
         const rankOptions = ranked.map((rankedId, rankIndex) => `<button class="${rank === rankIndex + 1 ? "active" : ""}" type="button" data-model-rank="${escapeHtml(id)}" data-rank-value="${rankIndex + 1}">排第 ${rankIndex + 1}</button>`).join("");
-        return `<article class="model-result-card"><div class="result-column-head"><h3 class="result-column-title">${String.fromCharCode(65 + index)}. 模型回答</h3><span class="result-column-meta">${escapeHtml(model.name)}</span></div><div class="result-body">${escapeHtml(answer)}</div><span class="result-rank ${rank === 1 ? "" : "muted"}">当前第 ${rank} 名</span><div class="result-order">${rankOptions}</div></article>`;
+        return `<article class="model-result-card" draggable="true" data-model-card="${escapeHtml(id)}"><div class="result-column-head"><h3 class="result-column-title">${escapeHtml(model.name)}</h3></div><div class="result-body">${escapeHtml(answer)}</div><span class="result-rank ${rank === 1 ? "" : "muted"}">当前第 ${rank} 名</span><div class="result-order">${rankOptions}</div></article>`;
       }).join("");
       rail.querySelectorAll("[data-model-rank]").forEach(button => button.addEventListener("click", () => {
         const id = button.dataset.modelRank;
-        const nextRank = Number(button.dataset.rankValue);
-        const currentRank = modelRanks[id] || nextRank;
-        selected.forEach(otherId => {
-          if (otherId === id) return;
-          if (modelRanks[otherId] === nextRank) modelRanks[otherId] = currentRank;
-        });
-        modelRanks[id] = nextRank;
-        renderModelResults();
+        moveModelToRank(selected, id, Number(button.dataset.rankValue));
       }));
+      rail.querySelectorAll("[data-model-card]").forEach(card => {
+        card.addEventListener("dragstart", event => {
+          draggedModelId = card.dataset.modelCard;
+          card.classList.add("dragging");
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", draggedModelId);
+        });
+        card.addEventListener("dragover", event => {
+          event.preventDefault();
+          event.dataTransfer.dropEffect = "move";
+          if (card.dataset.modelCard !== draggedModelId) card.classList.add("drag-over");
+        });
+        card.addEventListener("dragleave", () => card.classList.remove("drag-over"));
+        card.addEventListener("drop", event => {
+          event.preventDefault();
+          card.classList.remove("drag-over");
+          const targetId = card.dataset.modelCard;
+          if (!draggedModelId || draggedModelId === targetId) return;
+          const ordered = [...selected].sort((a, b) => modelRanks[a] - modelRanks[b]);
+          const targetIndex = ordered.indexOf(targetId);
+          const placeAfter = event.clientX > card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2;
+          moveModelToRank(selected, draggedModelId, targetIndex + 1 + (placeAfter ? 1 : 0));
+        });
+        card.addEventListener("dragend", () => {
+          draggedModelId = "";
+          rail.querySelectorAll("[data-model-card]").forEach(item => item.classList.remove("dragging", "drag-over"));
+        });
+        let pointerStartX = 0;
+        let pointerDragging = false;
+        const capturePointer = pointerId => {
+          try { card.setPointerCapture(pointerId); } catch {}
+        };
+        const releasePointer = pointerId => {
+          try { card.releasePointerCapture(pointerId); } catch {}
+        };
+        card.addEventListener("pointerdown", event => {
+          if (event.target.closest("button, input, select, textarea")) return;
+          pointerStartX = event.clientX;
+          pointerDragging = false;
+          capturePointer(event.pointerId);
+        });
+        card.addEventListener("pointermove", event => {
+          if (!pointerDragging && Math.abs(event.clientX - pointerStartX) < 8) return;
+          pointerDragging = true;
+          event.preventDefault();
+          card.classList.add("dragging");
+        });
+        card.addEventListener("pointerup", event => {
+          if (!pointerDragging) {
+            releasePointer(event.pointerId);
+            return;
+          }
+          const orderedCards = [...rail.querySelectorAll("[data-model-card]")].filter(item => item !== card);
+          const insertIndex = orderedCards.findIndex(item => {
+            const rect = item.getBoundingClientRect();
+            return event.clientX < rect.left + rect.width / 2;
+          });
+          card.classList.remove("dragging");
+          pointerDragging = false;
+          releasePointer(event.pointerId);
+          moveModelToRank(selected, card.dataset.modelCard, (insertIndex < 0 ? orderedCards.length : insertIndex) + 1);
+        });
+        card.addEventListener("pointercancel", () => {
+          pointerDragging = false;
+          card.classList.remove("dragging");
+        });
+      });
     }
 
     document.querySelectorAll(".eval-item[data-eval-index]").forEach(button => button.addEventListener("click", () => renderDebugEval(button.dataset.evalIndex)));
@@ -4434,45 +4538,14 @@
       });
     }));
 
-    document.getElementById("generatePlan").addEventListener("click", () => {
+    document.getElementById("submitFeedback").addEventListener("click", () => {
       const note = document.getElementById("feedbackNote").value.trim();
-      const seedFirst = document.querySelector("#seedResult")?.closest(".result-model")?.querySelector(".result-rank:not(.muted)");
-      const plans = seedFirst
-        ? "当前 Skill 结构基本有效，建议继续补充边界案例，并检查 GPT-5 的模型适配提示。"
-        : "优先调整 Skill 的关键字段校验，将预算、报价等敏感信息前置为人工确认。";
-      document.getElementById("planSummary").textContent = note ? `${plans} 已结合你的补充反馈。` : plans;
-      document.getElementById("iterationResult").hidden = false;
-      document.getElementById("planState").textContent = "建议已生成";
-      document.getElementById("applyIteration").disabled = false;
-      document.getElementById("applyIteration").textContent = `继续调试（V${formalVersion}.${debugMinorVersion + 1}）`;
-      showToast("已生成本轮调整建议");
-    });
-
-    document.getElementById("applyIteration").addEventListener("click", () => {
-      debugMinorVersion += 1;
-      const previewVersion = `V${formalVersion}.${debugMinorVersion}`;
-      document.getElementById("planState").textContent = `${previewVersion} 调试预览`;
-      document.getElementById("planSummary").textContent = `当前仍基于正式版本 V${formalVersion} 调试，预览变更为 ${previewVersion}。确认本轮结果后才会生成新的正式版本。`;
-      document.getElementById("resultVersionMeta").textContent = `${previewVersion} · 未发布`;
-      renderSkillInspector();
-      document.getElementById("diffSummary").innerHTML = `<div class="diff-row"><span class="diff-badge add">新增</span><span>补充预算、报价等敏感字段的人工确认规则。</span></div><div class="diff-row"><span class="diff-badge change">调整</span><span>将写入前风险检查前置到 CRM 动作之前。</span></div><div class="diff-row"><span class="diff-badge remove">移除</span><span>移除无法确认时直接写入的旧路径。</span></div>`;
-      document.getElementById("applyIteration").textContent = `继续调试（V${formalVersion}.${debugMinorVersion + 1}）`;
-      document.getElementById("applyIteration").disabled = false;
-      showToast(`已生成 ${previewVersion} 调试预览，正式版本仍为 V${formalVersion}`);
-    });
-
-    document.getElementById("confirmIteration").addEventListener("click", () => {
-      formalVersion += 1;
-      debugMinorVersion = 0;
-      iteration = formalVersion;
-      document.getElementById("resultVersionMeta").textContent = `V${formalVersion}`;
-      renderSkillInspector();
-      document.getElementById("planState").textContent = `V${formalVersion} 已生成`;
-      document.getElementById("planSummary").textContent = `已确认本轮调试结果，${getDebugSelectionName()} 已生成新的正式版本 V${formalVersion}。`;
-      document.getElementById("applyIteration").disabled = true;
-      document.getElementById("confirmIteration").disabled = true;
-      document.getElementById("confirmIteration").textContent = "已执行";
-      showToast(`已确认结果并生成正式版本 V${formalVersion}`);
+      const ranked = getSelectedDebugModels().sort((a, b) => modelRanks[a] - modelRanks[b]);
+      const leadingModel = debugModels[ranked[0]]?.name || ranked[0] || "当前模型排序";
+      document.getElementById("inspectorMembers").hidden = false;
+      document.getElementById("inspectorChanges").hidden = true;
+      document.getElementById("skillModuleTitle").closest(".skill-module")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      showToast(note ? `已结合 ${leadingModel} 排名与反馈，生成技能迭代建议` : `已结合 ${leadingModel} 最新排名，生成技能迭代建议`);
     });
 
     renderDebugSelection();

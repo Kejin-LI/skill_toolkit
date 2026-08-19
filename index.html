@@ -573,6 +573,45 @@
     .scene-card-menu:hover { color: var(--primary-ink); background: var(--violet-bg); }
     .scene-category { font-size: 12px; line-height: 1.35; color: var(--faint); margin-top: 5px; }
     .scene-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: auto; }
+    .connector-library { max-width: 1240px; }
+    .connector-page-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .connector-page-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      transition: transform .14s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+    .connector-page-card:hover { transform: translateY(-3px); border-color: rgba(108,92,231,.28); box-shadow: var(--shadow-md); }
+    .connector-page-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .connector-page-brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .connector-page-logo {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 750;
+    }
+    .connector-page-logo.argos { color: #111; background: #f6f6f6; font-size: 24px; }
+    .connector-page-logo.bytecli { color: #4a9b63; font-size: 10px; }
+    .connector-page-logo.tea { color: #1e8ad8; font-size: 26px; font-weight: 800; }
+    .connector-page-name { color: var(--text); font-size: 16px; font-weight: 700; }
+    .connector-page-type { display: block; margin-top: 3px; color: var(--faint); font-size: 11px; }
+    .connector-page-desc { min-height: 43px; margin: 20px 0 18px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .connector-page-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 13px; border-top: 1px solid var(--line); color: var(--faint); font-size: 11.5px; }
+    .connector-page-status { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-weight: 650; }
+    .connector-page-status::before { width: 6px; height: 6px; border-radius: 50%; background: currentColor; content: ""; }
+    .connector-page-action { margin-top: 14px; align-self: flex-start; }
     .scene-stat { padding: 9px 10px; border-radius: 10px; background: var(--surface-soft); }
     .scene-stat b { display: block; font-size: 14px; font-weight: 650; }
     .scene-stat span { display: block; margin-top: 2px; color: var(--faint); font-size: 11px; }
@@ -1531,6 +1570,7 @@
       .quick, .metrics { grid-template-columns: repeat(2, 1fr); }
       .batch-report-metrics { grid-template-columns: repeat(2, 1fr); }
       .scene-grid, .scene-library-grid { grid-template-columns: repeat(2, 1fr); }
+      .connector-page-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-2 { grid-template-columns: 1fr; }
       .detail-layout { grid-template-columns: 1fr; }
       .studio-layout { grid-template-columns: 1fr; }
@@ -1549,6 +1589,7 @@
       .top-actions { display: none; }
       .mobile-nav { display: block; margin-left: auto; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line-strong); background: #fff; }
       .quick, .metrics, .field-2, .scene-grid, .scene-library-grid { grid-template-columns: 1fr; }
+      .connector-page-grid { grid-template-columns: 1fr; }
       .batch-report-metrics { grid-template-columns: 1fr 1fr; }
       .atomic-grid, .asset-summary { grid-template-columns: 1fr; }
       .example-grid { grid-template-columns: 1fr; }
@@ -1606,32 +1647,10 @@
 
       <div class="side-bottom">
         <div class="nav-label">配置</div>
-        <div class="connector-menu-wrap">
-        <button class="nav-btn" id="connectorButton" type="button" aria-expanded="false" aria-controls="connectorMenu">
+        <button class="nav-btn" data-view="connectors">
           <svg class="ic" viewBox="0 0 24 24"><path d="M9 12l-2 2a3.5 3.5 0 01-5-5l2.5-2.5M15 12l2-2a3.5 3.5 0 015 5l-2.5 2.5"/><path d="M9 15l6-6"/></svg>
           <span>连接器</span>
         </button>
-        <div class="connector-menu" id="connectorMenu" aria-hidden="true">
-          <div class="connector-menu-title"><span>可用连接器</span><span class="connector-menu-count">3 个已接入</span></div>
-          <div class="connector-menu-list">
-            <button class="connector-menu-item connected" type="button" data-connector="Argos">
-              <span class="connector-menu-logo argos">A</span>
-              <span><span class="connector-menu-name">Argos <span class="connector-menu-badge">连接器</span></span><span class="connector-menu-desc">统一命令行入口，直接调用 SRE Agent 能力</span></span>
-              <span class="connector-menu-check"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></span>
-            </button>
-            <button class="connector-menu-item connected" type="button" data-connector="Bytecli">
-              <span class="connector-menu-logo bytecli">S_bytecli</span>
-              <span><span class="connector-menu-name">Bytecli <span class="connector-menu-badge">连接器</span></span><span class="connector-menu-desc">字节内部研发工作流 Skill 与 CLI</span></span>
-              <span class="connector-menu-check"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></span>
-            </button>
-            <button class="connector-menu-item connected" type="button" data-connector="Tea">
-              <span class="connector-menu-logo tea">T</span>
-              <span><span class="connector-menu-name">Tea <span class="connector-menu-badge">连接器</span></span><span class="connector-menu-desc">用户行为分析平台，支持业务意图检索与分析</span></span>
-              <span class="connector-menu-check"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></span>
-            </button>
-          </div>
-        </div>
-        </div>
         <button class="nav-btn" data-toast="客户知识库已同步 126 篇素材">
           <svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z"/></svg>
           <span>知识库</span>
@@ -1681,6 +1700,7 @@
           <option value="generate">技能生成</option>
           <option value="debug">技能调试</option>
           <option value="batch">批量评测</option>
+          <option value="connectors">连接器</option>
         </select>
       </header>
 
@@ -2080,6 +2100,72 @@
           </section>
         </div>
 
+        <!-- ===== Connectors ===== -->
+        <div class="view" id="view-connectors">
+          <section class="connector-library">
+            <div class="library-head">
+              <div>
+                <h2 class="library-title">连接器</h2>
+                <p class="library-copy">管理可供 Skill 和场景调用的外部系统能力。</p>
+              </div>
+              <button class="btn btn-primary" type="button" data-toast="连接器创建流程即将开放">
+                <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                添加连接器
+              </button>
+            </div>
+            <div class="library-toolbar">
+              <select class="filter-select" aria-label="按连接状态筛选">
+                <option>全部状态</option>
+                <option>已连接</option>
+                <option>未连接</option>
+              </select>
+              <div class="search-wrap">
+                <svg class="ic ic-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></svg>
+                <input class="scene-search" placeholder="搜索连接器名称" aria-label="搜索连接器名称">
+              </div>
+            </div>
+            <div class="scene-summary"><span><strong>3</strong> 个连接器</span><span>按最近接入排序</span></div>
+            <div class="connector-page-grid">
+              <article class="connector-page-card">
+                <div class="connector-page-card-head">
+                  <div class="connector-page-brand">
+                    <span class="connector-page-logo argos">A</span>
+                    <div><div class="connector-page-name">Argos</div><span class="connector-page-type">命令行与 SRE Agent</span></div>
+                  </div>
+                  <span class="pill green">已连接</span>
+                </div>
+                <p class="connector-page-desc">统一命令行入口，直接调用 SRE Agent 能力，支持运维任务执行与结果回传。</p>
+                <div class="connector-page-meta"><span class="connector-page-status">连接正常</span><span>最近调用 今天 17:32</span></div>
+                <button class="btn btn-ghost connector-page-action" type="button" data-toast="已打开 Argos 连接器详情">查看详情</button>
+              </article>
+              <article class="connector-page-card">
+                <div class="connector-page-card-head">
+                  <div class="connector-page-brand">
+                    <span class="connector-page-logo bytecli">S_bytecli</span>
+                    <div><div class="connector-page-name">Bytecli</div><span class="connector-page-type">内部研发工作流</span></div>
+                  </div>
+                  <span class="pill green">已连接</span>
+                </div>
+                <p class="connector-page-desc">字节内部统一研发工作流 Skill 和 CLI，支持工程任务编排与开发流程调用。</p>
+                <div class="connector-page-meta"><span class="connector-page-status">连接正常</span><span>最近调用 今天 16:48</span></div>
+                <button class="btn btn-ghost connector-page-action" type="button" data-toast="已打开 Bytecli 连接器详情">查看详情</button>
+              </article>
+              <article class="connector-page-card">
+                <div class="connector-page-card-head">
+                  <div class="connector-page-brand">
+                    <span class="connector-page-logo tea">T</span>
+                    <div><div class="connector-page-name">Tea</div><span class="connector-page-type">用户行为分析平台</span></div>
+                  </div>
+                  <span class="pill green">已连接</span>
+                </div>
+                <p class="connector-page-desc">通过命令行使用 Tea 用户行为分析能力，支持业务意图检索与数据分析。</p>
+                <div class="connector-page-meta"><span class="connector-page-status">连接正常</span><span>最近调用 今天 15:06</span></div>
+                <button class="btn btn-ghost connector-page-action" type="button" data-toast="已打开 Tea 连接器详情">查看详情</button>
+              </article>
+            </div>
+          </section>
+        </div>
+
         <!-- ===== Batch ===== -->
         <div class="view" id="view-batch">
           <div class="sec-head">
@@ -2461,7 +2547,8 @@
       "scene-detail": ["场景详情", "业务背景、技能、连接器与评测资产", ""],
       generate: ["技能生成", "描述任务，AI 生成技能草案与技能包编排", "V3 草稿"],
       debug: ["技能调试", "对技能或技能包用真实任务单条调试", "Task #024"],
-      batch: ["批量评测", "批量运行真实任务集，统一查看评测状态与结果报告", "Blind Set"]
+      batch: ["批量评测", "批量运行真实任务集，统一查看评测状态与结果报告", "Blind Set"],
+      connectors: ["连接器", "管理可供 Skill 和场景调用的外部系统能力", "3 个已接入"]
     };
 
     const navButtons = document.querySelectorAll(".nav-btn[data-view]");
@@ -2474,8 +2561,6 @@
     const app = document.querySelector(".app");
     const collapseButton = document.getElementById("collapseButton");
     const brandToggle = document.getElementById("brandToggle");
-    const connectorButton = document.getElementById("connectorButton");
-    const connectorMenu = document.getElementById("connectorMenu");
 
     function setSidebarCollapsed(collapsed) {
       app.classList.toggle("sidebar-collapsed", collapsed);
@@ -2531,30 +2616,6 @@
     document.querySelectorAll("[data-toast]").forEach(b =>
       b.addEventListener("click", () => showToast(b.dataset.toast))
     );
-
-    function closeConnectorMenu() {
-      connectorMenu.classList.remove("open");
-      connectorMenu.setAttribute("aria-hidden", "true");
-      connectorButton.setAttribute("aria-expanded", "false");
-    }
-    connectorButton.addEventListener("click", event => {
-      event.stopPropagation();
-      const open = connectorMenu.classList.toggle("open");
-      connectorMenu.setAttribute("aria-hidden", String(!open));
-      connectorButton.setAttribute("aria-expanded", String(open));
-    });
-    connectorMenu.addEventListener("click", event => {
-      const item = event.target.closest("[data-connector]");
-      if (!item) return;
-      item.classList.toggle("connected");
-      const connected = item.classList.contains("connected");
-      const connectedCount = connectorMenu.querySelectorAll(".connector-menu-item.connected").length;
-      connectorMenu.querySelector(".connector-menu-count").textContent = `${connectedCount} 个已接入`;
-      showToast(`${item.dataset.connector} 已${connected ? "连接" : "断开连接"}`);
-    });
-    document.addEventListener("click", event => {
-      if (!event.target.closest(".connector-menu-wrap")) closeConnectorMenu();
-    });
 
     const addTestSetButton = document.getElementById("addTestSetButton");
     const testSetMenu = document.getElementById("testSetMenu");

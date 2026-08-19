@@ -612,6 +612,23 @@
     .connector-page-status { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-weight: 650; }
     .connector-page-status::before { width: 6px; height: 6px; border-radius: 50%; background: currentColor; content: ""; }
     .connector-page-action { margin-top: 14px; align-self: flex-start; }
+    .connector-scene-modal { width: min(520px, calc(100vw - 32px)); }
+    .connector-scene-list { display: grid; gap: 6px; }
+    .connector-scene-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 42px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface-soft);
+      color: var(--text);
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .connector-scene-option:has(input:checked) { border-color: var(--primary); background: var(--violet-bg); }
+    .connector-scene-option input { accent-color: var(--primary); }
     .scene-stat { padding: 9px 10px; border-radius: 10px; background: var(--surface-soft); }
     .scene-stat b { display: block; font-size: 14px; font-weight: 650; }
     .scene-stat span { display: block; margin-top: 2px; color: var(--faint); font-size: 11px; }
@@ -2136,7 +2153,7 @@
                 </div>
                 <p class="connector-page-desc">统一命令行入口，直接调用 SRE Agent 能力，支持运维任务执行与结果回传。</p>
                 <div class="connector-page-meta"><span class="connector-page-status">连接正常</span><span>最近调用 今天 17:32</span></div>
-                <button class="btn btn-ghost connector-page-action" type="button" data-toast="已打开 Argos 连接器详情">查看详情</button>
+                <button class="btn btn-primary connector-page-action" type="button" data-connect-scenes="Argos">接入场景</button>
               </article>
               <article class="connector-page-card">
                 <div class="connector-page-card-head">
@@ -2148,7 +2165,7 @@
                 </div>
                 <p class="connector-page-desc">字节内部统一研发工作流 Skill 和 CLI，支持工程任务编排与开发流程调用。</p>
                 <div class="connector-page-meta"><span class="connector-page-status">连接正常</span><span>最近调用 今天 16:48</span></div>
-                <button class="btn btn-ghost connector-page-action" type="button" data-toast="已打开 Bytecli 连接器详情">查看详情</button>
+                <button class="btn btn-primary connector-page-action" type="button" data-connect-scenes="Bytecli">接入场景</button>
               </article>
               <article class="connector-page-card">
                 <div class="connector-page-card-head">
@@ -2160,7 +2177,7 @@
                 </div>
                 <p class="connector-page-desc">通过命令行使用 Tea 用户行为分析能力，支持业务意图检索与数据分析。</p>
                 <div class="connector-page-meta"><span class="connector-page-status">连接正常</span><span>最近调用 今天 15:06</span></div>
-                <button class="btn btn-ghost connector-page-action" type="button" data-toast="已打开 Tea 连接器详情">查看详情</button>
+                <button class="btn btn-primary connector-page-action" type="button" data-connect-scenes="Tea">接入场景</button>
               </article>
             </div>
           </section>
@@ -2536,6 +2553,30 @@
     </form>
   </div>
 
+  <div class="modal-backdrop" id="connectorSceneModal" aria-hidden="true">
+    <section class="scene-modal connector-scene-modal" role="dialog" aria-modal="true" aria-labelledby="connectorSceneTitle">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title" id="connectorSceneTitle">接入场景</h2>
+          <p class="modal-copy">选择允许调用该连接器的场景卡片。</p>
+        </div>
+        <button class="modal-close" id="closeConnectorSceneModal" type="button" aria-label="关闭">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="connector-scene-list">
+        <label class="connector-scene-option"><input type="checkbox" value="销售会议纪要入 CRM">销售会议纪要入 CRM</label>
+        <label class="connector-scene-option"><input type="checkbox" value="客服工单分级">客服工单分级</label>
+        <label class="connector-scene-option"><input type="checkbox" value="HR 简历初筛">HR 简历初筛</label>
+        <label class="connector-scene-option"><input type="checkbox" value="报销异常检查">报销异常检查</label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="cancelConnectorScene" type="button">取消</button>
+        <button class="btn btn-primary" id="confirmConnectorScene" type="button">确认接入</button>
+      </div>
+    </section>
+  </div>
+
   <div class="toast" id="toast">
     <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
     <span id="toastText"></span>
@@ -2616,6 +2657,39 @@
     document.querySelectorAll("[data-toast]").forEach(b =>
       b.addEventListener("click", () => showToast(b.dataset.toast))
     );
+
+    const connectorSceneModal = document.getElementById("connectorSceneModal");
+    const connectorSceneTitle = document.getElementById("connectorSceneTitle");
+    const connectorSceneOptions = connectorSceneModal.querySelectorAll("input[type=checkbox]");
+    let activeConnectorName = "";
+
+    function closeConnectorSceneModal() {
+      connectorSceneModal.classList.remove("open");
+      connectorSceneModal.setAttribute("aria-hidden", "true");
+    }
+    document.querySelectorAll("[data-connect-scenes]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeConnectorName = button.dataset.connectScenes;
+        connectorSceneTitle.textContent = `接入 ${activeConnectorName} 到场景`;
+        connectorSceneOptions.forEach(option => { option.checked = false; });
+        connectorSceneModal.classList.add("open");
+        connectorSceneModal.setAttribute("aria-hidden", "false");
+      });
+    });
+    document.getElementById("closeConnectorSceneModal").addEventListener("click", closeConnectorSceneModal);
+    document.getElementById("cancelConnectorScene").addEventListener("click", closeConnectorSceneModal);
+    document.getElementById("confirmConnectorScene").addEventListener("click", () => {
+      const scenes = [...connectorSceneOptions].filter(option => option.checked).map(option => option.value);
+      if (!scenes.length) {
+        showToast("请至少选择一个场景");
+        return;
+      }
+      closeConnectorSceneModal();
+      showToast(`${activeConnectorName} 已接入 ${scenes.length} 个场景`);
+    });
+    connectorSceneModal.addEventListener("click", event => {
+      if (event.target === connectorSceneModal) closeConnectorSceneModal();
+    });
 
     const addTestSetButton = document.getElementById("addTestSetButton");
     const testSetMenu = document.getElementById("testSetMenu");

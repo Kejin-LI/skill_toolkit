@@ -204,6 +204,125 @@
     .app.sidebar-collapsed .nav-btn { justify-content: center; padding-left: 0; padding-right: 0; }
     .app.sidebar-collapsed .sidebar .user { justify-content: center; padding-left: 0; padding-right: 0; }
 
+    .connector-menu-wrap { position: relative; }
+    .connector-menu {
+      position: absolute;
+      z-index: 20;
+      left: calc(100% + 14px);
+      bottom: 0;
+      width: min(520px, calc(100vw - 280px));
+      padding: 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .97);
+      box-shadow: 0 20px 48px -22px rgba(44, 38, 110, .35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+      transition: opacity .16s ease, transform .16s ease;
+    }
+    .connector-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .connector-menu-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px 6px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .connector-menu-count { color: var(--faint); font-size: 11px; font-weight: 500; }
+    .connector-menu-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+    .connector-menu-item {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 24px;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 10px 8px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      text-align: left;
+      transition: background .16s ease, border-color .16s ease;
+    }
+    .connector-menu-item:hover { background: var(--surface-soft); border-color: var(--line); }
+    .connector-menu-item:last-child { grid-column: 1 / -1; }
+    .connector-menu-logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: -.04em;
+    }
+    .connector-menu-logo.argos { color: #111; background: #f6f6f6; font-size: 21px; }
+    .connector-menu-logo.bytecli { color: #4a9b63; font-size: 10px; }
+    .connector-menu-logo.tea { color: #1e8ad8; font-size: 24px; font-weight: 800; }
+    .connector-menu-name {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .connector-menu-badge {
+      padding: 2px 5px;
+      color: var(--faint);
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .connector-menu-desc {
+      display: block;
+      overflow: hidden;
+      margin-top: 4px;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.4;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .connector-menu-check {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      border-radius: 50%;
+      background: var(--green-bg);
+    }
+    .connector-menu-check .ic { width: 15px; height: 15px; stroke-width: 2.1; }
+    .connector-menu-item:not(.connected) .connector-menu-check {
+      color: var(--faint);
+      border: 1px solid var(--line-strong);
+      background: transparent;
+    }
+    @media (max-width: 820px) {
+      .connector-menu {
+        left: 0;
+        bottom: calc(100% + 10px);
+        width: min(420px, calc(100vw - 28px));
+      }
+    }
+    @media (max-width: 520px) {
+      .connector-menu-list { grid-template-columns: 1fr; }
+      .connector-menu-item:last-child { grid-column: auto; }
+    }
+
     /* ---------- Main ---------- */
     .main { position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 
@@ -1489,10 +1608,32 @@
 
       <div class="side-bottom">
         <div class="nav-label">配置</div>
-        <button class="nav-btn" data-toast="已连接飞书、CRM、知识库 3 个连接器">
+        <div class="connector-menu-wrap">
+        <button class="nav-btn" id="connectorButton" type="button" aria-expanded="false" aria-controls="connectorMenu">
           <svg class="ic" viewBox="0 0 24 24"><path d="M9 12l-2 2a3.5 3.5 0 01-5-5l2.5-2.5M15 12l2-2a3.5 3.5 0 015 5l-2.5 2.5"/><path d="M9 15l6-6"/></svg>
           <span>连接器</span>
         </button>
+        <div class="connector-menu" id="connectorMenu" aria-hidden="true">
+          <div class="connector-menu-title"><span>可用连接器</span><span class="connector-menu-count">3 个已接入</span></div>
+          <div class="connector-menu-list">
+            <button class="connector-menu-item connected" type="button" data-connector="Argos">
+              <span class="connector-menu-logo argos">A</span>
+              <span><span class="connector-menu-name">Argos <span class="connector-menu-badge">连接器</span></span><span class="connector-menu-desc">统一命令行入口，直接调用 SRE Agent 能力</span></span>
+              <span class="connector-menu-check"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></span>
+            </button>
+            <button class="connector-menu-item connected" type="button" data-connector="Bytecli">
+              <span class="connector-menu-logo bytecli">S_bytecli</span>
+              <span><span class="connector-menu-name">Bytecli <span class="connector-menu-badge">连接器</span></span><span class="connector-menu-desc">字节内部研发工作流 Skill 与 CLI</span></span>
+              <span class="connector-menu-check"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></span>
+            </button>
+            <button class="connector-menu-item connected" type="button" data-connector="Tea">
+              <span class="connector-menu-logo tea">T</span>
+              <span><span class="connector-menu-name">Tea <span class="connector-menu-badge">连接器</span></span><span class="connector-menu-desc">用户行为分析平台，支持业务意图检索与分析</span></span>
+              <span class="connector-menu-check"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></span>
+            </button>
+          </div>
+        </div>
+        </div>
         <button class="nav-btn" data-toast="客户知识库已同步 126 篇素材">
           <svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z"/></svg>
           <span>知识库</span>
@@ -2335,6 +2476,8 @@
     const app = document.querySelector(".app");
     const collapseButton = document.getElementById("collapseButton");
     const brandToggle = document.getElementById("brandToggle");
+    const connectorButton = document.getElementById("connectorButton");
+    const connectorMenu = document.getElementById("connectorMenu");
 
     function setSidebarCollapsed(collapsed) {
       app.classList.toggle("sidebar-collapsed", collapsed);
@@ -2390,6 +2533,30 @@
     document.querySelectorAll("[data-toast]").forEach(b =>
       b.addEventListener("click", () => showToast(b.dataset.toast))
     );
+
+    function closeConnectorMenu() {
+      connectorMenu.classList.remove("open");
+      connectorMenu.setAttribute("aria-hidden", "true");
+      connectorButton.setAttribute("aria-expanded", "false");
+    }
+    connectorButton.addEventListener("click", event => {
+      event.stopPropagation();
+      const open = connectorMenu.classList.toggle("open");
+      connectorMenu.setAttribute("aria-hidden", String(!open));
+      connectorButton.setAttribute("aria-expanded", String(open));
+    });
+    connectorMenu.addEventListener("click", event => {
+      const item = event.target.closest("[data-connector]");
+      if (!item) return;
+      item.classList.toggle("connected");
+      const connected = item.classList.contains("connected");
+      const connectedCount = connectorMenu.querySelectorAll(".connector-menu-item.connected").length;
+      connectorMenu.querySelector(".connector-menu-count").textContent = `${connectedCount} 个已接入`;
+      showToast(`${item.dataset.connector} 已${connected ? "连接" : "断开连接"}`);
+    });
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".connector-menu-wrap")) closeConnectorMenu();
+    });
 
     const addTestSetButton = document.getElementById("addTestSetButton");
     const testSetMenu = document.getElementById("testSetMenu");

@@ -629,6 +629,17 @@
     }
     .connector-scene-option:has(input:checked) { border-color: var(--primary); background: var(--violet-bg); }
     .connector-scene-option input { accent-color: var(--primary); }
+    .knowledge-library { max-width: 1240px; }
+    .knowledge-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
+    .knowledge-table { width: 100%; min-width: 780px; border-collapse: collapse; }
+    .knowledge-table th, .knowledge-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; font-size: 12.5px; white-space: nowrap; }
+    .knowledge-table th { color: var(--faint); font-size: 11px; font-weight: 650; }
+    .knowledge-table tr:last-child td { border-bottom: 0; }
+    .knowledge-document { color: var(--text); font-weight: 650; }
+    .knowledge-document-meta { display: block; margin-top: 4px; color: var(--faint); font-size: 11px; font-weight: 400; }
+    .knowledge-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; color: var(--primary-ink); background: var(--violet-bg); font-size: 11px; font-weight: 600; }
+    .knowledge-upload-modal { width: min(560px, calc(100vw - 32px)); }
+    .knowledge-file-input { display: block; width: 100%; padding: 13px; border: 1px dashed var(--line-strong); border-radius: 8px; background: var(--surface-soft); color: var(--muted); font-size: 12px; }
     .scene-stat { padding: 9px 10px; border-radius: 10px; background: var(--surface-soft); }
     .scene-stat b { display: block; font-size: 14px; font-weight: 650; }
     .scene-stat span { display: block; margin-top: 2px; color: var(--faint); font-size: 11px; }
@@ -1668,7 +1679,7 @@
           <svg class="ic" viewBox="0 0 24 24"><path d="M9 12l-2 2a3.5 3.5 0 01-5-5l2.5-2.5M15 12l2-2a3.5 3.5 0 015 5l-2.5 2.5"/><path d="M9 15l6-6"/></svg>
           <span>连接器</span>
         </button>
-        <button class="nav-btn" data-toast="客户知识库已同步 126 篇素材">
+        <button class="nav-btn" data-view="knowledge">
           <svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z"/></svg>
           <span>知识库</span>
         </button>
@@ -1718,6 +1729,7 @@
           <option value="debug">技能调试</option>
           <option value="batch">批量评测</option>
           <option value="connectors">连接器</option>
+          <option value="knowledge">知识库</option>
         </select>
       </header>
 
@@ -2114,6 +2126,56 @@
               </div>
               <section class="tuning-card"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">这轮排序完成了吗？</h3><p class="tuning-sub" id="feedbackHint">确认最佳结果后，生成针对 Skill 或模型适配的迭代建议。</p></div></div><div class="feedback-area"><textarea class="feedback-note" id="feedbackNote" rows="2" placeholder="补充一句反馈（可选）"></textarea></div><div class="iteration-result" id="iterationResult" hidden><span class="iteration-result-icon"><svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12l4 4 9-10"/></svg></span><div><div class="iteration-result-title" id="planState">AI 迭代建议</div><div class="iteration-result-copy" id="planSummary">补全风险确认与下一步动作规则。</div></div><button class="btn btn-soft" id="applyIteration" type="button">继续调试</button><button class="btn btn-primary" id="confirmIteration" type="button">确认执行</button></div><div class="tuning-actions"><button class="btn btn-primary" id="generatePlan" type="button">生成迭代建议</button></div></section>
             </section>
+          </section>
+        </div>
+
+        <!-- ===== Knowledge ===== -->
+        <div class="view" id="view-knowledge">
+          <section class="knowledge-library">
+            <div class="library-head">
+              <div>
+                <h2 class="library-title">知识库</h2>
+                <p class="library-copy">按行业和合作企业管理可供 Skill 调用的业务文档。</p>
+              </div>
+              <button class="btn btn-primary" id="openKnowledgeUpload" type="button">
+                <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+                上传文档
+              </button>
+            </div>
+            <div class="library-toolbar">
+              <select class="filter-select" aria-label="按所属行业筛选知识库">
+                <option>全部行业</option>
+                <option>企业服务</option>
+                <option>互联网</option>
+                <option>人力资源</option>
+                <option>财务管理</option>
+              </select>
+              <select class="filter-select" aria-label="按合作企业筛选知识库">
+                <option>全部企业</option>
+                <option>未命名科技</option>
+                <option>星云客服</option>
+                <option>人才优选</option>
+                <option>华东制造集团</option>
+              </select>
+              <div class="search-wrap">
+                <svg class="ic ic-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></svg>
+                <input class="scene-search" placeholder="搜索文档名称" aria-label="搜索文档名称">
+              </div>
+            </div>
+            <div class="scene-summary"><span><strong>6</strong> 篇文档</span><span>按最近上传排序</span></div>
+            <div class="knowledge-table-wrap">
+              <table class="knowledge-table">
+                <thead><tr><th>文档</th><th>所属行业</th><th>合作企业</th><th>类型</th><th>更新时间</th><th>操作</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="knowledge-document">销售会议纪要规范</span><span class="knowledge-document-meta">会议记录、商机字段与跟进动作标准</span></td><td><span class="knowledge-tag">企业服务</span></td><td>未命名科技</td><td>PDF · 2.4 MB</td><td>今天 17:18</td><td><button class="btn btn-ghost" type="button" data-toast="已打开销售会议纪要规范">查看文档</button></td></tr>
+                  <tr><td><span class="knowledge-document">客服工单分级手册</span><span class="knowledge-document-meta">投诉等级、业务线和升级处理规则</span></td><td><span class="knowledge-tag">互联网</span></td><td>星云客服</td><td>DOCX · 1.8 MB</td><td>今天 15:42</td><td><button class="btn btn-ghost" type="button" data-toast="已打开客服工单分级手册">查看文档</button></td></tr>
+                  <tr><td><span class="knowledge-document">岗位画像与面试标准</span><span class="knowledge-document-meta">岗位能力模型、简历筛选和面试评估维度</span></td><td><span class="knowledge-tag">人力资源</span></td><td>人才优选</td><td>PDF · 3.1 MB</td><td>昨天 18:06</td><td><button class="btn btn-ghost" type="button" data-toast="已打开岗位画像与面试标准">查看文档</button></td></tr>
+                  <tr><td><span class="knowledge-document">费用报销审核规则</span><span class="knowledge-document-meta">发票校验、费用标准和异常处理流程</span></td><td><span class="knowledge-tag">财务管理</span></td><td>华东制造集团</td><td>XLSX · 860 KB</td><td>昨天 14:22</td><td><button class="btn btn-ghost" type="button" data-toast="已打开费用报销审核规则">查看文档</button></td></tr>
+                  <tr><td><span class="knowledge-document">CRM 客户字段字典</span><span class="knowledge-document-meta">客户、联系人与商机字段写入约束</span></td><td><span class="knowledge-tag">企业服务</span></td><td>未命名科技</td><td>PDF · 1.2 MB</td><td>08-18 11:30</td><td><button class="btn btn-ghost" type="button" data-toast="已打开 CRM 客户字段字典">查看文档</button></td></tr>
+                  <tr><td><span class="knowledge-document">服务质量复盘报告</span><span class="knowledge-document-meta">客服满意度、响应时效和复盘分析方法</span></td><td><span class="knowledge-tag">互联网</span></td><td>星云客服</td><td>DOCX · 2.7 MB</td><td>08-17 16:10</td><td><button class="btn btn-ghost" type="button" data-toast="已打开服务质量复盘报告">查看文档</button></td></tr>
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
 
@@ -2569,6 +2631,54 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="knowledgeUploadModal" aria-hidden="true">
+    <form class="scene-modal knowledge-upload-modal" id="knowledgeUploadForm">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title">上传知识库文档</h2>
+          <p class="modal-copy">上传后按行业和合作企业归档，供对应场景调用。</p>
+        </div>
+        <button class="modal-close" id="closeKnowledgeUpload" type="button" aria-label="关闭">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="field">
+        <label for="knowledgeFile">文档文件</label>
+        <input class="knowledge-file-input" id="knowledgeFile" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.md" required>
+      </div>
+      <div class="field">
+        <label for="knowledgeDocumentName">文档名称</label>
+        <input class="input" id="knowledgeDocumentName" required placeholder="例如：销售会议纪要规范">
+      </div>
+      <div class="field-2">
+        <div class="field">
+          <label for="knowledgeIndustry">所属行业</label>
+          <select class="input" id="knowledgeIndustry" required>
+            <option value="">选择行业</option>
+            <option>企业服务</option>
+            <option>互联网</option>
+            <option>人力资源</option>
+            <option>财务管理</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="knowledgePartner">合作企业</label>
+          <select class="input" id="knowledgePartner" required>
+            <option value="">选择企业</option>
+            <option>未命名科技</option>
+            <option>星云客服</option>
+            <option>人才优选</option>
+            <option>华东制造集团</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="cancelKnowledgeUpload" type="button">取消</button>
+        <button class="btn btn-primary" type="submit">上传并归档</button>
+      </div>
+    </form>
+  </div>
+
   <div class="toast" id="toast">
     <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
     <span id="toastText"></span>
@@ -2581,7 +2691,8 @@
       generate: ["技能生成", "描述任务，AI 生成技能草案与技能包编排", "V3 草稿"],
       debug: ["技能调试", "对技能或技能包用真实任务单条调试", "Task #024"],
       batch: ["批量评测", "批量运行真实任务集，统一查看评测状态与结果报告", "Blind Set"],
-      connectors: ["连接器", "管理可供 Skill 和场景调用的外部系统能力", "3 个已接入"]
+      connectors: ["连接器", "管理可供 Skill 和场景调用的外部系统能力", "3 个已接入"],
+      knowledge: ["知识库", "按行业和合作企业管理可供 Skill 调用的业务文档", "6 篇文档"]
     };
 
     const navButtons = document.querySelectorAll(".nav-btn[data-view]");
@@ -2681,6 +2792,43 @@
     });
     connectorSceneModal.addEventListener("click", event => {
       if (event.target === connectorSceneModal) closeConnectorSceneModal();
+    });
+
+    const knowledgeUploadModal = document.getElementById("knowledgeUploadModal");
+    const knowledgeUploadForm = document.getElementById("knowledgeUploadForm");
+    const knowledgeFile = document.getElementById("knowledgeFile");
+    const knowledgeDocumentName = document.getElementById("knowledgeDocumentName");
+    function closeKnowledgeUpload() {
+      knowledgeUploadModal.classList.remove("open");
+      knowledgeUploadModal.setAttribute("aria-hidden", "true");
+    }
+    document.getElementById("openKnowledgeUpload").addEventListener("click", () => {
+      knowledgeUploadForm.reset();
+      knowledgeUploadModal.classList.add("open");
+      knowledgeUploadModal.setAttribute("aria-hidden", "false");
+    });
+    document.getElementById("closeKnowledgeUpload").addEventListener("click", closeKnowledgeUpload);
+    document.getElementById("cancelKnowledgeUpload").addEventListener("click", closeKnowledgeUpload);
+    knowledgeFile.addEventListener("change", () => {
+      const file = knowledgeFile.files[0];
+      if (file && !knowledgeDocumentName.value) {
+        knowledgeDocumentName.value = file.name.replace(/\.[^.]+$/, "");
+      }
+    });
+    knowledgeUploadModal.addEventListener("click", event => {
+      if (event.target === knowledgeUploadModal) closeKnowledgeUpload();
+    });
+    knowledgeUploadForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const file = knowledgeFile.files[0];
+      if (!file) {
+        showToast("请选择要上传的文档");
+        return;
+      }
+      const industry = document.getElementById("knowledgeIndustry").value;
+      const partner = document.getElementById("knowledgePartner").value;
+      closeKnowledgeUpload();
+      showToast(`${knowledgeDocumentName.value.trim()} 已归档至 ${industry} · ${partner}`);
     });
 
     const addTestSetButton = document.getElementById("addTestSetButton");

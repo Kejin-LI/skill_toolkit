@@ -871,6 +871,8 @@
       .score-grid { grid-template-columns: 1fr; }
       .reviewer-picker { grid-template-columns: 1fr; }
       .review-create-shell, .review-create-grid, .review-object-picker { grid-template-columns: 1fr; }
+      .debug-judge-form { grid-template-columns: 1fr; }
+      .debug-mode-head { align-items: flex-start; flex-direction: column; }
       .review-standard-item { grid-template-columns: 1fr; }
       .review-create-steps { position: static; }
     }
@@ -1408,6 +1410,19 @@
     #runExecution { min-height: 30px; padding: 0 12px; font-size: 12px; }
     #runExecution .ic { margin-right: 5px; }
     #runExecution[disabled] { opacity: .6; cursor: default; }
+    .debug-mode-panel { display: grid; gap: 10px; margin: 12px 0 14px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.78); }
+    .debug-mode-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .debug-mode-title { color: var(--text); font-size: 12px; font-weight: 750; }
+    .debug-mode-control { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
+    .debug-mode-control button { min-height: 28px; padding: 0 11px; border-radius: 6px; color: var(--muted); font: inherit; font-size: 11.5px; font-weight: 650; cursor: pointer; }
+    .debug-mode-control button.active { background: #fff; color: var(--primary-ink); box-shadow: 0 1px 3px rgba(20,20,45,.08); }
+    .debug-judge-form { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 10px; }
+    .debug-judge-form[hidden] { display: none !important; }
+    .debug-judge-field { display: grid; gap: 6px; min-width: 0; }
+    .debug-judge-field label { color: var(--faint); font-size: 11px; font-weight: 700; }
+    .debug-judge-field label b { color: #c24141; font-weight: 800; }
+    .debug-judge-field textarea { min-height: 74px; resize: vertical; box-sizing: border-box; padding: 9px 10px; border: 1px solid var(--line-strong); border-radius: 8px; outline: 0; background: #fff; color: var(--text); font: inherit; font-size: 12px; line-height: 1.5; }
+    .debug-judge-field textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,92,231,.1); }
     .result-task-strip { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 11px; }
     .result-task-strip .source-value { flex: 1; margin-top: 0; }
     #resultTaskTextV2 { margin-top: 14px; }
@@ -3059,10 +3074,23 @@
                 </section>
                 <section class="debug-result-module eval-module result-stage" aria-labelledby="evalModuleTitle">
                   <div class="result-column-head"><h3 class="result-column-title" id="evalModuleTitle">调试结果排序</h3><div class="eval-module-actions"><button class="btn btn-primary" id="runExecution" type="button"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>执行结果</button></div></div>
-                  <div class="result-task-strip"><span class="source-label">调试 Prompt</span><div class="result-task-nav"><button class="active" type="button" data-eval-index="0">01</button><button type="button" data-eval-index="1">02</button><button type="button" data-eval-index="2">03</button></div></div>
+                  <div class="result-task-strip"><span class="source-label">调试集</span><div class="result-task-nav"><button class="active" type="button" data-eval-index="0">01</button><button type="button" data-eval-index="1">02</button><button type="button" data-eval-index="2">03</button></div></div>
+                  <div class="debug-mode-panel">
+                    <div class="debug-mode-head">
+                      <div class="debug-mode-title">调试方式</div>
+                      <div class="debug-mode-control" id="debugModeControl" role="tablist" aria-label="选择调试方式">
+                        <button class="active" type="button" data-debug-mode="ranking" aria-selected="true">排序型</button>
+                        <button type="button" data-debug-mode="judgement" aria-selected="false">判定型</button>
+                      </div>
+                    </div>
+                    <div class="debug-judge-form" id="debugJudgeForm" hidden>
+                      <div class="debug-judge-field"><label for="debugCorrectAnswer">正确答案 <b>*</b></label><textarea id="debugCorrectAnswer" placeholder="输入该 Prompt 的标准答案或必须命中的关键结论。"></textarea></div>
+                      <div class="debug-judge-field"><label for="debugJudgeRule">判定规则</label><textarea id="debugJudgeRule" placeholder="选填，例如：必须覆盖预算状态、决策人、下一步动作；不得编造 CRM 字段。"></textarea></div>
+                    </div>
+                  </div>
                   <div class="source-value" id="resultTaskTextV2">客户希望下周三前完成试点，请提取预算状态、决策人和下一步跟进动作。</div>
                   <div class="model-result-rail" id="modelResultRail"></div>
-                  <div class="rail-hint">拖拽卡片调整排序；排序结果会作为本轮 Skill 迭代依据。</div>
+                  <div class="rail-hint" id="debugModeHint">拖拽卡片调整排序；排序结果会作为本轮 Skill 迭代依据。</div>
                 </section>
               </div>
               <div class="result-workbench">
@@ -3070,8 +3098,8 @@
                 <article class="result-model"><div class="result-column-head"><h3 class="result-column-title">A. 模型回答</h3><span class="result-column-meta">Seed-Base</span></div><div class="result-body" id="seedResult">识别到试点范围与预算状态；报价和预算已标记为人工确认，并生成下周三前的跟进任务。</div><span class="result-rank">当前第 1 名</span><div class="result-order"><button class="active" type="button" data-result-rank="seed">排第 1</button><button type="button" data-result-rank="gpt">排第 2</button></div></article>
                 <article class="result-model"><div class="result-column-head"><h3 class="result-column-title">B. 模型回答</h3><span class="result-column-meta">GPT-5</span></div><div class="result-body" id="gptResult">提取到试点计划和报价需求，但未明确预算确认责任人，也没有给出可执行的后续动作。</div><span class="result-rank muted">当前第 2 名</span><div class="result-order"><button type="button" data-result-rank="gpt">排第 1</button><button class="active" type="button" data-result-rank="seed">排第 2</button></div></article>
               </div>
-              <section class="tuning-card"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">补充本轮反馈</h3><p class="tuning-sub" id="feedbackHint">先选择主要差异维度，再说明第 1 名和第 3 名的关键差别，以及希望 Skill 下一轮怎么改。</p></div></div><div class="feedback-area"><div class="feedback-dimension-panel"><div class="feedback-dimension-title">主要差异维度</div><div class="feedback-dimensions" id="feedbackDimensions" role="group" aria-label="选择主要差异维度"><button class="feedback-dimension active" type="button" data-feedback-dimension="事实准确性">事实准确性</button><button class="feedback-dimension" type="button" data-feedback-dimension="覆盖完整度">覆盖完整度</button><button class="feedback-dimension" type="button" data-feedback-dimension="定位精确度">定位精确度</button><button class="feedback-dimension" type="button" data-feedback-dimension="严重度判断">严重度判断</button><button class="feedback-dimension" type="button" data-feedback-dimension="可执行性">可执行性</button><button class="feedback-dimension" type="button" data-feedback-dimension="格式与规范">格式与规范</button><button class="feedback-dimension" type="button" data-feedback-dimension="幻觉与编造">幻觉与编造</button></div></div><div class="feedback-writing-grid"><div class="feedback-field"><label for="feedbackNote">第 1 名与第 3 名的关键差别</label><textarea class="feedback-note" id="feedbackNote" rows="4" placeholder="例如：第 1 名能逐条对齐合同条款并指出 5.3 与 7.2 的冲突；第 3 名只给结论，没有说明冲突发生在哪个环节。"></textarea></div><div class="feedback-field"><label for="feedbackExpectation">期望怎么改</label><textarea class="feedback-expectation" id="feedbackExpectation" rows="4" placeholder="例如：下一轮强制逐条对比相关条款，输出冲突位置、影响和建议改法。"></textarea></div></div></div></section>
-              <div class="tuning-actions"><button class="btn btn-ghost" id="finishPublish" type="button">结束迭代并发布</button><button class="btn btn-primary" id="submitFeedback" type="button">开始迭代</button></div>
+              <section class="tuning-card"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">补充本轮反馈</h3><p class="tuning-sub" id="feedbackHint">先选择主要差异维度，再说明第 1 名和第 3 名的关键差别，以及希望 Skill 下一轮怎么改。</p></div></div><div class="feedback-area"><div class="feedback-dimension-panel"><div class="feedback-dimension-title">主要差异维度</div><div class="feedback-dimensions" id="feedbackDimensions" role="group" aria-label="选择主要差异维度"><button class="feedback-dimension active" type="button" data-feedback-dimension="事实准确性" aria-pressed="true">事实准确性</button><button class="feedback-dimension" type="button" data-feedback-dimension="覆盖完整度" aria-pressed="false">覆盖完整度</button><button class="feedback-dimension" type="button" data-feedback-dimension="定位精确度" aria-pressed="false">定位精确度</button><button class="feedback-dimension" type="button" data-feedback-dimension="严重度判断" aria-pressed="false">严重度判断</button><button class="feedback-dimension" type="button" data-feedback-dimension="可执行性" aria-pressed="false">可执行性</button><button class="feedback-dimension" type="button" data-feedback-dimension="格式与规范" aria-pressed="false">格式与规范</button><button class="feedback-dimension" type="button" data-feedback-dimension="幻觉与编造" aria-pressed="false">幻觉与编造</button></div></div><div class="feedback-writing-grid"><div class="feedback-field"><label for="feedbackNote">第 1 名与第 3 名的关键差别</label><textarea class="feedback-note" id="feedbackNote" rows="4" placeholder="例如：第 1 名能逐条对齐合同条款并指出 5.3 与 7.2 的冲突；第 3 名只给结论，没有说明冲突发生在哪个环节。"></textarea></div><div class="feedback-field"><label for="feedbackExpectation">期望怎么改</label><textarea class="feedback-expectation" id="feedbackExpectation" rows="4" placeholder="例如：下一轮强制逐条对比相关条款，输出冲突位置、影响和建议改法。"></textarea></div></div></div></section>
+              <div class="tuning-actions"><button class="btn btn-ghost" id="finishPublish" type="button">结束迭代并发布</button><button class="btn btn-primary" id="submitFeedback" type="button">开始第 1 轮迭代</button></div>
             </section>
           </section>
         </div>
@@ -5625,6 +5653,9 @@
     let formalVersion = 3;
     let debugMinorVersion = 0;
     let iteration = 3;
+    let debugIterationCount = 0;
+    let debugIterationStatus = "idle";
+    let debugMode = "ranking";
     var debugStage = 1;
     let debugSelection = ["sales_followup_package"];
     let debugSource = "skills";
@@ -5852,7 +5883,46 @@
       const version = document.getElementById("resultVersionMeta")?.textContent.trim()
         || item?.querySelector(".debug-object-version")?.value
         || "V1";
-      list.innerHTML = `<article class="skill-member" data-skill-member="${escapeHtml(id)}"><div class="skill-member-head"><span>${escapeHtml(name)}</span><span class="skill-member-version">${escapeHtml(version)}</span></div><div class="skill-member-copy">${escapeHtml(purpose)}</div><div class="skill-member-actions"><button class="skill-member-detail" type="button" data-skill-diff="${escapeHtml(id)}">查看本轮迭代 diff <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div></article>`;
+      const statusText = debugIterationStatus === "debugging"
+        ? "调试中"
+        : debugIterationStatus === "completed"
+          ? `已完成第 ${debugIterationCount} 次调试`
+          : "";
+      const statusClass = debugIterationStatus === "debugging" ? "debugging" : "completed";
+      const statusMarkup = statusText ? `<span class="skill-member-status ${statusClass}">${escapeHtml(statusText)}</span>` : "";
+      list.innerHTML = `<article class="skill-member" data-skill-member="${escapeHtml(id)}"><div class="skill-member-head"><span>${escapeHtml(name)}</span><span class="skill-member-version">${escapeHtml(version)}</span>${statusMarkup}</div><div class="skill-member-copy">${escapeHtml(purpose)}</div><div class="skill-member-actions"><button class="skill-member-detail" type="button" data-skill-diff="${escapeHtml(id)}">查看本轮迭代 diff <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div></article>`;
+    }
+
+    function resetDebugIterationState() {
+      debugIterationCount = 0;
+      debugIterationStatus = "idle";
+      updateDebugIterationButton();
+    }
+
+    function updateDebugIterationButton() {
+      const submitButton = document.getElementById("submitFeedback");
+      if (submitButton) {
+        const nextRound = debugIterationCount + 1;
+        submitButton.disabled = debugIterationStatus === "debugging";
+        submitButton.textContent = debugIterationStatus === "debugging" ? `第 ${nextRound} 轮调试中` : `开始第 ${nextRound} 轮迭代`;
+      }
+    }
+
+    function setDebugMode(mode) {
+      debugMode = mode === "judgement" ? "judgement" : "ranking";
+      document.querySelectorAll("[data-debug-mode]").forEach(button => {
+        const active = button.dataset.debugMode === debugMode;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-selected", String(active));
+      });
+      document.getElementById("debugJudgeForm").hidden = debugMode !== "judgement";
+      document.getElementById("evalModuleTitle").textContent = debugMode === "judgement" ? "调试结果判定" : "调试结果排序";
+      document.getElementById("feedbackHint").textContent = debugMode === "judgement"
+        ? "填写正确答案和判定规则后，结合模型输出判断 Skill 下一轮怎么改。"
+        : "先选择主要差异维度，再说明第 1 名和第 3 名的关键差别，以及希望 Skill 下一轮怎么改。";
+      document.getElementById("debugModeHint").textContent = debugMode === "judgement"
+        ? "根据正确答案和判定规则检查模型输出；判定结果会作为本轮 Skill 迭代依据。"
+        : "拖拽卡片调整排序；排序结果会作为本轮 Skill 迭代依据。";
     }
 
     let activeSkillSource = { title: "skill", version: "V1", content: "" };
@@ -6096,6 +6166,7 @@
       debugSource = "scene";
       debugScene = "sales";
       Object.keys(modelRanks).forEach(key => delete modelRanks[key]);
+      resetDebugIterationState();
       setDebugBackLabel("返回场景技能");
       renderDebugSelection();
       document.getElementById("debugSelectionName").textContent = name;
@@ -6504,13 +6575,19 @@
     }
 
     document.getElementById("runExecution").addEventListener("click", runExecution);
+    document.getElementById("debugModeControl").addEventListener("click", event => {
+      const button = event.target.closest("[data-debug-mode]");
+      if (!button) return;
+      setDebugMode(button.dataset.debugMode);
+    });
 
     document.querySelectorAll(".eval-item[data-eval-index]").forEach(button => button.addEventListener("click", () => renderDebugEval(button.dataset.evalIndex)));
     document.querySelectorAll(".result-task-nav [data-eval-index]").forEach(button => button.addEventListener("click", () => renderDebugEval(button.dataset.evalIndex)));
     document.getElementById("feedbackDimensions").addEventListener("click", event => {
       const button = event.target.closest("[data-feedback-dimension]");
       if (!button) return;
-      document.querySelectorAll("[data-feedback-dimension]").forEach(item => item.classList.toggle("active", item === button));
+      button.classList.toggle("active");
+      button.setAttribute("aria-pressed", String(button.classList.contains("active")));
     });
     document.querySelectorAll("[data-result-rank]").forEach(button => button.addEventListener("click", () => {
       const rank = button.dataset.resultRank;
@@ -6529,22 +6606,48 @@
     }));
 
     document.getElementById("submitFeedback").addEventListener("click", () => {
+      if (debugIterationStatus === "debugging") return;
+      const currentRound = debugIterationCount + 1;
+      const correctAnswer = document.getElementById("debugCorrectAnswer").value.trim();
+      const judgeRule = document.getElementById("debugJudgeRule").value.trim();
+      if (debugMode === "judgement" && !correctAnswer) {
+        document.getElementById("debugCorrectAnswer").focus();
+        showToast("判定型调试需要填写正确答案");
+        return;
+      }
       const difference = document.getElementById("feedbackNote").value.trim();
-      const dimension = document.querySelector("[data-feedback-dimension].active")?.dataset.feedbackDimension || "";
+      const dimensions = [...document.querySelectorAll("[data-feedback-dimension].active")].map(button => button.dataset.feedbackDimension);
       const expectation = document.getElementById("feedbackExpectation").value.trim();
-      const note = [difference && `关键差别：${difference}`, dimension && `主要维度：${dimension}`, expectation && `期望改法：${expectation}`].filter(Boolean).join("；");
+      const note = [
+        difference && `关键差别：${difference}`,
+        dimensions.length && `主要维度：${dimensions.join("、")}`,
+        expectation && `期望改法：${expectation}`,
+        debugMode === "judgement" && `正确答案：${correctAnswer}`,
+        debugMode === "judgement" && judgeRule && `判定规则：${judgeRule}`
+      ].filter(Boolean).join("；");
       const ranked = getSelectedDebugModels().sort((a, b) => modelRanks[a] - modelRanks[b]);
       const leadingModel = getAnonymousModelName(ranked[0]) || "当前模型排序";
+      debugIterationStatus = "debugging";
+      updateDebugIterationButton();
+      renderSkillInspector();
       document.getElementById("inspectorMembers").hidden = false;
       document.getElementById("inspectorChanges").hidden = true;
       document.getElementById("skillModuleTitle").closest(".skill-module")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      showToast(note ? `已结合 ${leadingModel} 排名与反馈，生成技能迭代建议` : `已结合 ${leadingModel} 最新排名，生成技能迭代建议`);
+      showToast(`第 ${currentRound} 轮调试已开始`);
+      window.setTimeout(() => {
+        debugIterationCount = currentRound;
+        debugIterationStatus = "completed";
+        updateDebugIterationButton();
+        renderSkillInspector();
+        showToast(note ? `已完成第 ${currentRound} 轮调试，并结合 ${leadingModel} 排名与反馈生成迭代建议` : `已完成第 ${currentRound} 轮调试，并结合 ${leadingModel} 最新排名生成迭代建议`);
+      }, 1200);
     });
 
     document.getElementById("finishPublish").addEventListener("click", () => {
       const name = getDebugSelectionName();
       const publishedVersion = debugMinorVersion > 0 ? `V${formalVersion}.${debugMinorVersion}` : `V${formalVersion}`;
       showToast(`已结束迭代，${name} ${publishedVersion} 已发布`);
+      resetDebugIterationState();
       document.getElementById("debugStage1").classList.remove("debug-picker-mode");
       goToDebugStage(1);
     });
@@ -6784,6 +6887,7 @@
 
     renderDebugObjectGrid();
     renderDebugSelection();
+    setDebugMode("ranking");
     renderReviewSceneOptions();
 
     const savedView = localStorage.getItem("skillpilot-current-view");

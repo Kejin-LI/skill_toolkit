@@ -2751,10 +2751,6 @@
                 <h2 class="skill-create-title">创建技能</h2>
                 <p class="skill-create-sub"><span id="createSceneContext">销售会议纪要入 CRM</span> · 基于场景数据、模型偏好和领域知识生成新技能。</p>
               </div>
-              <button class="btn btn-primary" id="runSkillCreation" type="button">
-                <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M12 3l1.4 4.6L18 9l-4.6 1.4L12 15l-1.4-4.6L6 9l4.6-1.4z"/></svg>
-                生成技能草案
-              </button>
             </div>
 
             <div class="skill-create-layout">
@@ -2762,8 +2758,7 @@
                 <button class="skill-create-step active" type="button" data-create-step="1" aria-selected="true"><b>第一步</b><span>选择学习数据</span></button>
                 <button class="skill-create-step" type="button" data-create-step="2" aria-selected="false"><b>第二步</b><span>学习先进模型</span></button>
                 <button class="skill-create-step" type="button" data-create-step="3" aria-selected="false"><b>第三步</b><span>设定理想标准</span></button>
-                <button class="skill-create-step" type="button" data-create-step="4" aria-selected="false"><b>第四步</b><span>上传领域知识</span></button>
-                <button class="skill-create-step" type="button" data-create-step="5" aria-selected="false"><b>第五步</b><span>生成并保存</span></button>
+                <button class="skill-create-step" type="button" data-create-step="4" aria-selected="false"><b>第四步</b><span>生成并保存</span></button>
               </aside>
 
               <div class="skill-create-main">
@@ -2811,19 +2806,10 @@
                   <textarea class="textarea" id="idealSkillStandard" placeholder="例如：必须输出 CRM 字段映射；低置信度客户匹配必须阻断写入；金额、合同状态和商机阶段必须给出人工确认问题。"></textarea>
                 </section>
 
-                <section class="card skill-create-card skill-create-panel" data-create-panel="4">
-                  <div class="card-head"><div><div class="card-title">上传领域知识</div><div class="skill-meta">选填，可选择已有知识或上传本地规则文件。</div></div><button class="btn btn-soft" id="addCreateKnowledge" type="button">上传文档</button></div>
-                  <input id="createKnowledgeUpload" type="file" multiple hidden>
-                  <div class="create-knowledge-list" id="createKnowledgeList">
-                    <span class="attachment-chip">CRM 客户字段字典.pdf</span>
-                    <span class="attachment-chip">销售会议纪要规范.md</span>
-                  </div>
-                </section>
-
-                <section class="card skill-create-card skill-create-panel skill-draft-card" id="skillDraftCard" data-create-panel="5">
+                <section class="card skill-create-card skill-create-panel skill-draft-card" id="skillDraftCard" data-create-panel="4">
                   <div class="card-head"><div><div class="card-title">技能草案</div><div class="skill-meta">确认名称和简介后保存到当前场景技能列表。</div></div></div>
                   <div class="skill-draft-empty" id="skillDraftEmpty">
-                    <p>前面步骤的信息会作为生成上下文。点击右上角“生成技能草案”后，这里会展示可编辑的技能名称、简介和草案内容。</p>
+                    <p>前面步骤的信息和当前场景知识库会自动作为生成上下文。点击右上角“生成技能草案”后，这里会展示可编辑的技能名称、简介和草案内容。</p>
                     <button class="btn btn-primary" type="button" data-run-create-draft>生成技能草案</button>
                   </div>
                   <div class="skill-draft-content" id="skillDraftContent" hidden>
@@ -4758,22 +4744,6 @@
       document.querySelectorAll("#createModelRanking .model-learning-card").forEach(card => card.classList.remove("dragging", "drag-over"));
       updateCreateModelRanks();
     });
-    const createKnowledgeUpload = document.getElementById("createKnowledgeUpload");
-    document.getElementById("addCreateKnowledge").addEventListener("click", () => {
-      createKnowledgeUpload.click();
-    });
-    createKnowledgeUpload.addEventListener("change", () => {
-      const list = document.getElementById("createKnowledgeList");
-      const files = [...createKnowledgeUpload.files];
-      if (!files.length) return;
-      files.forEach(file => {
-        if (!list.textContent.includes(file.name)) {
-          list.insertAdjacentHTML("beforeend", `<span class="attachment-chip">${escapeHtml(file.name)}</span>`);
-        }
-      });
-      createKnowledgeUpload.value = "";
-      showToast("领域知识文档已上传");
-    });
     function runCreateDraft() {
       const { selectedDatasets } = getLearningDatasetStats();
       const sampleCount = getLearningSampleCount();
@@ -4787,13 +4757,12 @@
       const samplingText = document.getElementById("learningSampleCount").textContent.trim();
       document.getElementById("newSkillName").value = "extract_sales_meeting_context";
       document.getElementById("newSkillPurpose").value = "基于销售会议纪要提取客户需求、预算状态、决策人、CRM 字段映射和后续跟进动作。";
-      document.getElementById("newSkillDraftCode").textContent = `# extract_sales_meeting_context\n\n## Scene\n${sceneName}\n\n## Learning Data\n- ${samplingText}\n- 数据集：${selectedDatasets.map(input => input.closest(".learning-dataset").querySelector("b").textContent).join("、")}\n\n## Learned Preference\n优先参考 ${topModel} 的回答结构：字段映射明确、风险原因可追溯、下一步动作可执行。\n\n## Ideal Standard\n${standard || "未额外设定，沿用场景数据集和模型排序偏好。"}\n\n## Inputs\n- 场景绑定数据集抽取的代表性 Prompt\n- 用户排序后的先进模型优质回答\n- CRM 字段字典与销售会议纪要规范\n\n## Guardrails\n- 低置信度客户匹配必须阻断写入。\n- 金额、合同状态和商机阶段必须给出人工确认问题。\n- 不补充输入中不存在的事实。`;
+      document.getElementById("newSkillDraftCode").textContent = `# extract_sales_meeting_context\n\n## Scene\n${sceneName}\n\n## Learning Data\n- ${samplingText}\n- 数据集：${selectedDatasets.map(input => input.closest(".learning-dataset").querySelector("b").textContent).join("、")}\n\n## Learned Preference\n优先参考 ${topModel} 的回答结构：字段映射明确、风险原因可追溯、下一步动作可执行。\n\n## Ideal Standard\n${standard || "未额外设定，沿用场景数据集和模型排序偏好。"}\n\n## Scene Knowledge Base\n自动带入当前场景知识库：CRM 客户字段字典、销售会议纪要规范、业务规则与 SOP。\n\n## Inputs\n- 场景绑定数据集抽取的代表性 Prompt\n- 用户排序后的先进模型优质回答\n- 当前场景知识库中的字段字典、规则与 SOP\n\n## Guardrails\n- 低置信度客户匹配必须阻断写入。\n- 金额、合同状态和商机阶段必须给出人工确认问题。\n- 不补充输入中不存在的事实。`;
       document.getElementById("skillDraftEmpty").hidden = true;
       document.getElementById("skillDraftContent").hidden = false;
-      setCreateStep(5);
+      setCreateStep(4);
       showToast("技能草案已生成");
     }
-    document.getElementById("runSkillCreation").addEventListener("click", runCreateDraft);
     document.querySelector("[data-run-create-draft]").addEventListener("click", runCreateDraft);
     document.getElementById("regenerateSkillDraft").addEventListener("click", runCreateDraft);
     document.getElementById("saveCreatedSkillToScene").addEventListener("click", () => {

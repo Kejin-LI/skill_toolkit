@@ -2781,8 +2781,7 @@
       } else {
         pageHeaderTitle.hidden = false;
         reviewHeader.hidden = true;
-        const debugPickerMode = name === "debug" && document.getElementById("debugStage1")?.classList.contains("debug-picker-mode");
-        debugHeaderBack.classList.toggle("visible", name === "debug" && (debugStage > 1 || debugPickerMode));
+        debugHeaderBack.classList.toggle("visible", name === "debug" && debugStage > 1);
         if (generateReview) generateReview.hidden = true;
       }
       mobileNav.value = name;
@@ -4377,8 +4376,7 @@
         step.classList.toggle("active", index === stage);
         step.classList.toggle("done", index < stage);
       });
-      const pickerMode = stage === 1 && document.getElementById("debugStage1").classList.contains("debug-picker-mode");
-      debugHeaderBack.classList.toggle("visible", stage > 1 || pickerMode);
+      debugHeaderBack.classList.toggle("visible", stage > 1);
       pageHeaderTitle.hidden = false;
     }
 

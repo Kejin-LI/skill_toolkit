@@ -1405,18 +1405,21 @@
     .diff-badge.remove { color: #b44242; background: #fdf0f0; }
     .diff-badge.change { color: var(--primary-ink); background: var(--violet-bg); }
     .eval-module { min-width: 0; padding: 16px; overflow: hidden; background: rgba(255,255,255,.72); }
-    .eval-module > .result-column-head { border-bottom: 0; padding-bottom: 0; }
+    .eval-module > .result-column-head { align-items: flex-start; border-bottom: 0; padding-bottom: 0; }
+    .eval-module-title-block { display: grid; gap: 4px; min-width: 0; }
+    .eval-module-sub { color: var(--faint); font-size: 10.5px; line-height: 1.45; }
     .eval-module-actions { display: flex; align-items: center; gap: 8px; }
     #runExecution { min-height: 30px; padding: 0 12px; font-size: 12px; }
     #runExecution .ic { margin-right: 5px; }
     #runExecution[disabled] { opacity: .6; cursor: default; }
-    .debug-mode-panel { display: grid; gap: 10px; margin: 12px 0 14px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.78); }
+    #runExecution[hidden] { display: none !important; }
+    .debug-mode-panel { display: grid; gap: 10px; margin: 12px 0 10px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.78); }
     .debug-mode-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .debug-mode-title { color: var(--text); font-size: 12px; font-weight: 750; }
     .debug-mode-control { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
     .debug-mode-control button { min-height: 28px; padding: 0 11px; border-radius: 6px; color: var(--muted); font: inherit; font-size: 11.5px; font-weight: 650; cursor: pointer; }
     .debug-mode-control button.active { background: #fff; color: var(--primary-ink); box-shadow: 0 1px 3px rgba(20,20,45,.08); }
-    .debug-judge-form { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 10px; }
+    .debug-judge-form { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 10px; margin: 0 0 18px; }
     .debug-judge-form[hidden] { display: none !important; }
     .debug-judge-field { display: grid; gap: 6px; min-width: 0; }
     .debug-judge-field label { color: var(--faint); font-size: 11px; font-weight: 700; }
@@ -1431,6 +1434,7 @@
     .result-task-nav button { flex: 0 0 auto; padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--muted); font: inherit; font-size: 10.5px; cursor: pointer; }
     .result-task-nav button.active { border-color: var(--primary); color: var(--primary-ink); background: var(--violet-bg); }
     .model-result-rail { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; touch-action: pan-y; }
+    .model-result-rail[hidden] { display: none !important; }
     .model-result-card { flex: 0 0 min(330px, 78vw); min-height: 380px; display: flex; flex-direction: column; padding: 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff; scroll-snap-align: start; cursor: grab; user-select: none; }
     .model-result-card:active { cursor: grabbing; }
     .model-result-card.dragging { opacity: 1; border-color: var(--primary); }
@@ -1483,7 +1487,6 @@
       user-select: text;
     }
     .model-feedback textarea:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(108,92,231,.1); }
-    .rail-hint { margin-top: 7px; color: var(--faint); font-size: 10px; }
     .skill-detail-modal { width: min(720px, 100%); }
     .skill-detail-title-row { display: flex; align-items: center; gap: 8px; }
     .skill-detail-version { display: inline-flex; align-items: center; min-height: 21px; padding: 0 8px; border-radius: 999px; font-size: 10px; white-space: nowrap; }
@@ -3073,8 +3076,15 @@
                   </div>
                 </section>
                 <section class="debug-result-module eval-module result-stage" aria-labelledby="evalModuleTitle">
-                  <div class="result-column-head"><h3 class="result-column-title" id="evalModuleTitle">调试结果排序</h3><div class="eval-module-actions"><button class="btn btn-primary" id="runExecution" type="button"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>执行结果</button></div></div>
+                  <div class="result-column-head">
+                    <div class="eval-module-title-block">
+                      <h3 class="result-column-title" id="evalModuleTitle">模型调试</h3>
+                      <div class="eval-module-sub" id="evalModuleSub">查看当前 Prompt 的模型输出，并补充本轮 Skill 迭代所需的反馈依据。</div>
+                    </div>
+                    <div class="eval-module-actions"><button class="btn btn-primary" id="runExecution" type="button"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>执行结果</button></div>
+                  </div>
                   <div class="result-task-strip"><span class="source-label">调试集</span><div class="result-task-nav"><button class="active" type="button" data-eval-index="0">01</button><button type="button" data-eval-index="1">02</button><button type="button" data-eval-index="2">03</button></div></div>
+                  <div class="source-value" id="resultTaskTextV2">客户希望下周三前完成试点，请提取预算状态、决策人和下一步跟进动作。</div>
                   <div class="debug-mode-panel">
                     <div class="debug-mode-head">
                       <div class="debug-mode-title">调试方式</div>
@@ -3083,14 +3093,12 @@
                         <button type="button" data-debug-mode="judgement" aria-selected="false">判定型</button>
                       </div>
                     </div>
-                    <div class="debug-judge-form" id="debugJudgeForm" hidden>
-                      <div class="debug-judge-field"><label for="debugCorrectAnswer">正确答案 <b>*</b></label><textarea id="debugCorrectAnswer" placeholder="输入该 Prompt 的标准答案或必须命中的关键结论。"></textarea></div>
-                      <div class="debug-judge-field"><label for="debugJudgeRule">判定规则</label><textarea id="debugJudgeRule" placeholder="选填，例如：必须覆盖预算状态、决策人、下一步动作；不得编造 CRM 字段。"></textarea></div>
-                    </div>
                   </div>
-                  <div class="source-value" id="resultTaskTextV2">客户希望下周三前完成试点，请提取预算状态、决策人和下一步跟进动作。</div>
+                  <div class="debug-judge-form" id="debugJudgeForm" hidden>
+                    <div class="debug-judge-field"><label for="debugCorrectAnswer">正确答案 <b>*</b></label><textarea id="debugCorrectAnswer" placeholder="输入该 Prompt 的标准答案或必须命中的关键结论。"></textarea></div>
+                    <div class="debug-judge-field"><label for="debugJudgeRule">判定规则</label><textarea id="debugJudgeRule" placeholder="选填，例如：必须覆盖预算状态、决策人、下一步动作；不得编造 CRM 字段。"></textarea></div>
+                  </div>
                   <div class="model-result-rail" id="modelResultRail"></div>
-                  <div class="rail-hint" id="debugModeHint">拖拽卡片调整排序；排序结果会作为本轮 Skill 迭代依据。</div>
                 </section>
               </div>
               <div class="result-workbench">
@@ -5915,14 +5923,14 @@
         button.classList.toggle("active", active);
         button.setAttribute("aria-selected", String(active));
       });
+      const isJudgementMode = debugMode === "judgement";
       document.getElementById("debugJudgeForm").hidden = debugMode !== "judgement";
-      document.getElementById("evalModuleTitle").textContent = debugMode === "judgement" ? "调试结果判定" : "调试结果排序";
-      document.getElementById("feedbackHint").textContent = debugMode === "judgement"
+      document.getElementById("modelResultRail").hidden = isJudgementMode;
+      document.getElementById("runExecution").hidden = isJudgementMode;
+      document.getElementById("evalModuleTitle").textContent = "模型调试";
+      document.getElementById("feedbackHint").textContent = isJudgementMode
         ? "填写正确答案和判定规则后，结合模型输出判断 Skill 下一轮怎么改。"
         : "先选择第 1 名和第 3 名的主要差异维度，再说明关键差别，以及希望 Skill 下一轮怎么改。";
-      document.getElementById("debugModeHint").textContent = debugMode === "judgement"
-        ? "根据正确答案和判定规则检查模型输出；判定结果会作为本轮 Skill 迭代依据。"
-        : "拖拽卡片调整排序；排序结果会作为本轮 Skill 迭代依据。";
     }
 
     let activeSkillSource = { title: "skill", version: "V1", content: "" };

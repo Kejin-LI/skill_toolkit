@@ -956,22 +956,8 @@
     .learning-sample.active { border-color: rgba(108,92,231,.45); background: rgba(108,92,231,.055); }
     .learning-sample b { display: block; font-size: 13px; }
     .learning-sample small { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.45; }
-    .model-learning-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-    .model-learning-card {
-      display: grid;
-      gap: 8px;
-      min-height: 142px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      cursor: grab;
-    }
-    .model-learning-card.dragging { opacity: .72; }
-    .model-learning-card.drag-over { border-color: var(--primary); background: var(--violet-bg); }
-    .model-learning-card b { font-size: 13px; }
-    .model-learning-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-    .model-learning-card span { align-self: end; color: var(--primary-ink); font-size: 11px; font-weight: 700; }
+    .learning-sample-attachments { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .learning-sample-attachment { display: inline-flex; align-items: center; min-height: 21px; padding: 0 7px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--muted); font-size: 10.5px; }
     .create-knowledge-list { display: flex; flex-wrap: wrap; gap: 8px; }
     .skill-draft-card { border-color: rgba(45,160,105,.42); }
     .skill-draft-empty { display: grid; gap: 10px; padding: 18px; border: 1px dashed var(--line-strong); border-radius: 8px; background: var(--surface-soft); }
@@ -1240,6 +1226,23 @@
     .debug-record-actions .btn { min-height: 28px; padding: 0 9px; font-size: 11px; }
     .debug-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
     .debug-panel-tools { display: flex; align-items: center; gap: 10px; }
+    .debug-iteration-flow { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.72); }
+    .debug-iteration-summary { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .debug-iteration-label { color: var(--text); font-size: 12px; font-weight: 750; }
+    .debug-round-history { display: flex; align-items: center; gap: 5px; overflow-x: auto; }
+    .debug-round-history button { flex: 0 0 auto; min-height: 28px; padding: 0 9px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--muted); font: inherit; font-size: 10.5px; font-weight: 650; cursor: pointer; }
+    .debug-round-history button.active { border-color: var(--primary); background: var(--violet-bg); color: var(--primary-ink); }
+    .debug-round-history button.completed::before { display: inline-block; margin-right: 4px; color: var(--green); content: "✓"; }
+    .debug-round-detail { display: grid; gap: 11px; margin-bottom: 16px; padding: 12px; border-left: 2px solid var(--primary); background: var(--violet-bg); }
+    .debug-round-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .debug-round-detail strong { display: block; color: var(--text); font-size: 11.5px; }
+    .debug-round-detail span { display: block; margin-top: 3px; color: var(--muted); font-size: 10.5px; line-height: 1.45; }
+    .debug-round-detail[hidden] { display: none; }
+    .debug-round-detail .btn { min-height: 28px; padding: 0 9px; font-size: 10.5px; }
+    .debug-round-result { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .debug-round-result-item { min-width: 0; padding: 9px 10px; border: 1px solid rgba(108,92,231,.18); background: rgba(255,255,255,.68); }
+    .debug-round-result-label { color: var(--primary-ink); font-size: 10px; font-weight: 750; }
+    .debug-round-result-copy { margin-top: 4px; color: var(--muted); font-size: 10.5px; line-height: 1.5; }
     .debug-search { width: 210px; height: 34px; padding: 0 11px; border: 1px solid var(--line-strong); border-radius: 7px; outline: 0; background: #fff; color: var(--text); font: inherit; font-size: 12px; }
     .debug-search:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,92,231,.1); }
     .debug-panel-title { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.015em; }
@@ -1429,6 +1432,19 @@
     .result-task-strip { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 11px; }
     .result-task-strip .source-value { flex: 1; margin-top: 0; }
     #resultTaskTextV2 { margin-top: 14px; }
+    .debug-task-attachments { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+    .debug-task-attachments-label { color: var(--faint); font-size: 10.5px; font-weight: 700; }
+    .debug-task-attachment {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 8px;
+      border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--muted);
+      font: inherit; font-size: 10.5px; font-weight: 650; cursor: pointer; transition: border-color .16s ease, background .16s ease, color .16s ease;
+    }
+    .debug-task-attachment:hover, .debug-task-attachment.active { border-color: rgba(108,92,231,.45); background: var(--violet-bg); color: var(--primary-ink); }
+    .debug-task-attachment-type { display: grid; place-items: center; width: 25px; height: 17px; border-radius: 3px; background: #eaf1ff; color: #3f68aa; font-size: 8px; font-weight: 800; letter-spacing: 0; }
+    .debug-task-attachment[data-file-type="xlsx"] .debug-task-attachment-type { background: #e7f5ed; color: #297752; }
+    .debug-task-attachment-preview { margin-top: 8px; padding: 9px 10px; border-left: 2px solid var(--primary); background: var(--violet-bg); color: var(--muted); font-size: 10.5px; line-height: 1.5; }
+    .debug-task-attachment-preview[hidden] { display: none; }
+    .debug-task-attachment-preview b { color: var(--text); font-size: 10.5px; }
     #modelResultRail { margin-top: 24px; }
     .result-task-nav { display: flex; gap: 5px; overflow-x: auto; }
     .result-task-nav button { flex: 0 0 auto; padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--muted); font: inherit; font-size: 10.5px; cursor: pointer; }
@@ -1564,6 +1580,7 @@
     .result-label { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 11.5px; }
     .result-text { margin: 14px 0 0; color: var(--text); font-size: 12.5px; line-height: 1.7; }
     .tuning-card { margin-top: 22px; padding: 18px; border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(255,255,255,.82); }
+    .tuning-card[hidden] { display: none !important; }
     .tuning-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
     .tuning-title { margin: 0; font-size: 14px; font-weight: 700; }
     .tuning-sub { margin: 4px 0 0; color: var(--muted); font-size: 11.5px; }
@@ -1623,6 +1640,8 @@
     @media (max-width: 850px) {
       .studio-layout { grid-template-columns: 1fr; }
       .studio-tree { position: static; }
+      .debug-iteration-flow, .debug-iteration-summary { align-items: flex-start; flex-direction: column; }
+      .debug-round-result { grid-template-columns: 1fr; }
       .result-compare, .test-config-grid { grid-template-columns: 1fr; }
       .result-workbench-v2 { display: grid; }
       .result-source, .result-model { border-right: 0; border-left: 0; border-bottom: 1px solid var(--line); }
@@ -2239,8 +2258,7 @@
       .grid-2 { grid-template-columns: 1fr; }
       .detail-layout { grid-template-columns: 1fr; }
       .skill-create-layout { grid-template-columns: 1fr; }
-      .skill-create-steps { position: static; grid-template-columns: repeat(5, minmax(0, 1fr)); }
-      .model-learning-board { grid-template-columns: 1fr; }
+      .skill-create-steps { position: static; grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .studio-layout { grid-template-columns: 1fr; }
       .generate-review { height: auto; min-height: auto; }
       .review-layout, .review-layout.has-generated, .review-layout:has(.generated-skill-view:not([hidden])) { grid-template-columns: 1fr; gap: 20px; }
@@ -2767,21 +2785,20 @@
             <div class="skill-create-head">
               <div>
                 <h2 class="skill-create-title">创建技能</h2>
-                <p class="skill-create-sub"><span id="createSceneContext">销售会议纪要入 CRM</span> · 基于场景数据、模型偏好和领域知识生成新技能。</p>
+                <p class="skill-create-sub"><span id="createSceneContext">销售会议纪要入 CRM</span> · 基于场景数据、领域知识和 SOTA 模型优质输出生成新技能。</p>
               </div>
             </div>
 
             <div class="skill-create-layout">
               <aside class="skill-create-steps" aria-label="创建技能流程">
                 <button class="skill-create-step active" type="button" data-create-step="1" aria-selected="true"><b>第一步</b><span>选择学习数据</span></button>
-                <button class="skill-create-step" type="button" data-create-step="2" aria-selected="false"><b>第二步</b><span>学习先进模型</span></button>
-                <button class="skill-create-step" type="button" data-create-step="3" aria-selected="false"><b>第三步</b><span>设定理想标准</span></button>
-                <button class="skill-create-step" type="button" data-create-step="4" aria-selected="false"><b>第四步</b><span>生成并保存</span></button>
+                <button class="skill-create-step" type="button" data-create-step="2" aria-selected="false"><b>第二步</b><span>设定理想标准</span></button>
+                <button class="skill-create-step" type="button" data-create-step="3" aria-selected="false"><b>第三步</b><span>生成并保存</span></button>
               </aside>
 
               <div class="skill-create-main">
                 <section class="card skill-create-card skill-create-panel active" data-create-panel="1">
-                  <div class="card-head"><div><div class="card-title">选择学习数据</div><div class="skill-meta">先选场景数据集，再抽取代表性 Prompt；保留评测数据默认不参与学习。</div></div><span class="pill" id="learningSampleCount">智能抽样 50 条</span></div>
+                  <div class="card-head"><div><div class="card-title">选择学习数据</div><div class="skill-meta">先选场景数据，再抽取代表性 Prompt；保留评测数据默认不参与学习。学习会自动参考 GPT-5.5、Seed-Reasoner 和 Claude Sonnet 4 的优质输出。</div></div><span class="pill" id="learningSampleCount">智能抽样 50 条</span></div>
                   <div class="learning-data-grid" id="learningDatasetList">
                     <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="40"><span><b>销售会议 Golden Set</b><small>核心意图、字段抽取、跟进动作 · 覆盖 8 个标签</small></span><em class="learning-dataset-count">40 条</em></label>
                     <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="36"><span><b>CRM 回归样例</b><small>客户匹配、联系人歧义、写入风险 · 最近用于 V3</small></span><em class="learning-dataset-count">36 条</em></label>
@@ -2798,33 +2815,24 @@
                     <button class="btn btn-soft" id="rerollLearningSamples" type="button">重新抽样</button>
                   </div>
                   <div class="sample-basket-head">
-                    <b>样本篮预览</b>
+                    <b>样本预览</b>
                     <span id="sampleBasketSummary">来自 3 个数据集，预览 5 条代表性 Prompt</span>
                   </div>
                   <div class="learning-sample-list" id="learningSampleList" data-sample-count="50">
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>预算与跟进动作</b><small>来源：销售会议 Golden Set · 客户确认下周三前完成试点，需提取预算状态、决策人和下一步动作。</small></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>客户匹配歧义</b><small>来源：CRM 回归样例 · 会议中同时出现总部和华东分部联系人，需判断是否可以直接匹配 CRM。</small></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>写入前风险确认</b><small>来源：销售会议 Golden Set · 金额、合同状态和商机阶段涉及受控字段，低置信度必须进入人工确认。</small></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>历史任务长尾</b><small>来源：历史真实任务池 · 销售要求把跨部门会议中的客户异议归并为 CRM 下一步行动。</small></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>字段缺失样本</b><small>来源：历史真实任务池 · 预算审批缺失但客户要求推进交付排期，需要输出待确认字段。</small></span></label>
+                    <label class="learning-sample active"><input type="checkbox" checked><span><b>客户确认下周三前完成试点，需要提取预算状态、决策人和下一步动作。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">会议纪要_0421.docx</span></span></span></label>
+                    <label class="learning-sample active"><input type="checkbox" checked><span><b>会议中同时出现总部和华东分部联系人，需要判断是否可以直接匹配 CRM。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">客户联系人表.xlsx</span><span class="learning-sample-attachment">会议纪要_0424.docx</span></span></span></label>
+                    <label class="learning-sample active"><input type="checkbox" checked><span><b>金额、合同状态和商机阶段涉及受控字段，低置信度时必须进入人工确认。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">CRM 字段字典.pdf</span><span class="learning-sample-attachment">写入规范.md</span></span></span></label>
+                    <label class="learning-sample active"><input type="checkbox" checked><span><b>将跨部门会议中的客户异议归并为 CRM 下一步行动，并标记需要销售确认的事项。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">会议录音转写.txt</span></span></span></label>
+                    <label class="learning-sample active"><input type="checkbox" checked><span><b>预算审批缺失但客户要求推进交付排期，需要输出待确认字段和阻断原因。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">项目排期.xlsx</span><span class="learning-sample-attachment">审批记录.pdf</span></span></span></label>
                   </div>
                 </section>
 
                 <section class="card skill-create-card skill-create-panel" data-create-panel="2">
-                  <div class="card-head"><div><div class="card-title">学习先进模型</div><div class="skill-meta">对同一批样本比较模型回答质量，拖拽排序形成偏好样例。</div></div></div>
-                  <div class="model-learning-board" id="createModelRanking">
-                    <article class="model-learning-card" draggable="true" data-model="gpt55"><b>GPT-5.5</b><p>输出 CRM 字段映射、风险阻断原因和销售下一步动作，格式稳定。</p><span>当前第 1 名</span></article>
-                    <article class="model-learning-card" draggable="true" data-model="seed"><b>Seed-Reasoner</b><p>风险判断清楚，但对联系人歧义的业务解释不够完整。</p><span>当前第 2 名</span></article>
-                    <article class="model-learning-card" draggable="true" data-model="claude"><b>Claude Sonnet 4</b><p>文字自然，适合人读，但结构化字段缺少置信度标记。</p><span>当前第 3 名</span></article>
-                  </div>
-                </section>
-
-                <section class="card skill-create-card skill-create-panel" data-create-panel="3">
                   <div class="card-head"><div><div class="card-title">设定理想标准</div><div class="skill-meta">选填，用于约束输出结构、风险边界和业务偏好。</div></div></div>
                   <textarea class="textarea" id="idealSkillStandard" placeholder="例如：必须输出 CRM 字段映射；低置信度客户匹配必须阻断写入；金额、合同状态和商机阶段必须给出人工确认问题。"></textarea>
                 </section>
 
-                <section class="card skill-create-card skill-create-panel skill-draft-card" id="skillDraftCard" data-create-panel="4">
+                <section class="card skill-create-card skill-create-panel skill-draft-card" id="skillDraftCard" data-create-panel="3">
                   <div class="card-head"><div><div class="card-title">技能草案</div><div class="skill-meta">确认名称和简介后保存到当前场景技能列表。</div></div></div>
                   <div class="skill-draft-empty" id="skillDraftEmpty">
                     <p>前面步骤的信息和当前场景知识库会自动作为生成上下文。点击右上角“生成技能草案”后，这里会展示可编辑的技能名称、简介和草案内容。</p>
@@ -2843,7 +2851,7 @@
 
 ## Inputs
 - 场景绑定数据集中的真实 Prompt
-- 用户排序后的先进模型优质回答
+- GPT-5.5、Seed-Reasoner、Claude Sonnet 4 的优质输出
 - CRM 字段字典与销售会议纪要规范
 
 ## Guardrails
@@ -3015,7 +3023,7 @@
             </button>
             <nav class="debug-steps" aria-label="调试步骤">
               <button class="debug-step active" type="button" data-debug-step="1"><b>1</b>选择调试集</button>
-              <button class="debug-step" type="button" data-debug-step="2"><b>2</b>结果排序</button>
+              <button class="debug-step" type="button" data-debug-step="2"><b>2</b>技能迭代</button>
             </nav>
 
             <section class="debug-panel" id="debugStage1">
@@ -3058,7 +3066,21 @@
             </section>
 
             <section class="debug-panel" id="debugStage2" hidden>
-              <div class="debug-panel-head"><div><h2 class="debug-panel-title">模型结果排序</h2><p class="debug-panel-copy">三个大模型会调用当前 Skill 处理同一条 Prompt，用户拖拽结果卡片完成质量排序。</p></div><span class="pill" id="debugTaskCount">调试集 3 条 · 当前 01</span></div>
+              <div class="debug-panel-head"><div><h2 class="debug-panel-title">技能迭代</h2><p class="debug-panel-copy">围绕同一条 Prompt 执行模型、完成评估并提交反馈，生成下一轮 Skill 改进。</p></div><span class="pill" id="debugTaskCount">调试集 3 条 · 当前 01</span></div>
+              <section class="debug-iteration-flow" aria-label="当前迭代进度">
+                <div class="debug-iteration-summary">
+                  <div class="debug-iteration-label">迭代轮次</div>
+                  <div class="debug-round-history" id="debugRoundHistory" aria-label="迭代轮次记录"></div>
+                </div>
+                <span class="pill" id="debugIterationLabel">当前第 1 轮</span>
+              </section>
+              <div class="debug-round-detail" id="debugRoundDetail" hidden>
+                <div class="debug-round-detail-head">
+                  <div><strong id="debugRoundDetailTitle">第 1 轮迭代结果</strong><span id="debugRoundDetailCopy"></span></div>
+                  <button class="btn btn-ghost" id="returnCurrentDebugRound" type="button" hidden>返回当前轮</button>
+                </div>
+                <div class="debug-round-result" id="debugRoundResult"></div>
+              </div>
               <div class="result-workbench-v2">
                 <section class="debug-result-module skill-module" aria-labelledby="skillModuleTitle">
                   <div class="skill-inspector">
@@ -3085,6 +3107,8 @@
                   </div>
                   <div class="result-task-strip"><span class="source-label">调试集</span><div class="result-task-nav"><button class="active" type="button" data-eval-index="0">01</button><button type="button" data-eval-index="1">02</button><button type="button" data-eval-index="2">03</button></div></div>
                   <div class="source-value" id="resultTaskTextV2">客户希望下周三前完成试点，请提取预算状态、决策人和下一步跟进动作。</div>
+                  <div class="debug-task-attachments" id="debugTaskAttachments" aria-label="当前 Prompt 附件"></div>
+                  <div class="debug-task-attachment-preview" id="debugTaskAttachmentPreview" hidden></div>
                   <div class="debug-mode-panel">
                     <div class="debug-mode-head">
                       <div class="debug-mode-title">调试方式</div>
@@ -3106,7 +3130,7 @@
                 <article class="result-model"><div class="result-column-head"><h3 class="result-column-title">A. 模型回答</h3><span class="result-column-meta">Seed-Base</span></div><div class="result-body" id="seedResult">识别到试点范围与预算状态；报价和预算已标记为人工确认，并生成下周三前的跟进任务。</div><span class="result-rank">当前第 1 名</span><div class="result-order"><button class="active" type="button" data-result-rank="seed">排第 1</button><button type="button" data-result-rank="gpt">排第 2</button></div></article>
                 <article class="result-model"><div class="result-column-head"><h3 class="result-column-title">B. 模型回答</h3><span class="result-column-meta">GPT-5</span></div><div class="result-body" id="gptResult">提取到试点计划和报价需求，但未明确预算确认责任人，也没有给出可执行的后续动作。</div><span class="result-rank muted">当前第 2 名</span><div class="result-order"><button type="button" data-result-rank="gpt">排第 1</button><button class="active" type="button" data-result-rank="seed">排第 2</button></div></article>
               </div>
-              <section class="tuning-card"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">补充本轮反馈</h3><p class="tuning-sub" id="feedbackHint">先选择第 1 名和第 3 名的主要差异维度，再说明关键差别，以及希望 Skill 下一轮怎么改。</p></div></div><div class="feedback-area"><div class="feedback-dimension-panel"><div class="feedback-dimension-title">第 1 名和第 3 名的主要差异维度</div><div class="feedback-dimensions" id="feedbackDimensions" role="group" aria-label="选择主要差异维度"><button class="feedback-dimension active" type="button" data-feedback-dimension="事实准确性" aria-pressed="true">事实准确性</button><button class="feedback-dimension" type="button" data-feedback-dimension="覆盖完整度" aria-pressed="false">覆盖完整度</button><button class="feedback-dimension" type="button" data-feedback-dimension="定位精确度" aria-pressed="false">定位精确度</button><button class="feedback-dimension" type="button" data-feedback-dimension="严重度判断" aria-pressed="false">严重度判断</button><button class="feedback-dimension" type="button" data-feedback-dimension="可执行性" aria-pressed="false">可执行性</button><button class="feedback-dimension" type="button" data-feedback-dimension="格式与规范" aria-pressed="false">格式与规范</button><button class="feedback-dimension" type="button" data-feedback-dimension="幻觉与编造" aria-pressed="false">幻觉与编造</button></div></div><div class="feedback-writing-grid"><div class="feedback-field"><label for="feedbackNote">第 1 名和第 3 名的差异说明</label><textarea class="feedback-note" id="feedbackNote" rows="4" placeholder="例如：第 1 名能逐条对齐合同条款并指出 5.3 与 7.2 的冲突；第 3 名只给结论，没有说明冲突发生在哪个环节。"></textarea></div><div class="feedback-field"><label for="feedbackExpectation">期望怎么改</label><textarea class="feedback-expectation" id="feedbackExpectation" rows="4" placeholder="例如：下一轮强制逐条对比相关条款，输出冲突位置、影响和建议改法。"></textarea></div></div></div></section>
+              <section class="tuning-card" id="debugFeedbackCard"><div class="tuning-head"><div><h3 class="tuning-title" id="feedbackTitle">补充本轮反馈</h3><p class="tuning-sub" id="feedbackHint">先选择第 1 名和第 3 名的主要差异维度，再说明关键差别，以及希望 Skill 下一轮怎么改。</p></div></div><div class="feedback-area"><div class="feedback-dimension-panel"><div class="feedback-dimension-title">第 1 名和第 3 名的主要差异维度</div><div class="feedback-dimensions" id="feedbackDimensions" role="group" aria-label="选择主要差异维度"><button class="feedback-dimension active" type="button" data-feedback-dimension="事实准确性" aria-pressed="true">事实准确性</button><button class="feedback-dimension" type="button" data-feedback-dimension="覆盖完整度" aria-pressed="false">覆盖完整度</button><button class="feedback-dimension" type="button" data-feedback-dimension="定位精确度" aria-pressed="false">定位精确度</button><button class="feedback-dimension" type="button" data-feedback-dimension="严重度判断" aria-pressed="false">严重度判断</button><button class="feedback-dimension" type="button" data-feedback-dimension="可执行性" aria-pressed="false">可执行性</button><button class="feedback-dimension" type="button" data-feedback-dimension="格式与规范" aria-pressed="false">格式与规范</button><button class="feedback-dimension" type="button" data-feedback-dimension="幻觉与编造" aria-pressed="false">幻觉与编造</button></div></div><div class="feedback-writing-grid"><div class="feedback-field"><label for="feedbackNote">第 1 名和第 3 名的差异说明</label><textarea class="feedback-note" id="feedbackNote" rows="4" placeholder="例如：第 1 名能逐条对齐合同条款并指出 5.3 与 7.2 的冲突；第 3 名只给结论，没有说明冲突发生在哪个环节。"></textarea></div><div class="feedback-field"><label for="feedbackExpectation">期望怎么改</label><textarea class="feedback-expectation" id="feedbackExpectation" rows="4" placeholder="例如：下一轮强制逐条对比相关条款，输出冲突位置、影响和建议改法。"></textarea></div></div></div></section>
               <div class="tuning-actions"><button class="btn btn-ghost" id="finishPublish" type="button">结束迭代并发布</button><button class="btn btn-primary" id="submitFeedback" type="button">开始第 1 轮迭代</button></div>
             </section>
           </section>
@@ -4616,7 +4640,6 @@
     });
 
     let createSkillSceneCard = null;
-    let draggedCreateModel = null;
     function syncCreateSkillContext() {
       const sceneName = createSkillSceneCard?.dataset.scene || activeSceneCard?.dataset.scene || "销售会议纪要入 CRM";
       document.getElementById("createSceneContext").textContent = sceneName;
@@ -4651,11 +4674,6 @@
         : "请先选择至少 1 个可学习数据集";
       document.getElementById("learningSampleList").dataset.sampleCount = String(sampleCount);
     }
-    function updateCreateModelRanks() {
-      [...document.querySelectorAll("#createModelRanking .model-learning-card")].forEach((card, index) => {
-        card.querySelector("span").textContent = `当前第 ${index + 1} 名`;
-      });
-    }
     function setCreateStep(step) {
       const currentStep = Number(step);
       document.querySelectorAll("[data-create-step]").forEach(button => {
@@ -4687,7 +4705,6 @@
       document.getElementById("skillDraftEmpty").hidden = false;
       document.getElementById("skillDraftContent").hidden = true;
       syncCreateSkillContext();
-      updateCreateModelRanks();
       setCreateStep(1);
     }
     function openCreateSkillForScene(sceneCard = activeSceneCard) {
@@ -4750,36 +4767,6 @@
       updateLearningSelectionSummary();
       showToast("已重新抽取学习样本篮");
     });
-    document.getElementById("createModelRanking").addEventListener("dragstart", event => {
-      const card = event.target.closest(".model-learning-card");
-      if (!card) return;
-      draggedCreateModel = card;
-      card.classList.add("dragging");
-      event.dataTransfer.effectAllowed = "move";
-    });
-    document.getElementById("createModelRanking").addEventListener("dragover", event => {
-      const card = event.target.closest(".model-learning-card");
-      if (!card || card === draggedCreateModel) return;
-      event.preventDefault();
-      card.classList.add("drag-over");
-    });
-    document.getElementById("createModelRanking").addEventListener("dragleave", event => {
-      event.target.closest(".model-learning-card")?.classList.remove("drag-over");
-    });
-    document.getElementById("createModelRanking").addEventListener("drop", event => {
-      const card = event.target.closest(".model-learning-card");
-      if (!card || !draggedCreateModel || card === draggedCreateModel) return;
-      event.preventDefault();
-      card.classList.remove("drag-over");
-      const after = event.clientX > card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2;
-      card.parentElement.insertBefore(draggedCreateModel, after ? card.nextSibling : card);
-      updateCreateModelRanks();
-    });
-    document.getElementById("createModelRanking").addEventListener("dragend", () => {
-      draggedCreateModel = null;
-      document.querySelectorAll("#createModelRanking .model-learning-card").forEach(card => card.classList.remove("dragging", "drag-over"));
-      updateCreateModelRanks();
-    });
     function runCreateDraft() {
       const { selectedDatasets } = getLearningDatasetStats();
       const sampleCount = getLearningSampleCount();
@@ -4788,15 +4775,15 @@
         return;
       }
       const standard = document.getElementById("idealSkillStandard").value.trim();
-      const topModel = document.querySelector("#createModelRanking .model-learning-card b")?.textContent || "GPT-5.5";
+      const referenceModels = "GPT-5.5、Seed-Reasoner、Claude Sonnet 4";
       const sceneName = document.getElementById("createSceneContext").textContent.trim();
       const samplingText = document.getElementById("learningSampleCount").textContent.trim();
       document.getElementById("newSkillName").value = "extract_sales_meeting_context";
       document.getElementById("newSkillPurpose").value = "基于销售会议纪要提取客户需求、预算状态、决策人、CRM 字段映射和后续跟进动作。";
-      document.getElementById("newSkillDraftCode").textContent = `# extract_sales_meeting_context\n\n## Scene\n${sceneName}\n\n## Learning Data\n- ${samplingText}\n- 数据集：${selectedDatasets.map(input => input.closest(".learning-dataset").querySelector("b").textContent).join("、")}\n\n## Learned Preference\n优先参考 ${topModel} 的回答结构：字段映射明确、风险原因可追溯、下一步动作可执行。\n\n## Ideal Standard\n${standard || "未额外设定，沿用场景数据集和模型排序偏好。"}\n\n## Scene Knowledge Base\n自动带入当前场景知识库：CRM 客户字段字典、销售会议纪要规范、业务规则与 SOP。\n\n## Inputs\n- 场景绑定数据集抽取的代表性 Prompt\n- 用户排序后的先进模型优质回答\n- 当前场景知识库中的字段字典、规则与 SOP\n\n## Guardrails\n- 低置信度客户匹配必须阻断写入。\n- 金额、合同状态和商机阶段必须给出人工确认问题。\n- 不补充输入中不存在的事实。`;
+      document.getElementById("newSkillDraftCode").textContent = `# extract_sales_meeting_context\n\n## Scene\n${sceneName}\n\n## Learning Data\n- ${samplingText}\n- 数据集：${selectedDatasets.map(input => input.closest(".learning-dataset").querySelector("b").textContent).join("、")}\n\n## SOTA Reference\n自动参考 ${referenceModels} 的优质输出：字段映射明确、风险原因可追溯、下一步动作可执行。\n\n## Ideal Standard\n${standard || "未额外设定，沿用场景数据集、SOTA 优质输出和场景知识库。"}\n\n## Scene Knowledge Base\n自动带入当前场景知识库：CRM 客户字段字典、销售会议纪要规范、业务规则与 SOP。\n\n## Inputs\n- 场景绑定数据集抽取的代表性 Prompt\n- GPT-5.5、Seed-Reasoner、Claude Sonnet 4 的优质输出\n- 当前场景知识库中的字段字典、规则与 SOP\n\n## Guardrails\n- 低置信度客户匹配必须阻断写入。\n- 金额、合同状态和商机阶段必须给出人工确认问题。\n- 不补充输入中不存在的事实。`;
       document.getElementById("skillDraftEmpty").hidden = true;
       document.getElementById("skillDraftContent").hidden = false;
-      setCreateStep(4);
+      setCreateStep(3);
       showToast("技能草案已生成");
     }
     document.querySelector("[data-run-create-draft]").addEventListener("click", runCreateDraft);
@@ -5663,25 +5650,42 @@
     let iteration = 3;
     let debugIterationCount = 0;
     let debugIterationStatus = "idle";
+    let debugIterationStep = "execute";
+    let activeDebugRound = null;
+    const debugRoundHistory = [];
     let debugMode = "ranking";
     var debugStage = 1;
     let debugSelection = ["sales_followup_package"];
     let debugSource = "skills";
     let debugScene = "sales";
+    let debugReturnTarget = "scene";
     let activeEvalIndex = 0;
+    let activeDebugAttachmentIndex = null;
     const debugEvalCases = [
       {
         task: "客户希望下周三前完成试点，请提取预算状态、决策人和下一步跟进动作。",
+        attachments: [
+          { name: "试点复盘会议纪要.docx", type: "docx", preview: "会议确认试点计划需在下周三前完成；预算审批状态待财务确认，决策人信息尚未完整记录。" },
+          { name: "商机推进表.xlsx", type: "xlsx", preview: "商机阶段：试点准备；预算状态：审批中；下一步：销售补充决策人并确认交付排期。" }
+        ],
         seed: "识别到试点范围与预算状态；报价和预算已标记为人工确认，并生成下周三前的跟进任务。",
         gpt: "提取到试点计划和报价需求，但未明确预算确认责任人，也没有给出可执行的后续动作。"
       },
       {
         task: "会议中出现两个同名客户，请判断是否可以直接写入 CRM，并说明还需要确认什么。",
+        attachments: [
+          { name: "客户联系人清单.xlsx", type: "xlsx", preview: "总部与华东分部存在同名联系人，客户编号不同；当前记录缺少可唯一匹配的手机号与所属组织信息。" },
+          { name: "客户匹配规则.docx", type: "docx", preview: "同名客户需同时校验客户编号、联系人手机号和所属组织；任一关键字段缺失时禁止自动写入。" }
+        ],
         seed: "发现同名客户记录，保留候选列表并暂停写入，要求确认客户编号或联系人后再提交。",
         gpt: "根据客户名称选择了一个匹配记录并准备写入 CRM，未提示同名歧义。"
       },
       {
         task: "客户要求修改合同金额并立即同步 CRM，请判断是否可以执行以及下一步动作。",
+        attachments: [
+          { name: "合同变更申请.pdf", type: "pdf", preview: "申请金额为 128 万元，变更原因待补充；当前未附审批人确认与合同补充协议。" },
+          { name: "CRM 受控字段规则.xlsx", type: "xlsx", preview: "合同金额属于受控字段，必须提交审批单、变更原因及审批人后方可同步 CRM。" }
+        ],
         seed: "合同金额属于敏感字段，不能直接写入；应先发起人工确认，记录变更原因和审批人。",
         gpt: "已生成合同金额更新草案，可在确认后同步 CRM，但没有明确审批人的确认步骤。"
       }
@@ -5901,10 +5905,62 @@
       list.innerHTML = `<article class="skill-member" data-skill-member="${escapeHtml(id)}"><div class="skill-member-head"><span>${escapeHtml(name)}</span><span class="skill-member-version">${escapeHtml(version)}</span>${statusMarkup}</div><div class="skill-member-copy">${escapeHtml(purpose)}</div><div class="skill-member-actions"><button class="skill-member-detail" type="button" data-skill-diff="${escapeHtml(id)}">查看本轮迭代 diff <svg class="ic ic-sm" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div></article>`;
     }
 
+    function buildDebugIterationResult({ dimensions, difference, expectation, mode, leadingModel }) {
+      const focus = dimensions.length ? dimensions.join("、") : "结果一致性与可执行性";
+      return {
+        problem: difference
+          ? `围绕${focus}发现：${difference}`
+          : `当前模型输出在${focus}上存在不稳定表现。`,
+        suggestion: expectation || `将${focus}写入明确的输出约束，并要求模型逐项给出证据和处理动作。`,
+        changes: [
+          mode === "判定型" ? "新增正确答案对齐与判定规则检查。" : `新增${focus}的对比检查与排序依据。`,
+          expectation ? `将“${expectation}”固化为下一版输出要求。` : "补充关键字段、风险原因和下一步动作的结构化输出。",
+          `基于${leadingModel}的领先表现，保留有效输出结构并纳入 Skill 约束。`
+        ].join(" ")
+      };
+    }
+
+    function renderDebugIterationFlow() {
+      const currentRound = debugIterationCount + 1;
+      const label = document.getElementById("debugIterationLabel");
+      if (label) label.textContent = activeDebugRound === null ? `当前第 ${currentRound} 轮` : `查看第 ${activeDebugRound} 轮`;
+      const history = document.getElementById("debugRoundHistory");
+      if (history) {
+        const completed = debugRoundHistory.map(round => `<button class="completed${activeDebugRound === round.round ? " active" : ""}" type="button" data-debug-round="${round.round}">第 ${round.round} 轮</button>`).join("");
+        history.innerHTML = `${completed}<button class="${activeDebugRound === null ? "active" : ""}" type="button" data-debug-round="current">第 ${currentRound} 轮</button>`;
+      }
+      const detail = document.getElementById("debugRoundDetail");
+      const selectedRound = debugRoundHistory.find(round => round.round === activeDebugRound)
+        || debugRoundHistory[debugRoundHistory.length - 1];
+      if (!detail) return;
+      detail.hidden = !selectedRound;
+      if (selectedRound) {
+        document.getElementById("debugRoundDetailTitle").textContent = `第 ${selectedRound.round} 轮${activeDebugRound === null ? "最新" : ""}迭代结果`;
+        document.getElementById("debugRoundDetailCopy").textContent = `Prompt：${selectedRound.prompt} · ${selectedRound.mode} · ${selectedRound.leadingModel} 排名领先`;
+        const result = selectedRound.result;
+        document.getElementById("debugRoundResult").innerHTML = [
+          ["问题总结", result.problem],
+          ["迭代建议", result.suggestion],
+          ["已应用变更", result.changes]
+        ].map(([labelText, copy]) => `<div class="debug-round-result-item"><div class="debug-round-result-label">${escapeHtml(labelText)}</div><div class="debug-round-result-copy">${escapeHtml(copy)}</div></div>`).join("");
+        document.getElementById("returnCurrentDebugRound").hidden = activeDebugRound === null;
+      }
+    }
+
+    function setDebugIterationStep(step) {
+      debugIterationStep = step;
+      activeDebugRound = null;
+      renderDebugIterationFlow();
+    }
+
     function resetDebugIterationState() {
       debugIterationCount = 0;
       debugIterationStatus = "idle";
+      debugIterationStep = "execute";
+      activeDebugRound = null;
+      debugRoundHistory.length = 0;
       updateDebugIterationButton();
+      renderDebugIterationFlow();
     }
 
     function updateDebugIterationButton() {
@@ -5927,10 +5983,12 @@
       document.getElementById("debugJudgeForm").hidden = debugMode !== "judgement";
       document.getElementById("modelResultRail").hidden = isJudgementMode;
       document.getElementById("runExecution").hidden = isJudgementMode;
+      document.getElementById("debugFeedbackCard").hidden = isJudgementMode;
       document.getElementById("evalModuleTitle").textContent = "模型调试";
       document.getElementById("feedbackHint").textContent = isJudgementMode
         ? "填写正确答案和判定规则后，结合模型输出判断 Skill 下一轮怎么改。"
         : "先选择第 1 名和第 3 名的主要差异维度，再说明关键差别，以及希望 Skill 下一轮怎么改。";
+      if (executionState === "done") setDebugIterationStep("evaluate");
     }
 
     let activeSkillSource = { title: "skill", version: "V1", content: "" };
@@ -6156,8 +6214,11 @@
         step.classList.toggle("done", index < stage);
       });
       debugHeaderBack.classList.add("visible");
-      setDebugBackLabel(stage > 1 ? "返回选择调试集" : "返回场景技能");
+      setDebugBackLabel(debugReturnTarget === "skills" ? "返回技能库" : (stage > 1 ? "返回选择调试集" : "返回场景技能"));
       pageHeaderTitle.hidden = false;
+      pageTitle.textContent = debugReturnTarget === "skills" ? meta.skills[0] : meta.debug[0];
+      pageSub.textContent = debugReturnTarget === "skills" ? meta.skills[1] : meta.debug[1];
+      if (stage === 2) renderDebugTaskAttachments(debugEvalCases[activeEvalIndex]);
     }
 
     function setDebugBackLabel(label) {
@@ -6173,6 +6234,7 @@
       debugActiveId = id;
       debugSource = "scene";
       debugScene = "sales";
+      debugReturnTarget = "scene";
       Object.keys(modelRanks).forEach(key => delete modelRanks[key]);
       resetDebugIterationState();
       setDebugBackLabel("返回场景技能");
@@ -6186,6 +6248,30 @@
       switchView("debug");
       goToDebugStage(1);
     }
+
+    function openSkillLibraryDebug(row) {
+      const id = row.querySelector(".skill-name")?.textContent.trim() || "extract_meeting_insights";
+      const name = row.querySelector(".skill-name")?.textContent.trim() || id;
+      const version = row.cells[2]?.textContent.trim() || "V1";
+      debugSelection = [id];
+      debugActiveId = id;
+      debugSource = "skills";
+      debugReturnTarget = "skills";
+      Object.keys(modelRanks).forEach(key => delete modelRanks[key]);
+      resetDebugIterationState();
+      renderDebugSelection();
+      document.getElementById("debugSelectionName").textContent = name;
+      document.getElementById("resultVersionMeta").textContent = version;
+      document.getElementById("resultSourceName").textContent = name;
+      renderSkillInspector();
+      renderDebugEval(0);
+      switchView("debug");
+      goToDebugStage(1);
+    }
+
+    document.querySelectorAll("#view-skills [data-open-view='debug']").forEach(button => {
+      button.addEventListener("click", () => openSkillLibraryDebug(button.closest("tr")));
+    });
 
     document.getElementById("debugDatasetList").addEventListener("change", event => {
       const input = event.target.closest("input[name='debugDataset']");
@@ -6265,6 +6351,10 @@
       goToDebugStage(1);
     });
     document.getElementById("debugHeaderBack").addEventListener("click", () => {
+      if (debugReturnTarget === "skills") {
+        switchView("skills");
+        return;
+      }
       if (debugStage <= 1) {
         returnToSceneSkills();
         return;
@@ -6337,11 +6427,46 @@
       document.getElementById("inspectorChanges").hidden = tab !== "changes";
     }));
 
+    function renderDebugTaskAttachments(item) {
+      const container = document.getElementById("debugTaskAttachments");
+      const preview = document.getElementById("debugTaskAttachmentPreview");
+      const attachments = item.attachments || [];
+      activeDebugAttachmentIndex = null;
+      container.innerHTML = attachments.length
+        ? `<span class="debug-task-attachments-label">附件 ${attachments.length}</span>${attachments.map((attachment, index) => `<button class="debug-task-attachment" type="button" data-debug-attachment-index="${index}" data-file-type="${escapeHtml(attachment.type)}" aria-expanded="false"><span class="debug-task-attachment-type">${escapeHtml(attachment.type.toUpperCase())}</span><span>${escapeHtml(attachment.name)}</span></button>`).join("")}`
+        : "";
+      preview.hidden = true;
+      preview.textContent = "";
+    }
+
+    document.getElementById("debugTaskAttachments").addEventListener("click", event => {
+      const button = event.target.closest("[data-debug-attachment-index]");
+      if (!button) return;
+      const index = Number(button.dataset.debugAttachmentIndex);
+      const preview = document.getElementById("debugTaskAttachmentPreview");
+      const attachments = debugEvalCases[activeEvalIndex]?.attachments || [];
+      const isActive = activeDebugAttachmentIndex === index;
+      activeDebugAttachmentIndex = isActive ? null : index;
+      document.querySelectorAll("[data-debug-attachment-index]").forEach(item => {
+        const active = Number(item.dataset.debugAttachmentIndex) === activeDebugAttachmentIndex;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-expanded", String(active));
+      });
+      if (isActive || !attachments[index]) {
+        preview.hidden = true;
+        preview.textContent = "";
+        return;
+      }
+      preview.hidden = false;
+      preview.innerHTML = `<b>${escapeHtml(attachments[index].name)}</b><br>${escapeHtml(attachments[index].preview)}`;
+    });
+
     function renderDebugEval(index) {
       activeEvalIndex = Number(index);
       const item = debugEvalCases[activeEvalIndex];
       document.getElementById("resultTaskText").textContent = item.task;
       document.getElementById("resultTaskTextV2").textContent = item.task;
+      renderDebugTaskAttachments(item);
       document.getElementById("seedResult").textContent = item.seed;
       document.getElementById("gptResult").textContent = item.gpt;
       document.getElementById("debugTaskCount").textContent = `调试集 3 条 · 当前 ${String(activeEvalIndex + 1).padStart(2, "0")}`;
@@ -6355,6 +6480,21 @@
       executedModels.clear();
       executionState = "idle";
       setRunButtonState("idle");
+    }
+
+    function resetDebugResultsForNextRound() {
+      getSelectedDebugModels().forEach(id => {
+        delete modelRanks[id];
+        delete modelFeedback[getModelFeedbackKey(id)];
+      });
+      document.getElementById("debugTaskAttachmentPreview").hidden = true;
+      document.getElementById("debugTaskAttachmentPreview").textContent = "";
+      document.querySelectorAll("[data-debug-attachment-index]").forEach(button => {
+        button.classList.remove("active");
+        button.setAttribute("aria-expanded", "false");
+      });
+      resetExecutionState();
+      renderModelResults();
     }
 
     function getSelectedDebugModels() {
@@ -6568,6 +6708,7 @@
         showToast("请先在第二步选择参与测试的模型");
         return;
       }
+      setDebugIterationStep("execute");
       const ranked = [...selected].sort((a, b) => modelRanks[a] - modelRanks[b]);
       rail.innerHTML = ranked.map(id => {
         const stepsMarkup = modelThinkingSteps.map(step => `<div class="model-card-think-line"><span class="model-card-think-dot"></span><span>${escapeHtml(step)}</span></div>`).join("");
@@ -6578,6 +6719,7 @@
         executionState = "done";
         setRunButtonState("done");
         renderModelResults();
+        setDebugIterationStep("evaluate");
         showToast(`已用 Skill 与 ${cards.length} 个模型执行出最终结果`);
       });
     }
@@ -6596,6 +6738,22 @@
       if (!button) return;
       button.classList.toggle("active");
       button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+      if (executionState === "done") setDebugIterationStep("feedback");
+    });
+    ["feedbackNote", "feedbackExpectation", "debugCorrectAnswer", "debugJudgeRule"].forEach(id => {
+      document.getElementById(id).addEventListener("input", () => {
+        if (executionState === "done") setDebugIterationStep("feedback");
+      });
+    });
+    document.getElementById("debugRoundHistory").addEventListener("click", event => {
+      const button = event.target.closest("[data-debug-round]");
+      if (!button) return;
+      activeDebugRound = button.dataset.debugRound === "current" ? null : Number(button.dataset.debugRound);
+      renderDebugIterationFlow();
+    });
+    document.getElementById("returnCurrentDebugRound").addEventListener("click", () => {
+      activeDebugRound = null;
+      renderDebugIterationFlow();
     });
     document.querySelectorAll("[data-result-rank]").forEach(button => button.addEventListener("click", () => {
       const rank = button.dataset.resultRank;
@@ -6623,9 +6781,10 @@
         showToast("判定型调试需要填写正确答案");
         return;
       }
-      const difference = document.getElementById("feedbackNote").value.trim();
-      const dimensions = [...document.querySelectorAll("[data-feedback-dimension].active")].map(button => button.dataset.feedbackDimension);
-      const expectation = document.getElementById("feedbackExpectation").value.trim();
+      const isJudgementMode = debugMode === "judgement";
+      const difference = isJudgementMode ? "" : document.getElementById("feedbackNote").value.trim();
+      const dimensions = isJudgementMode ? [] : [...document.querySelectorAll("[data-feedback-dimension].active")].map(button => button.dataset.feedbackDimension);
+      const expectation = isJudgementMode ? "" : document.getElementById("feedbackExpectation").value.trim();
       const note = [
         difference && `关键差别：${difference}`,
         dimensions.length && `主要维度：${dimensions.join("、")}`,
@@ -6636,6 +6795,7 @@
       const ranked = getSelectedDebugModels().sort((a, b) => modelRanks[a] - modelRanks[b]);
       const leadingModel = getAnonymousModelName(ranked[0]) || "当前模型排序";
       debugIterationStatus = "debugging";
+      setDebugIterationStep("generate");
       updateDebugIterationButton();
       renderSkillInspector();
       document.getElementById("inspectorMembers").hidden = false;
@@ -6645,8 +6805,25 @@
       window.setTimeout(() => {
         debugIterationCount = currentRound;
         debugIterationStatus = "completed";
+        debugRoundHistory.push({
+          round: currentRound,
+          prompt: debugEvalCases[activeEvalIndex]?.task || "当前调试 Prompt",
+          mode: debugMode === "judgement" ? "判定型" : "排序型",
+          leadingModel,
+          note,
+          result: buildDebugIterationResult({
+            dimensions,
+            difference,
+            expectation,
+            mode: debugMode === "judgement" ? "判定型" : "排序型",
+            leadingModel
+          })
+        });
+        debugIterationStep = "execute";
+        resetDebugResultsForNextRound();
         updateDebugIterationButton();
         renderSkillInspector();
+        renderDebugIterationFlow();
         showToast(note ? `已完成第 ${currentRound} 轮调试，并结合 ${leadingModel} 排名与反馈生成迭代建议` : `已完成第 ${currentRound} 轮调试，并结合 ${leadingModel} 最新排名生成迭代建议`);
       }, 1200);
     });
@@ -6896,6 +7073,7 @@
     renderDebugObjectGrid();
     renderDebugSelection();
     setDebugMode("ranking");
+    renderDebugIterationFlow();
     renderReviewSceneOptions();
 
     const savedView = localStorage.getItem("skillpilot-current-view");

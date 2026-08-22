@@ -1536,6 +1536,7 @@
     .debug-human-review-total strong.pending { color: var(--faint); }
     .debug-test-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
     .debug-test-actions-copy { margin-right: auto; color: var(--muted); font-size: 11.5px; }
+    .debug-test-actions #finishDebugTesting[hidden] { display: none; }
     .debug-final-comparison { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 14px; margin-bottom: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
     .debug-final-score { text-align: center; }
     .debug-final-score span { display: block; color: var(--faint); font-size: 10.5px; }
@@ -3567,7 +3568,7 @@
                     <div class="debug-test-block-head"><div><h3>异常项复核</h3><p>仅展示低分、低置信度或相较上一轮发生退化的结果。</p></div><span class="pill amber" id="debugReviewProgress">0 项待复核</span></div>
                     <div class="debug-anomaly-list" id="debugAnomalyList"></div>
                   </section>
-                  <div class="debug-test-actions"><span class="debug-test-actions-copy" id="debugIterationHint">基线完成后可生成候选 Skill 并继续测试。</span><button class="btn btn-soft" id="continueDebugOptimization" type="button">迭代并测试第 1 轮</button><button class="btn btn-primary" id="finishDebugTesting" type="button" disabled>结束迭代并验证</button></div>
+                  <div class="debug-test-actions"><span class="debug-test-actions-copy" id="debugIterationHint">基线完成后可生成候选 Skill 并继续测试。</span><button class="btn btn-soft" id="continueDebugOptimization" type="button">迭代并测试第 1 轮</button><button class="btn btn-primary" id="finishDebugTesting" type="button" hidden disabled>结束迭代并验证</button></div>
                 </div>
               </div>
               <div class="legacy-debug-annotation" hidden>
@@ -7811,7 +7812,9 @@
         : `<div class="debug-anomaly resolved"><div><div class="debug-anomaly-title">本轮未发现需要人工复核的异常</div><div class="debug-anomaly-copy">所有样本均达到当前理想结果标准，且未出现相较基线的明显退化。</div></div></div>`;
       const canFinish = debugTestRounds.length > 1;
       document.getElementById("continueDebugOptimization").textContent = `迭代并测试第 ${debugTestRounds.length} 轮`;
-      document.getElementById("finishDebugTesting").disabled = !canFinish;
+      const finishButton = document.getElementById("finishDebugTesting");
+      finishButton.hidden = !canFinish;
+      finishButton.disabled = !canFinish;
       document.getElementById("debugIterationHint").textContent = canFinish
         ? `当前候选较基线提升 ${delta} 分，可继续优化或进入最终验证。`
         : "AI 已根据基线异常生成修改建议，可开始第一轮优化。";

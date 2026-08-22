@@ -1492,6 +1492,8 @@
     .debug-test-block-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 14px; border-bottom: 1px solid var(--line); }
     .debug-test-block-head h3 { margin: 0; font-size: 13px; }
     .debug-test-block-head p { margin: 4px 0 0; color: var(--faint); font-size: 10.5px; line-height: 1.45; }
+    .debug-test-block-head-actions { display: flex; align-items: center; gap: 7px; }
+    .debug-test-block-head-actions .btn { min-height: 28px; padding: 0 9px; font-size: 10.5px; }
     .debug-score-breakdown { display: grid; gap: 12px; padding: 14px; }
     .debug-score-row { display: grid; grid-template-columns: 84px minmax(0, 1fr) 34px; align-items: center; gap: 10px; }
     .debug-score-row span, .debug-score-row strong { font-size: 11.5px; }
@@ -1534,6 +1536,22 @@
     .debug-human-review-total span { color: var(--muted); font-size: 11px; }
     .debug-human-review-total strong { margin-left: 6px; color: var(--text); font-size: 16px; }
     .debug-human-review-total strong.pending { color: var(--faint); }
+    .debug-score-detail-modal { width: min(1180px, 100%); max-height: min(820px, calc(100vh - 40px)); overflow: hidden; border-radius: 12px; }
+    .debug-score-detail-body { max-height: calc(100vh - 190px); overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
+    .debug-score-prompt-legend { display: grid; gap: 6px; margin-bottom: 12px; }
+    .debug-score-prompt-legend div { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; color: var(--muted); font-size: 10.5px; line-height: 1.45; }
+    .debug-score-prompt-legend b { color: var(--primary-ink); }
+    .debug-score-detail-table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+    .debug-score-detail-table { width: 100%; min-width: 820px; border-collapse: collapse; }
+    .debug-score-detail-table th, .debug-score-detail-table td { padding: 9px 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 11px; line-height: 1.45; text-align: center; }
+    .debug-score-detail-table th { position: sticky; top: 0; z-index: 1; background: var(--surface-soft); color: var(--faint); font-size: 10.5px; }
+    .debug-score-detail-table th:first-child, .debug-score-detail-table th:nth-child(2), .debug-score-detail-table td:first-child, .debug-score-detail-table td:nth-child(2) { text-align: left; }
+    .debug-score-detail-table tr:last-child td { border-bottom: 0; }
+    .debug-score-detail-table th:last-child, .debug-score-detail-table td:last-child { border-right: 0; }
+    .debug-score-detail-table td:first-child { color: var(--text); font-weight: 700; }
+    .debug-score-detail-table td:nth-child(2) { min-width: 180px; color: var(--text); }
+    .debug-score-detail-table .average { color: var(--primary-ink); font-weight: 750; }
+    .debug-score-detail-table .human-score { color: var(--green); background: var(--green-bg); font-weight: 700; }
     .debug-test-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
     .debug-test-actions-copy { margin-right: auto; color: var(--muted); font-size: 11.5px; }
     .debug-test-actions #finishDebugTesting[hidden] { display: none; }
@@ -3556,7 +3574,7 @@
                   </div>
                   <div class="debug-test-grid">
                     <section class="debug-test-block">
-                      <div class="debug-test-block-head"><div><h3>分项表现</h3><p>评分标准在各轮保持不变，便于比较 Skill 修改效果。</p></div><span class="pill" id="debugRoundScoreLabel">--</span></div>
+                      <div class="debug-test-block-head"><div><h3>分项表现</h3><p>评分标准在各轮保持不变，便于比较 Skill 修改效果。</p></div><div class="debug-test-block-head-actions"><span class="pill" id="debugRoundScoreLabel">--</span><button class="btn btn-ghost" id="openDebugScoreDetail" type="button">指标明细</button></div></div>
                       <div class="debug-score-breakdown" id="debugScoreBreakdown"></div>
                     </section>
                     <section class="debug-test-block">
@@ -4202,6 +4220,25 @@
         </div>
       </div>
       <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close-debug-human-review>取消</button><button class="btn btn-primary" id="submitDebugHumanReview" type="button" disabled>采用人评分数</button></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="debugScoreDetailModal" aria-hidden="true">
+    <section class="scene-modal debug-score-detail-modal" role="dialog" aria-modal="true" aria-labelledby="debugScoreDetailTitle">
+      <div class="modal-head">
+        <div><h2 class="modal-title" id="debugScoreDetailTitle">指标评分明细</h2><p class="modal-copy" id="debugScoreDetailSubtitle">查看每条 Prompt 在各项理想结果标准下的得分。</p></div>
+        <button class="modal-close" type="button" data-close-debug-score-detail aria-label="关闭"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="debug-score-detail-body">
+        <div class="debug-score-prompt-legend" id="debugScorePromptLegend"></div>
+        <div class="debug-score-detail-table-wrap">
+          <table class="debug-score-detail-table" aria-label="理想结果标准逐题评分明细">
+            <thead><tr id="debugScoreDetailHead"></tr></thead>
+            <tbody id="debugScoreDetailBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-actions"><button class="btn btn-primary" type="button" data-close-debug-score-detail>关闭</button></div>
     </section>
   </div>
 
@@ -7620,15 +7657,59 @@
       if (!totalWeight || scores.some(score => score === null || !Number.isFinite(score))) return null;
       return Number((scores.reduce((sum, score, index) => sum + score * weights[index], 0) / totalWeight).toFixed(1));
     }
+    function getDebugDimensionGroups(standards) {
+      const groups = new Map();
+      standards.forEach((standard, index) => {
+        const label = standard.dimension.trim();
+        if (!label) return;
+        if (!groups.has(label)) groups.set(label, { label, weight: 0, indices: [] });
+        const group = groups.get(label);
+        group.weight += Number(standard.weight.replace("%", "")) || 0;
+        group.indices.push(index);
+      });
+      return [...groups.values()];
+    }
+    function calculateDebugDimensionScore(scores, standards, group) {
+      return calculateWeightedReviewScore(
+        group.indices.map(index => scores[index]),
+        group.indices.map(index => standards[index])
+      );
+    }
+    function calculateDebugRoundScore(dimensions) {
+      const totalWeight = dimensions.reduce((sum, item) => sum + item.weight, 0);
+      if (!totalWeight) return null;
+      return Number((dimensions.reduce((sum, item) => sum + item.score * item.weight, 0) / totalWeight).toFixed(1));
+    }
+    function getDebugEvaluationScores(evaluation, standards) {
+      return evaluation.humanScores.length === standards.length ? evaluation.humanScores : evaluation.aiScores;
+    }
+    function recalculateDebugRoundScores(round, standards = getDebugStandardRows()) {
+      if (!round.evaluations?.length || !standards.length) return;
+      round.indicatorScores = standards.map((_, criterionIndex) => {
+        const total = round.evaluations.reduce((sum, evaluation) => sum + getDebugEvaluationScores(evaluation, standards)[criterionIndex], 0);
+        return Number((total / round.evaluations.length).toFixed(1));
+      });
+      round.dimensions = getDebugDimensionGroups(standards).map(group => ({
+        label: group.label,
+        weight: group.weight,
+        score: calculateDebugDimensionScore(round.indicatorScores, standards, group)
+      }));
+      round.score = calculateDebugRoundScore(round.dimensions) ?? round.score;
+    }
     function createDebugTestRound(round) {
       const scoreSequence = [72, 84, 90, 94, 96];
-      const score = scoreSequence[Math.min(round, scoreSequence.length - 1)];
+      const targetScore = scoreSequence[Math.min(round, scoreSequence.length - 1)];
       const standards = getDebugStandardRows();
-      const dimensionLabels = [...new Set(standards.map(item => item.dimension.trim()).filter(Boolean))];
+      const dimensionGroups = getDebugDimensionGroups(standards);
       const dimensionOffsets = round === 0 ? [-6, -2, 1, -5, -3] : [0, 2, 1, -1, 0];
-      const dimensions = dimensionLabels.map((label, index) => ({
-        label,
-        score: Math.min(99, Math.max(0, score + dimensionOffsets[index % dimensionOffsets.length]))
+      const totalDimensionWeight = dimensionGroups.reduce((sum, group) => sum + group.weight, 0);
+      const weightedOffset = totalDimensionWeight
+        ? dimensionGroups.reduce((sum, group, index) => sum + dimensionOffsets[index % dimensionOffsets.length] * group.weight, 0) / totalDimensionWeight
+        : 0;
+      const targetDimensions = dimensionGroups.map((group, index) => ({
+        label: group.label,
+        weight: group.weight,
+        score: Number(Math.min(99, Math.max(0, targetScore + dimensionOffsets[index % dimensionOffsets.length] - weightedOffset)).toFixed(1))
       }));
       const anomalyThreshold = getDebugModelSettings().anomalyThreshold;
       const anomalyScoreOffsets = round === 0
@@ -7637,10 +7718,20 @@
           ? [-12, 2, 6, 10, 14]
           : [-8, 2, 6, 10, 14];
       const criterionOffsets = [-4, 1, 3, -2, 2, 0, -3, 4, 1, -1, 2];
-      const anomalies = activeDebugEvalCases.map((item, index) => {
-        const baseScore = Math.min(99, score + (anomalyScoreOffsets[index] ?? 18));
-        const aiScores = standards.map((_, criterionIndex) => Math.min(100, Math.max(0, baseScore + (criterionOffsets[criterionIndex % criterionOffsets.length] || 0))));
-        const aiScore = calculateWeightedReviewScore(aiScores, standards) ?? baseScore;
+      const selectedSampleOffsets = activeDebugEvalCases.map((_, index) => anomalyScoreOffsets[index] ?? 18);
+      const averageSampleOffset = selectedSampleOffsets.reduce((sum, offset) => sum + offset, 0) / Math.max(1, selectedSampleOffsets.length);
+      const criterionTargets = standards.map((standard, criterionIndex) => {
+        const group = dimensionGroups.find(item => item.label === standard.dimension.trim());
+        const dimension = targetDimensions.find(item => item.label === standard.dimension.trim());
+        const groupOffsets = group.indices.map(index => criterionOffsets[index % criterionOffsets.length] || 0);
+        const groupStandards = group.indices.map(index => standards[index]);
+        const weightedCriterionOffset = calculateWeightedReviewScore(groupOffsets, groupStandards) || 0;
+        return dimension.score + (criterionOffsets[criterionIndex % criterionOffsets.length] || 0) - weightedCriterionOffset;
+      });
+      const evaluations = activeDebugEvalCases.map((item, index) => {
+        const sampleOffset = selectedSampleOffsets[index] - averageSampleOffset;
+        const aiScores = criterionTargets.map(target => Number(Math.min(100, Math.max(0, target + sampleOffset)).toFixed(1)));
+        const aiScore = calculateWeightedReviewScore(aiScores, standards) ?? targetScore;
         return {
           task: item.task,
           response: getDebugExecutionResponse(item),
@@ -7657,17 +7748,19 @@
             ? index === 0 ? "补充敏感字段阻断条件，并明确审批信息不足时不得写入。" : "将行动项固定为负责人、截止时间和确认状态三个字段。"
             : "统一待确认字段格式，并在信息不足时输出缺失依据。"
         };
-      }).filter(item => item.aiScore < anomalyThreshold);
+      });
+      const anomalies = evaluations.filter(item => item.aiScore < anomalyThreshold);
       const changeSets = [
         ["增加证据不足时的阻断规则", "统一输出负责人、截止时间与确认状态", "禁止补充附件中不存在的事实"],
         ["强化敏感字段写入前的审批校验", "将待确认项调整为固定结构", "补充可执行的后续动作"],
         ["压缩重复说明并统一异常输出格式", "增强跨附件证据引用", "保留低置信度人工确认机制"]
       ];
-      return {
+      const result = {
         round,
-        score,
+        score: targetScore,
         applied: false,
-        dimensions,
+        dimensions: targetDimensions,
+        evaluations,
         anomalies,
         diagnosis: round === 0
           ? "基线结果在风险识别上较稳定，但对缺失信息的处理和后续动作结构仍不一致。AI 已根据异常项生成首轮候选修改方案。"
@@ -7677,6 +7770,8 @@
         changes: changeSets[Math.min(round, changeSets.length - 1)],
         createdAt: new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })
       };
+      recalculateDebugRoundScores(result, standards);
+      return result;
     }
     function formatDebugScore(score) {
       return Number.isInteger(score) ? String(score) : score.toFixed(1);
@@ -7692,6 +7787,37 @@
         scoreText: `${valueSign}${formatDebugScore(value)}`,
         percentText: `（${percentSign}${percent.toFixed(1)}%）`
       };
+    }
+    let debugScoreDetailTrigger = null;
+    function closeDebugScoreDetail() {
+      const modal = document.getElementById("debugScoreDetailModal");
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      debugScoreDetailTrigger?.focus();
+    }
+    function openDebugScoreDetail() {
+      const round = debugTestRounds[activeDebugTestRoundIndex];
+      const standards = getDebugStandardRows();
+      if (!round?.evaluations?.length || !standards.length) {
+        showToast("当前轮次暂无指标评分明细");
+        return;
+      }
+      debugScoreDetailTrigger = document.activeElement;
+      document.getElementById("debugScoreDetailSubtitle").textContent = `${round.round === 0 ? "基线结果" : `第 ${round.round} 轮`} · ${round.evaluations.length} 条 Prompt · 加权总分 ${formatDebugScore(round.score)}`;
+      document.getElementById("debugScorePromptLegend").innerHTML = round.evaluations.map((evaluation, index) => `<div><b>P${index + 1}</b><span>${escapeHtml(evaluation.task)}</span></div>`).join("");
+      document.getElementById("debugScoreDetailHead").innerHTML = `<th>维度</th><th>指标</th><th>权重</th>${round.evaluations.map((_, index) => `<th>P${index + 1}</th>`).join("")}<th>平均分</th>`;
+      document.getElementById("debugScoreDetailBody").innerHTML = standards.map((standard, criterionIndex) => {
+        const promptScores = round.evaluations.map(evaluation => getDebugEvaluationScores(evaluation, standards)[criterionIndex]);
+        const scoreCells = promptScores.map((score, promptIndex) => {
+          const isHumanScore = round.evaluations[promptIndex].humanScores.length === standards.length;
+          return `<td class="${isHumanScore ? "human-score" : ""}" title="${isHumanScore ? "人工评分" : "AI 评分"}">${formatDebugScore(score)}</td>`;
+        }).join("");
+        return `<tr><td>${escapeHtml(standard.dimension)}</td><td>${escapeHtml(standard.indicator)}</td><td>${escapeHtml(standard.weight)}</td>${scoreCells}<td class="average">${formatDebugScore(round.indicatorScores[criterionIndex])}</td></tr>`;
+      }).join("");
+      const modal = document.getElementById("debugScoreDetailModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      modal.querySelector("[data-close-debug-score-detail]")?.focus();
     }
     function updateDebugHumanReviewTotal() {
       const standards = getDebugStandardRows();
@@ -7746,11 +7872,11 @@
         showToast("请为每项标准填写 0–100 分");
         return;
       }
-      const previousFinalScore = anomaly.humanScore ?? anomaly.aiScore;
+      const standards = getDebugStandardRows();
       anomaly.humanScores = scores;
       anomaly.humanScore = total;
       anomaly.score = total;
-      round.score = Number(Math.min(100, Math.max(0, round.score + (total - previousFinalScore) / activeDebugEvalCases.length)).toFixed(1));
+      recalculateDebugRoundScores(round, standards);
       debugReviewedAnomalies.add(`${round.round}:${activeDebugHumanReview.anomalyIndex}`);
       closeDebugHumanReview();
       renderDebugTestWorkspace();
@@ -7772,26 +7898,27 @@
       }
       const baseline = debugTestRounds[0];
       const latest = debugTestRounds[debugTestRounds.length - 1];
-      const previous = debugTestRounds.length > 1 ? debugTestRounds[debugTestRounds.length - 2] : null;
       const selected = debugTestRounds[activeDebugTestRoundIndex] || latest;
-      const delta = latest.score - baseline.score;
-      const baselineChange = formatDebugScoreChange(latest.score, latest.round === 0 ? null : baseline.score);
-      const roundChange = formatDebugScoreChange(latest.score, previous?.score);
+      const selectedIndex = debugTestRounds.indexOf(selected);
+      const selectedPrevious = selectedIndex > 0 ? debugTestRounds[selectedIndex - 1] : null;
+      const latestDelta = latest.score - baseline.score;
+      const baselineChange = formatDebugScoreChange(selected.score, selected.round === 0 ? null : baseline.score);
+      const roundChange = formatDebugScoreChange(selected.score, selectedPrevious?.score);
       const baselineChangeElement = document.getElementById("debugScoreDelta");
       const roundChangeElement = document.getElementById("debugRoundChange");
       document.getElementById("debugTestRoundStatus").textContent = latest.round === 0 ? `基线 · ${formatDebugScore(latest.score)} 分` : `第 ${latest.round} 轮 · ${formatDebugScore(latest.score)} 分`;
       document.getElementById("debugBaselineScore").innerHTML = `${formatDebugScore(baseline.score)}<small>/100</small>`;
-      document.getElementById("debugCurrentScore").innerHTML = `${formatDebugScore(latest.score)}<small>/100</small>`;
+      document.getElementById("debugCurrentScore").innerHTML = `${formatDebugScore(selected.score)}<small>/100</small>`;
       baselineChangeElement.innerHTML = `${baselineChange.scoreText}${baselineChange.percentText ? `<small class="debug-score-change-percent">${baselineChange.percentText}</small>` : ""}`;
       baselineChangeElement.classList.toggle("positive", baselineChange.value > 0);
       baselineChangeElement.classList.toggle("warning", baselineChange.value < 0);
       roundChangeElement.innerHTML = `${roundChange.scoreText}${roundChange.percentText ? `<small class="debug-score-change-percent">${roundChange.percentText}</small>` : ""}`;
       roundChangeElement.classList.toggle("positive", roundChange.value > 0);
       roundChangeElement.classList.toggle("warning", roundChange.value < 0);
-      document.getElementById("debugAnomalyCount").innerHTML = `${latest.anomalies.length}<small>项</small>`;
+      document.getElementById("debugAnomalyCount").innerHTML = `${selected.anomalies.length}<small>项</small>`;
       document.getElementById("debugTestRoundTabs").innerHTML = debugTestRounds.map((item, index) => `<button class="${index === activeDebugTestRoundIndex ? "active" : ""}" type="button" data-debug-test-round="${index}">${item.round === 0 ? "基线" : `第 ${item.round} 轮`} · ${formatDebugScore(item.score)} 分</button>`).join("");
       document.getElementById("debugRoundScoreLabel").textContent = selected.round === 0 ? "基线结果" : `第 ${selected.round} 轮`;
-      document.getElementById("debugScoreBreakdown").innerHTML = selected.dimensions.map(item => `<div class="debug-score-row"><span>${escapeHtml(item.label)}</span><div class="debug-score-track"><i style="width:${item.score}%"></i></div><strong>${item.score}</strong></div>`).join("");
+      document.getElementById("debugScoreBreakdown").innerHTML = selected.dimensions.map(item => `<div class="debug-score-row"><span>${escapeHtml(item.label)}</span><div class="debug-score-track"><i style="width:${item.score}%"></i></div><strong>${formatDebugScore(item.score)}</strong></div>`).join("");
       document.getElementById("debugDiagnosisSummary").textContent = selected.diagnosis;
       document.getElementById("debugChangeList").innerHTML = selected.changes.map(change => `<li>${escapeHtml(change)}</li>`).join("");
       const diagnosisState = document.getElementById("debugDiagnosisState");
@@ -7816,7 +7943,7 @@
       finishButton.hidden = !canFinish;
       finishButton.disabled = !canFinish;
       document.getElementById("debugIterationHint").textContent = canFinish
-        ? `当前候选较基线提升 ${delta} 分，可继续优化或进入最终验证。`
+        ? `当前候选较基线提升 ${formatDebugScore(latestDelta)} 分，可继续优化或进入最终验证。`
         : "AI 已根据基线异常生成修改建议，可开始第一轮优化。";
     }
     function resetDebugTestFlow() {
@@ -8063,8 +8190,14 @@
     document.getElementById("debugHumanReviewModal").addEventListener("click", event => {
       if (event.target === event.currentTarget) closeDebugHumanReview();
     });
+    document.getElementById("openDebugScoreDetail").addEventListener("click", openDebugScoreDetail);
+    document.querySelectorAll("[data-close-debug-score-detail]").forEach(button => button.addEventListener("click", closeDebugScoreDetail));
+    document.getElementById("debugScoreDetailModal").addEventListener("click", event => {
+      if (event.target === event.currentTarget) closeDebugScoreDetail();
+    });
     document.addEventListener("keydown", event => {
       if (event.key === "Escape" && document.getElementById("debugHumanReviewModal").classList.contains("open")) closeDebugHumanReview();
+      if (event.key === "Escape" && document.getElementById("debugScoreDetailModal").classList.contains("open")) closeDebugScoreDetail();
     });
     document.getElementById("debugAnnotationQueue").addEventListener("click", event => {
       const button = event.target.closest("[data-debug-annotation-index]");

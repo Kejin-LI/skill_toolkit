@@ -1509,12 +1509,17 @@
     .debug-anomaly-list { display: grid; gap: 9px; padding: 12px; }
     .debug-anomaly { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 11px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-soft); }
     .debug-anomaly.resolved { border-color: rgba(45,160,105,.28); background: var(--green-bg); }
-    .debug-anomaly-title { overflow: hidden; color: var(--text); font-size: 11.5px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+    .debug-anomaly-title-row { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .debug-anomaly-title-row .pill { flex: 0 0 auto; }
+    .debug-anomaly-title { flex: 1 1 auto; min-width: 0; overflow: hidden; color: var(--text); font-size: 11.5px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
     .debug-anomaly-copy { margin-top: 4px; color: var(--muted); font-size: 10.5px; line-height: 1.45; }
     .debug-anomaly-meta { display: flex; align-items: center; gap: 7px; margin-top: 7px; color: var(--faint); font-size: 10.5px; }
     .debug-anomaly .btn { align-self: center; min-height: 28px; padding: 0 9px; font-size: 10.5px; }
-    .debug-human-review-modal { width: min(1120px, 100%); max-height: min(820px, calc(100vh - 40px)); overflow: hidden; border-radius: 12px; }
-    .debug-human-review-body { max-height: calc(100vh - 190px); overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
+    .debug-human-review-modal { display: flex; flex-direction: column; width: min(1120px, 100%); height: min(820px, calc(100vh - 40px)); overflow: hidden; border-radius: 12px; }
+    .debug-human-review-modal > .modal-head,
+    .debug-human-review-modal > .modal-actions { flex: 0 0 auto; }
+    .debug-human-review-modal > .modal-actions { flex-wrap: wrap; }
+    .debug-human-review-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 2px; }
     .debug-human-review-context { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 12px; margin-bottom: 16px; }
     .debug-human-review-block { min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
     .debug-human-review-block span { display: block; color: var(--faint); font-size: 10.5px; font-weight: 650; }
@@ -1552,6 +1557,7 @@
     .debug-score-detail-table td:nth-child(2) { min-width: 180px; color: var(--text); }
     .debug-score-detail-table .average { color: var(--primary-ink); font-weight: 750; }
     .debug-score-detail-table .human-score { color: var(--green); background: var(--green-bg); font-weight: 700; }
+    .debug-score-detail-table .score-low { color: #b42318; background: #fff0ee; font-weight: 750; }
     .debug-test-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
     .debug-test-actions-copy { margin-right: auto; color: var(--muted); font-size: 11.5px; }
     .debug-test-actions #finishDebugTesting[hidden] { display: none; }
@@ -2660,6 +2666,112 @@
     }
     .prompt-tooltip.show { opacity: 1; transform: translateY(0); }
 
+    /* unified page modules: transparent page shells with independent white cards */
+    .card,
+    .scene-card,
+    .metric,
+    .connector-page-card,
+    .review-task-row,
+    .review-detail-head,
+    .review-rubric,
+    .review-score-card {
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .library-toolbar {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .scene-library > .batch-table-wrap,
+    .knowledge-library > .knowledge-table-wrap,
+    .dataset-panel > .batch-table-wrap,
+    .dataset-prompt-page > .batch-table-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .detail-head {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .review-panel-intro {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .review-create-main {
+      display: grid;
+      gap: 16px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+    .review-create-panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .review-create-footer {
+      margin-top: 0;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    #debugStage2,
+    #debugStage3 {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    #debugStage2 > .debug-panel-head,
+    #debugStage3 > .debug-panel-head { margin-bottom: 16px; }
+    #debugStage2 .debug-test-shell,
+    #debugStage2 .debug-test-results,
+    #debugStage3 .skill-draft-content { gap: 20px; }
+    #debugStage2 .debug-test-empty,
+    #debugStage2 .debug-score-overview,
+    #debugStage2 .debug-test-block,
+    #debugStage3 .skill-draft-empty,
+    #debugStage3 .debug-final-comparison,
+    #debugStage3 .debug-final-check,
+    #debugStage3 .debug-round-result-item,
+    #debugStage3 .debug-version-form-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    #debugStage2 .debug-test-empty { border-style: dashed; }
+    #debugStage2 .debug-test-actions {
+      padding-top: 0;
+      border-top: 0;
+    }
+    #debugStage3 .skill-draft-empty { padding: 20px; }
+    #debugStage3 .debug-final-comparison { margin-bottom: 0; }
+    #debugStage3 .debug-final-checks { margin-bottom: 0; gap: 12px; }
+    #debugStage3 .debug-round-result { margin-bottom: 0; gap: 12px; }
+    #debugStage3 .debug-version-form-card { padding: 18px; }
+    #debugStage3 .debug-version-form-card .field-2,
+    #debugStage3 .debug-version-form-card > .field { margin-top: 0; }
+
     @media (max-width: 1080px) {
       .app { grid-template-columns: 76px 1fr; }
       .brand-text, .nav-label, .nav-btn span, .side-bottom span:not(.avatar), .user-name, .user-role { display: none; }
@@ -3572,19 +3684,17 @@
                     <div class="debug-score-stat"><span>较上一轮</span><strong id="debugRoundChange">--</strong></div>
                     <div class="debug-score-stat"><span>异常项</span><strong class="warning" id="debugAnomalyCount">--</strong></div>
                   </div>
-                  <div class="debug-test-grid">
-                    <section class="debug-test-block">
-                      <div class="debug-test-block-head"><div><h3>分项表现</h3><p>评分标准在各轮保持不变，便于比较 Skill 修改效果。</p></div><div class="debug-test-block-head-actions"><span class="pill" id="debugRoundScoreLabel">--</span><button class="btn btn-ghost" id="openDebugScoreDetail" type="button">指标明细</button></div></div>
-                      <div class="debug-score-breakdown" id="debugScoreBreakdown"></div>
-                    </section>
-                    <section class="debug-test-block">
-                      <div class="debug-test-block-head"><div><h3>AI 诊断与修改建议</h3><p>迭代模型基于异常结果生成候选 Skill。</p></div><span class="pill amber" id="debugDiagnosisState">未应用</span></div>
-                      <div class="debug-diagnosis"><p class="debug-diagnosis-summary" id="debugDiagnosisSummary"></p><ul class="debug-change-list" id="debugChangeList"></ul></div>
-                    </section>
-                  </div>
+                  <section class="debug-test-block">
+                    <div class="debug-test-block-head"><div><h3>分项表现</h3><p>评分标准在各轮保持不变，便于比较 Skill 修改效果。</p></div><div class="debug-test-block-head-actions"><span class="pill" id="debugRoundScoreLabel">--</span><button class="btn btn-ghost" id="openDebugScoreDetail" type="button">指标明细</button></div></div>
+                    <div class="debug-score-breakdown" id="debugScoreBreakdown"></div>
+                  </section>
                   <section class="debug-test-block">
                     <div class="debug-test-block-head"><div><h3>异常项复核</h3><p>仅展示低分、低置信度或相较上一轮发生退化的结果。</p></div><span class="pill amber" id="debugReviewProgress">0 项待复核</span></div>
                     <div class="debug-anomaly-list" id="debugAnomalyList"></div>
+                  </section>
+                  <section class="debug-test-block">
+                    <div class="debug-test-block-head"><div><h3>AI 诊断与修改建议</h3><p>人工复核完成后，迭代模型将基于最终评分重新生成建议。</p></div><span class="pill amber" id="debugDiagnosisState">等待复核</span></div>
+                    <div class="debug-diagnosis"><p class="debug-diagnosis-summary" id="debugDiagnosisSummary"></p><ul class="debug-change-list" id="debugChangeList"></ul></div>
                   </section>
                   <div class="debug-test-actions"><span class="debug-test-actions-copy" id="debugIterationHint">基线完成后可生成候选 Skill 并继续测试。</span><button class="btn btn-soft" id="continueDebugOptimization" type="button">迭代并测试第 1 轮</button><button class="btn btn-primary" id="finishDebugTesting" type="button" hidden disabled>结束迭代并验证</button></div>
                 </div>
@@ -3693,13 +3803,15 @@
                 <div class="debug-final-comparison"><div class="debug-final-score"><span>基线版本</span><strong id="debugFinalBaselineScore">--</strong></div><div class="debug-final-arrow">→</div><div class="debug-final-score"><span>候选版本</span><strong class="score-good" id="debugFinalCandidateScore">--</strong></div></div>
                 <div class="debug-final-checks"><div class="debug-final-check"><b>异常项已收敛</b><span id="debugFinalAnomalyCheck">--</span></div><div class="debug-final-check"><b>未发现新增退化</b><span>关键安全边界保持稳定</span></div><div class="debug-final-check"><b>模型配置一致</b><span id="debugFinalModelCheck">--</span></div></div>
                 <div class="debug-round-result" id="debugDraftSummary"></div>
-                <div class="field-2">
-                  <div class="field"><label for="debugDraftName">技能名称</label><input class="input" id="debugDraftName"></div>
-                  <div class="field"><label for="debugDraftVersionInput">迭代版本</label><input class="input" id="debugDraftVersionInput" readonly></div>
-                </div>
-                <div class="field"><label for="debugDraftPurpose">简介</label><textarea class="textarea" id="debugDraftPurpose"></textarea></div>
-                <div class="generated-skill-code create-draft-code" id="debugDraftCode"></div>
-                <div class="modal-actions"><button class="btn btn-ghost" id="regenerateDebugDraft" type="button">重新验证</button><button class="btn btn-primary" id="saveDebugDraft" type="button">生成并保存新版本</button></div>
+                <section class="debug-version-form-card" aria-label="新版本信息">
+                  <div class="field-2">
+                    <div class="field"><label for="debugDraftName">技能名称</label><input class="input" id="debugDraftName"></div>
+                    <div class="field"><label for="debugDraftVersionInput">迭代版本</label><input class="input" id="debugDraftVersionInput" readonly></div>
+                  </div>
+                  <div class="field"><label for="debugDraftPurpose">简介</label><textarea class="textarea" id="debugDraftPurpose"></textarea></div>
+                  <div class="generated-skill-code create-draft-code" id="debugDraftCode"></div>
+                  <div class="modal-actions"><button class="btn btn-ghost" id="regenerateDebugDraft" type="button">重新验证</button><button class="btn btn-primary" id="saveDebugDraft" type="button">生成并保存新版本</button></div>
+                </section>
               </div>
             </section>
           </section>
@@ -4219,7 +4331,7 @@
           <span>人评总分<strong class="pending" id="debugHumanReviewTotal" aria-live="polite">--</strong></span>
         </div>
       </div>
-      <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close-debug-human-review>取消</button><button class="btn btn-primary" id="submitDebugHumanReview" type="button" disabled>采用人评分数</button></div>
+      <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close-debug-human-review>取消</button><button class="btn btn-soft" id="reuseDebugAiScores" type="button">复用 AI 分数并完成复核</button><button class="btn btn-primary" id="submitDebugHumanReview" type="button" disabled>保存人评分数</button></div>
     </section>
   </div>
 
@@ -7755,6 +7867,13 @@
         ["强化敏感字段写入前的审批校验", "将待确认项调整为固定结构", "补充可执行的后续动作"],
         ["压缩重复说明并统一异常输出格式", "增强跨附件证据引用", "保留低置信度人工确认机制"]
       ];
+      const proposedDiagnosis = round === 0
+        ? "基线结果在风险识别上较稳定，但对缺失信息的处理和后续动作结构仍不一致。"
+        : anomalies.length
+          ? `第 ${round} 轮已修复主要风险边界问题，当前剩余异常集中在输出格式和待确认字段的一致性。`
+          : `第 ${round} 轮已修复已知异常，关键维度均高于基线，未发现新的明显退化。`;
+      const proposedChanges = changeSets[Math.min(round, changeSets.length - 1)];
+      const diagnosisReady = anomalies.length === 0;
       const result = {
         round,
         score: targetScore,
@@ -7762,16 +7881,28 @@
         dimensions: targetDimensions,
         evaluations,
         anomalies,
-        diagnosis: round === 0
-          ? "基线结果在风险识别上较稳定，但对缺失信息的处理和后续动作结构仍不一致。AI 已根据异常项生成首轮候选修改方案。"
-          : anomalies.length
-            ? `第 ${round} 轮已修复主要风险边界问题，当前剩余异常集中在输出格式和待确认字段的一致性。`
-            : `第 ${round} 轮已修复已知异常，关键维度均高于基线，未发现新的明显退化。`,
-        changes: changeSets[Math.min(round, changeSets.length - 1)],
+        diagnosisReady,
+        proposedDiagnosis,
+        proposedChanges,
+        diagnosis: diagnosisReady ? proposedDiagnosis : "",
+        changes: diagnosisReady ? [...proposedChanges] : [],
         createdAt: new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })
       };
       recalculateDebugRoundScores(result, standards);
       return result;
+    }
+    function getUnresolvedDebugAnomalyCount(round) {
+      return round.anomalies.filter((_, index) => !debugReviewedAnomalies.has(`${round.round}:${index}`)).length;
+    }
+    function regenerateDebugDiagnosis(round) {
+      const unresolved = getUnresolvedDebugAnomalyCount(round);
+      if (unresolved) return false;
+      round.diagnosisReady = true;
+      round.diagnosis = round.anomalies.length
+        ? `已结合 ${round.anomalies.length} 项人工复核结果重新生成。${round.proposedDiagnosis}`
+        : round.proposedDiagnosis;
+      round.changes = [...round.proposedChanges];
+      return true;
     }
     function formatDebugScore(score) {
       return Number.isInteger(score) ? String(score) : score.toFixed(1);
@@ -7802,17 +7933,25 @@
         showToast("当前轮次暂无指标评分明细");
         return;
       }
+      const threshold = getDebugModelSettings().anomalyThreshold;
       debugScoreDetailTrigger = document.activeElement;
-      document.getElementById("debugScoreDetailSubtitle").textContent = `${round.round === 0 ? "基线结果" : `第 ${round.round} 轮`} · ${round.evaluations.length} 条 Prompt · 加权总分 ${formatDebugScore(round.score)}`;
+      document.getElementById("debugScoreDetailSubtitle").textContent = `${round.round === 0 ? "基线结果" : `第 ${round.round} 轮`} · ${round.evaluations.length} 条 Prompt · 加权总分 ${formatDebugScore(round.score)} · 异常阈值 ${threshold} 分`;
       document.getElementById("debugScorePromptLegend").innerHTML = round.evaluations.map((evaluation, index) => `<div><b>P${index + 1}</b><span>${escapeHtml(evaluation.task)}</span></div>`).join("");
       document.getElementById("debugScoreDetailHead").innerHTML = `<th>维度</th><th>指标</th><th>权重</th>${round.evaluations.map((_, index) => `<th>P${index + 1}</th>`).join("")}<th>平均分</th>`;
       document.getElementById("debugScoreDetailBody").innerHTML = standards.map((standard, criterionIndex) => {
         const promptScores = round.evaluations.map(evaluation => getDebugEvaluationScores(evaluation, standards)[criterionIndex]);
         const scoreCells = promptScores.map((score, promptIndex) => {
           const isHumanScore = round.evaluations[promptIndex].humanScores.length === standards.length;
-          return `<td class="${isHumanScore ? "human-score" : ""}" title="${isHumanScore ? "人工评分" : "AI 评分"}">${formatDebugScore(score)}</td>`;
+          const isLowScore = score < threshold;
+          const scoreClass = isLowScore ? "score-low" : isHumanScore ? "human-score" : "";
+          const scoreSource = isHumanScore ? "人工评分" : "AI 评分";
+          const scoreTitle = isLowScore ? `${scoreSource} · 低于异常阈值 ${threshold} 分` : scoreSource;
+          return `<td class="${scoreClass}" title="${scoreTitle}">${formatDebugScore(score)}</td>`;
         }).join("");
-        return `<tr><td>${escapeHtml(standard.dimension)}</td><td>${escapeHtml(standard.indicator)}</td><td>${escapeHtml(standard.weight)}</td>${scoreCells}<td class="average">${formatDebugScore(round.indicatorScores[criterionIndex])}</td></tr>`;
+        const averageScore = round.indicatorScores[criterionIndex];
+        const averageClass = averageScore < threshold ? "average score-low" : "average";
+        const averageTitle = averageScore < threshold ? `低于异常阈值 ${threshold} 分` : "逐题平均分";
+        return `<tr><td>${escapeHtml(standard.dimension)}</td><td>${escapeHtml(standard.indicator)}</td><td>${escapeHtml(standard.weight)}</td>${scoreCells}<td class="${averageClass}" title="${averageTitle}">${formatDebugScore(averageScore)}</td></tr>`;
       }).join("");
       const modal = document.getElementById("debugScoreDetailModal");
       modal.classList.add("open");
@@ -7863,7 +8002,7 @@
       modal.setAttribute("aria-hidden", "false");
       modal.querySelector("[data-debug-human-score]")?.focus();
     }
-    function submitDebugHumanReview() {
+    function submitDebugHumanReview({ reusedAi = false } = {}) {
       if (!activeDebugHumanReview) return;
       const round = debugTestRounds[activeDebugHumanReview.roundIndex];
       const anomaly = round?.anomalies[activeDebugHumanReview.anomalyIndex];
@@ -7878,9 +8017,25 @@
       anomaly.score = total;
       recalculateDebugRoundScores(round, standards);
       debugReviewedAnomalies.add(`${round.round}:${activeDebugHumanReview.anomalyIndex}`);
+      const diagnosisRegenerated = regenerateDebugDiagnosis(round);
       closeDebugHumanReview();
       renderDebugTestWorkspace();
-      showToast(`已采用人评分数 ${formatDebugScore(total)} 分`);
+      const saveMessage = reusedAi
+        ? `已复用 AI 分数 ${formatDebugScore(total)} 分并完成复核`
+        : `已保存人评分数 ${formatDebugScore(total)} 分`;
+      showToast(`${saveMessage}${diagnosisRegenerated ? "，并重新生成 AI 诊断" : ""}`);
+    }
+    function reuseDebugAiScores() {
+      if (!activeDebugHumanReview) return;
+      const round = debugTestRounds[activeDebugHumanReview.roundIndex];
+      const anomaly = round?.anomalies[activeDebugHumanReview.anomalyIndex];
+      if (!anomaly) return;
+      document.querySelectorAll("[data-debug-human-score]").forEach((input, index) => {
+        input.value = String(anomaly.aiScores[index] ?? anomaly.aiScore);
+        input.setAttribute("aria-invalid", "false");
+      });
+      updateDebugHumanReviewTotal();
+      submitDebugHumanReview({ reusedAi: true });
     }
     function renderDebugTestWorkspace() {
       const settings = getDebugModelSettings();
@@ -7919,14 +8074,22 @@
       document.getElementById("debugTestRoundTabs").innerHTML = debugTestRounds.map((item, index) => `<button class="${index === activeDebugTestRoundIndex ? "active" : ""}" type="button" data-debug-test-round="${index}">${item.round === 0 ? "基线" : `第 ${item.round} 轮`} · ${formatDebugScore(item.score)} 分</button>`).join("");
       document.getElementById("debugRoundScoreLabel").textContent = selected.round === 0 ? "基线结果" : `第 ${selected.round} 轮`;
       document.getElementById("debugScoreBreakdown").innerHTML = selected.dimensions.map(item => `<div class="debug-score-row"><span>${escapeHtml(item.label)}</span><div class="debug-score-track"><i style="width:${item.score}%"></i></div><strong>${formatDebugScore(item.score)}</strong></div>`).join("");
-      document.getElementById("debugDiagnosisSummary").textContent = selected.diagnosis;
-      document.getElementById("debugChangeList").innerHTML = selected.changes.map(change => `<li>${escapeHtml(change)}</li>`).join("");
+      const unresolved = getUnresolvedDebugAnomalyCount(selected);
+      const diagnosisPending = !selected.diagnosisReady;
+      document.getElementById("debugDiagnosisSummary").textContent = diagnosisPending
+        ? `仍有 ${unresolved} 项异常待人工复核。完成后将依据最终评分重新生成诊断与修改建议。`
+        : selected.diagnosis;
+      const changeList = document.getElementById("debugChangeList");
+      changeList.hidden = diagnosisPending;
+      changeList.innerHTML = diagnosisPending ? "" : selected.changes.map(change => `<li>${escapeHtml(change)}</li>`).join("");
       const diagnosisState = document.getElementById("debugDiagnosisState");
-      diagnosisState.textContent = selected.applied ? "已应用" : "未应用";
+      diagnosisState.textContent = selected.applied ? "已应用" : diagnosisPending ? "等待复核" : "未应用";
       diagnosisState.classList.toggle("green", selected.applied);
       diagnosisState.classList.toggle("amber", !selected.applied);
-      const unresolved = selected.anomalies.filter((_, index) => !debugReviewedAnomalies.has(`${selected.round}:${index}`)).length;
-      document.getElementById("debugReviewProgress").textContent = selected.anomalies.length ? `${unresolved} 项待复核` : "无异常";
+      const reviewProgress = document.getElementById("debugReviewProgress");
+      reviewProgress.textContent = selected.anomalies.length ? unresolved ? `${unresolved} 项待复核` : "已完成复核" : "无异常";
+      reviewProgress.classList.toggle("green", unresolved === 0);
+      reviewProgress.classList.toggle("amber", unresolved > 0);
       document.getElementById("debugAnomalyList").innerHTML = selected.anomalies.length
         ? selected.anomalies.map((item, index) => {
             const key = `${selected.round}:${index}`;
@@ -7934,15 +8097,21 @@
             const scoreMeta = item.humanScore === null
               ? `AI 评分 ${formatDebugScore(item.aiScore)}`
               : `AI 评分 ${formatDebugScore(item.aiScore)} · 人评 ${formatDebugScore(item.humanScore)}（最终）`;
-            return `<article class="debug-anomaly${reviewed ? " resolved" : ""}"><div><div class="debug-anomaly-title">${escapeHtml(item.task)}</div><div class="debug-anomaly-copy">${escapeHtml(item.reason)}</div><div class="debug-anomaly-meta"><span>${scoreMeta}</span><span>建议：${escapeHtml(item.suggestion)}</span></div></div><button class="btn btn-soft" type="button" data-debug-review-anomaly="${index}">${reviewed ? "查看人评" : "人工复核"}</button></article>`;
+            return `<article class="debug-anomaly${reviewed ? " resolved" : ""}"><div><div class="debug-anomaly-title-row"><div class="debug-anomaly-title">${escapeHtml(item.task)}</div>${reviewed ? '<span class="pill green">已复核</span>' : ""}</div><div class="debug-anomaly-copy">${escapeHtml(item.reason)}</div><div class="debug-anomaly-meta"><span>${scoreMeta}</span><span>建议：${escapeHtml(item.suggestion)}</span></div></div><button class="btn btn-soft" type="button" data-debug-review-anomaly="${index}">${reviewed ? "查看人评" : "人工复核"}</button></article>`;
           }).join("")
         : `<div class="debug-anomaly resolved"><div><div class="debug-anomaly-title">本轮未发现需要人工复核的异常</div><div class="debug-anomaly-copy">所有样本均达到当前理想结果标准，且未出现相较基线的明显退化。</div></div></div>`;
-      const canFinish = debugTestRounds.length > 1;
-      document.getElementById("continueDebugOptimization").textContent = `迭代并测试第 ${debugTestRounds.length} 轮`;
+      const latestReady = latest.diagnosisReady;
+      const canFinish = debugTestRounds.length > 1 && latestReady;
+      const continueButton = document.getElementById("continueDebugOptimization");
+      continueButton.textContent = `迭代并测试第 ${debugTestRounds.length} 轮`;
+      continueButton.disabled = !latestReady;
+      continueButton.title = latestReady ? "" : "请先完成人工复核";
       const finishButton = document.getElementById("finishDebugTesting");
       finishButton.hidden = !canFinish;
       finishButton.disabled = !canFinish;
-      document.getElementById("debugIterationHint").textContent = canFinish
+      document.getElementById("debugIterationHint").textContent = !latestReady
+        ? `请先完成 ${getUnresolvedDebugAnomalyCount(latest)} 项人工复核，系统将据此重新生成诊断与建议。`
+        : canFinish
         ? `当前候选较基线提升 ${formatDebugScore(latestDelta)} 分，可继续优化或进入最终验证。`
         : "AI 已根据基线异常生成修改建议，可开始第一轮优化。";
     }
@@ -7957,6 +8126,10 @@
     }
     function runDebugTest(isBaseline = false) {
       if (debugTestRunning) return;
+      if (!isBaseline && !debugTestRounds[debugTestRounds.length - 1]?.diagnosisReady) {
+        showToast("请先完成当前轮次的人工复核");
+        return;
+      }
       debugTestRunning = true;
       const trigger = isBaseline ? document.getElementById("runDebugBaseline") : document.getElementById("continueDebugOptimization");
       const originalLabel = trigger.textContent;
@@ -8185,7 +8358,8 @@
       input.setAttribute("aria-invalid", String(input.value !== "" && (Number(input.value) < 0 || Number(input.value) > 100)));
       updateDebugHumanReviewTotal();
     });
-    document.getElementById("submitDebugHumanReview").addEventListener("click", submitDebugHumanReview);
+    document.getElementById("submitDebugHumanReview").addEventListener("click", () => submitDebugHumanReview());
+    document.getElementById("reuseDebugAiScores").addEventListener("click", reuseDebugAiScores);
     document.querySelectorAll("[data-close-debug-human-review]").forEach(button => button.addEventListener("click", closeDebugHumanReview));
     document.getElementById("debugHumanReviewModal").addEventListener("click", event => {
       if (event.target === event.currentTarget) closeDebugHumanReview();

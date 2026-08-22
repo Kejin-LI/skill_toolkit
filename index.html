@@ -533,7 +533,7 @@
     .scene-foot span { display: inline-flex; align-items: center; gap: 5px; }
 
     /* scene library */
-    .scene-library { max-width: 1240px; }
+    .scene-library { width: 100%; max-width: 1240px; margin-inline: auto; }
     .library-head {
       display: flex; align-items: flex-start; justify-content: space-between;
       gap: 24px; margin-bottom: 28px;
@@ -707,7 +707,7 @@
     .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; }
 
     /* scene detail */
-    .detail-shell { max-width: 1240px; }
+    .detail-shell { width: 100%; max-width: 1240px; margin-inline: auto; }
     .back-link {
       display: inline-flex; align-items: center; gap: 7px;
       margin: 0 0 18px; padding: 0; color: var(--muted);
@@ -886,13 +886,15 @@
     }
     .skill-create-title { margin: 0; font-size: 22px; font-weight: 760; letter-spacing: 0; }
     .skill-create-sub { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
-    .skill-create-layout { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 18px; align-items: start; }
-    .skill-create-steps { position: sticky; top: 12px; display: grid; gap: 8px; }
+    .skill-create-layout { display: grid; gap: 14px; }
+    .skill-create-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
     .skill-create-step {
-      display: grid;
-      gap: 4px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
       width: 100%;
-      padding: 12px;
+      min-height: 48px;
+      padding: 11px 13px;
       border-radius: 8px;
       background: var(--surface-soft);
       color: var(--muted);
@@ -901,8 +903,8 @@
     }
     .skill-create-step.active { background: var(--violet-bg); color: var(--primary-ink); }
     .skill-create-step.done { color: var(--primary-ink); }
-    .skill-create-step b { font-size: 12px; }
-    .skill-create-step span { font-size: 12px; }
+    .skill-create-step b { flex: 0 0 auto; font-size: 12px; }
+    .skill-create-step span { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
     .skill-create-main { display: grid; gap: 14px; min-width: 0; }
     .skill-create-card { padding: 18px; }
     .skill-create-panel { display: none; }
@@ -934,10 +936,24 @@
       padding-top: 14px;
       border-top: 1px solid var(--line);
     }
-    .sampling-mode { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
-    .sampling-mode button { height: 30px; padding: 0 10px; border-radius: 6px; color: var(--muted); font-size: 12px; font-weight: 650; }
-    .sampling-mode button.active { background: #fff; color: var(--primary-ink); box-shadow: 0 1px 3px rgba(20,20,45,.08); }
+    .sampling-label { color: var(--muted); font-size: 12px; font-weight: 650; }
     .sampling-value { width: 92px; height: 36px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 7px; background: #fff; font-size: 12px; }
+    .sampling-unit { color: var(--muted); font-size: 12px; }
+    .learning-retrieval-config { display: flex; align-items: center; gap: 10px; margin-top: 14px; margin-bottom: 18px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
+    .learning-retrieval-config input { position: absolute; opacity: 0; pointer-events: none; }
+    .learning-retrieval-switch { position: relative; flex: 0 0 auto; width: 38px; height: 22px; margin-top: 1px; border-radius: 999px; background: #b7bdc8; cursor: pointer; transition: background .18s ease; }
+    .learning-retrieval-switch::after { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(18,24,40,.2); content: ""; transition: transform .18s ease; }
+    #learningWebRetrieval:checked + .learning-retrieval-switch { background: var(--primary); }
+    #learningWebRetrieval:checked + .learning-retrieval-switch::after { transform: translateX(16px); }
+    .learning-retrieval-copy { display: flex; align-items: center; gap: 8px; min-width: 0; cursor: pointer; }
+    .learning-retrieval-copy b { font-size: 12.5px; }
+    .learning-retrieval-copy > span { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+    .retrieval-tooltip { position: relative; display: inline-grid; place-items: center; color: var(--muted); cursor: help; }
+    .retrieval-tooltip svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+    .retrieval-tooltip-copy { position: absolute; z-index: 8; bottom: calc(100% + 8px); left: 50%; width: 280px; padding: 9px 10px; border-radius: 7px; background: #242637; color: #fff; font-size: 11.5px; font-weight: 500; line-height: 1.5; white-space: normal; opacity: 0; pointer-events: none; transform: translate(-50%, 4px); transition: opacity .16s ease, transform .16s ease; }
+    .retrieval-tooltip:hover .retrieval-tooltip-copy, .retrieval-tooltip:focus .retrieval-tooltip-copy { opacity: 1; transform: translate(-50%, 0); }
+    .ideal-standard-field { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .ideal-standard-field .textarea { min-height: 88px; }
     .sample-basket-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 16px 0 8px; }
     .sample-basket-head b { font-size: 13px; }
     .sample-basket-head span { color: var(--muted); font-size: 12px; }
@@ -954,10 +970,66 @@
       cursor: pointer;
     }
     .learning-sample.active { border-color: rgba(108,92,231,.45); background: rgba(108,92,231,.055); }
+    .learning-sample.preview { grid-template-columns: minmax(0, 1fr); }
     .learning-sample b { display: block; font-size: 13px; }
     .learning-sample small { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.45; }
     .learning-sample-attachments { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .learning-sample-attachment { display: inline-flex; align-items: center; min-height: 21px; padding: 0 7px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--muted); font-size: 10.5px; }
+    .create-panel-actions { display: flex; justify-content: flex-end; margin-top: 16px; }
+    .learning-annotation-head { align-items: flex-start; }
+    .learning-annotation-layout { display: grid; grid-template-columns: 218px minmax(0, 1fr); gap: 18px; min-height: 500px; }
+    .annotation-queue { display: grid; align-content: start; gap: 6px; padding-right: 14px; border-right: 1px solid var(--line); }
+    .annotation-queue-item { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; width: 100%; padding: 9px 8px; border: 1px solid transparent; border-radius: 7px; color: var(--text); text-align: left; cursor: pointer; }
+    .annotation-queue-item:hover { background: var(--surface-soft); }
+    .annotation-queue-item.active { border-color: rgba(108,92,231,.35); background: var(--violet-bg); }
+    .annotation-queue-number { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #eef0f4; color: #89909d; font-size: 11px; font-weight: 700; }
+    .annotation-queue-item.complete .annotation-queue-number { background: rgba(45,160,105,.18); color: #197c50; }
+    .annotation-queue-copy { min-width: 0; }
+    .annotation-queue-copy b { display: block; overflow: hidden; font-size: 11.5px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+    .annotation-queue-copy small { display: block; margin-top: 3px; color: var(--faint); font-size: 10.5px; }
+    .annotation-workspace { min-width: 0; }
+    .annotation-prompt { padding: 13px 14px; border-left: 3px solid var(--primary); background: var(--surface-soft); }
+    .annotation-kicker { color: var(--primary-ink); font-size: 11px; font-weight: 750; }
+    .annotation-prompt p { margin: 7px 0 0; font-size: 14px; font-weight: 650; line-height: 1.55; }
+    .annotation-mode { display: inline-flex; gap: 3px; margin-top: 16px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
+    .annotation-type-label { margin-top: 16px; color: var(--muted); font-size: 12px; font-weight: 650; }
+    .annotation-type-label + .annotation-mode { margin-top: 6px; }
+    .annotation-type-label + .learning-retrieval-config { margin-top: 6px; }
+    .annotation-mode button { height: 30px; padding: 0 11px; border-radius: 6px; color: var(--muted); font-size: 12px; font-weight: 650; }
+    .annotation-mode button.active { background: #fff; color: var(--primary-ink); box-shadow: 0 1px 3px rgba(20,20,45,.08); }
+    .annotation-mode-panel { display: none; margin-top: 14px; }
+    .annotation-mode-panel.active { display: block; }
+    .annotation-help { margin-bottom: 10px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .model-response-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .model-response { display: flex; flex-direction: column; height: 390px; min-height: 390px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; cursor: grab; user-select: none; }
+    .model-response:first-child { border-color: rgba(108,92,231,.55); background: #fbfaff; }
+    .model-response:active { cursor: grabbing; }
+    .model-response.dragging { opacity: .7; border-color: var(--primary); cursor: grabbing; }
+    .model-response.drag-over { border-color: var(--primary); background: var(--violet-bg); }
+    .model-response-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .model-response-name, .model-response-rank { color: var(--primary-ink); font-size: 12px; font-weight: 750; }
+    .model-response-rank { font-size: 11px; }
+    .model-response p { flex: 1; margin: 12px 0; color: var(--text); font-size: 12px; line-height: 1.55; }
+    #modelResponseGrid .model-feedback { flex: 0 0 112px; display: grid; gap: 6px; padding-top: 8px; border-top: 1px solid var(--line); }
+    #modelResponseGrid .model-feedback label { display: grid; gap: 3px; color: var(--muted); font-size: 11px; font-weight: 650; }
+    #modelResponseGrid .model-feedback .textarea { box-sizing: border-box; height: 40px; min-height: 40px; max-height: 40px; padding: 6px 8px; font-size: 11px; line-height: 1.35; resize: none; }
+    .learning-supplement-feedback { margin-top: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-soft); }
+    .learning-supplement-feedback h4 { margin: 0; font-size: 13px; }
+    .learning-supplement-feedback > p { margin: 5px 0 12px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .annotation-dimensions { display: flex; flex-wrap: wrap; gap: 7px; }
+    .annotation-dimensions button { min-height: 30px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 7px; background: #fff; color: var(--muted); font-size: 11.5px; font-weight: 650; }
+    .annotation-dimensions button.active { border-color: var(--primary); background: var(--violet-bg); color: var(--primary-ink); }
+    .annotation-feedback-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 12px; margin-top: 14px; }
+    .annotation-feedback-fields .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .annotation-feedback-fields .field label { flex: 0 0 20px; min-height: 20px; }
+    .annotation-mode-panel .annotation-feedback-fields .textarea { box-sizing: border-box; flex: 0 0 auto; min-height: 100px; height: 100px; }
+    .annotation-mode-panel .field + .field { margin-top: 12px; }
+    .annotation-mode-panel .textarea { min-height: 120px; }
+    .field-required, .field-optional { margin-left: 6px; font-size: 10.5px; font-weight: 600; }
+    .field-required { color: #c44848; }
+    .field-optional { color: var(--faint); }
+    .annotation-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .annotation-actions span { color: var(--muted); font-size: 12px; }
     .create-knowledge-list { display: flex; flex-wrap: wrap; gap: 8px; }
     .skill-draft-card { border-color: rgba(45,160,105,.42); }
     .skill-draft-empty { display: grid; gap: 10px; padding: 18px; border: 1px dashed var(--line-strong); border-radius: 8px; background: var(--surface-soft); }
@@ -2257,8 +2329,8 @@
       .connector-page-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-2 { grid-template-columns: 1fr; }
       .detail-layout { grid-template-columns: 1fr; }
-      .skill-create-layout { grid-template-columns: 1fr; }
-      .skill-create-steps { position: static; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .learning-annotation-layout { grid-template-columns: 1fr; }
+      .annotation-queue { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0 0 12px; border-right: 0; border-bottom: 1px solid var(--line); }
       .studio-layout { grid-template-columns: 1fr; }
       .generate-review { height: auto; min-height: auto; }
       .review-layout, .review-layout.has-generated, .review-layout:has(.generated-skill-view:not([hidden])) { grid-template-columns: 1fr; gap: 20px; }
@@ -2280,6 +2352,13 @@
       .atomic-grid, .asset-summary { grid-template-columns: 1fr; }
       .skill-create-head { flex-direction: column; }
       .skill-create-steps { grid-template-columns: 1fr; }
+      .learning-data-grid, .model-response-grid { grid-template-columns: 1fr; }
+      .learning-retrieval-config { align-items: flex-start; }
+      .learning-retrieval-copy { flex-wrap: wrap; row-gap: 4px; }
+      .retrieval-tooltip-copy { left: auto; right: 0; transform: translate(0, 4px); }
+      .retrieval-tooltip:hover .retrieval-tooltip-copy, .retrieval-tooltip:focus .retrieval-tooltip-copy { transform: translate(0, 0); }
+      .annotation-feedback-fields { grid-template-columns: 1fr; }
+      .annotation-queue { grid-template-columns: 1fr; }
       .example-grid { grid-template-columns: 1fr; }
       .create-title { font-size: 24px; }
       .hero-title { font-size: 34px; }
@@ -2792,44 +2871,51 @@
             <div class="skill-create-layout">
               <aside class="skill-create-steps" aria-label="创建技能流程">
                 <button class="skill-create-step active" type="button" data-create-step="1" aria-selected="true"><b>第一步</b><span>选择学习数据</span></button>
-                <button class="skill-create-step" type="button" data-create-step="2" aria-selected="false"><b>第二步</b><span>设定理想标准</span></button>
+                <button class="skill-create-step" type="button" data-create-step="2" aria-selected="false"><b>第二步</b><span>学习标注</span></button>
                 <button class="skill-create-step" type="button" data-create-step="3" aria-selected="false"><b>第三步</b><span>生成并保存</span></button>
               </aside>
 
               <div class="skill-create-main">
                 <section class="card skill-create-card skill-create-panel active" data-create-panel="1">
-                  <div class="card-head"><div><div class="card-title">选择学习数据</div><div class="skill-meta">先选场景数据，再抽取代表性 Prompt；保留评测数据默认不参与学习。学习会自动参考 GPT-5.5、Seed-Reasoner 和 Claude Sonnet 4 的优质输出。</div></div><span class="pill" id="learningSampleCount">智能抽样 50 条</span></div>
+                  <div class="card-head"><div><div class="card-title">选择学习数据</div><div class="skill-meta">仅从学习集随机抽取 Prompt，抽取后可通过模型偏好排序或人工标准答案提供学习信号。</div></div><span class="pill" id="learningSampleCount">随机抽取 5 条</span></div>
                   <div class="learning-data-grid" id="learningDatasetList">
-                    <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="40"><span><b>销售会议 Golden Set</b><small>核心意图、字段抽取、跟进动作 · 覆盖 8 个标签</small></span><em class="learning-dataset-count">40 条</em></label>
-                    <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="36"><span><b>CRM 回归样例</b><small>客户匹配、联系人歧义、写入风险 · 最近用于 V3</small></span><em class="learning-dataset-count">36 条</em></label>
-                    <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="3200"><span><b>历史真实任务池</b><small>销售会议真实请求沉淀，按标签和难度分层抽样</small></span><em class="learning-dataset-count">3200 条</em></label>
-                    <label class="learning-dataset disabled"><input type="checkbox" disabled data-dataset-size="56"><span><b>Blind Set #3</b><small>保留评测数据，不进入学习抽样，避免结果泄漏</small></span><em class="learning-dataset-count">56 条</em></label>
+                    <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="40"><span><b>销售会议 Golden Set</b></span><em class="learning-dataset-count">40 条</em></label>
+                    <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="36"><span><b>CRM 回归样例</b></span><em class="learning-dataset-count">36 条</em></label>
+                    <label class="learning-dataset active"><input type="checkbox" checked data-dataset-size="3200"><span><b>历史真实任务池</b></span><em class="learning-dataset-count">3200 条</em></label>
                   </div>
                   <div class="sampling-config" aria-label="学习数据抽样配置">
-                    <div class="sampling-mode" id="samplingMode">
-                      <button class="active" type="button" data-sampling-mode="smart">智能抽样</button>
-                      <button type="button" data-sampling-mode="count">随机 N 条</button>
-                      <button type="button" data-sampling-mode="percent">随机 N%</button>
-                    </div>
-                    <input class="sampling-value" id="samplingValue" type="number" min="1" max="200" value="50" aria-label="抽样数量">
+                    <label class="sampling-label" for="samplingValue">随机抽取</label>
+                    <input class="sampling-value" id="samplingValue" type="number" min="1" max="3276" value="5" aria-label="抽样数量">
+                    <span class="sampling-unit">条 Prompt</span>
                     <button class="btn btn-soft" id="rerollLearningSamples" type="button">重新抽样</button>
                   </div>
                   <div class="sample-basket-head">
                     <b>样本预览</b>
-                    <span id="sampleBasketSummary">来自 3 个数据集，预览 5 条代表性 Prompt</span>
+                    <span id="sampleBasketSummary">来自 3 个学习集，共抽取 5 条 Prompt</span>
                   </div>
-                  <div class="learning-sample-list" id="learningSampleList" data-sample-count="50">
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>客户确认下周三前完成试点，需要提取预算状态、决策人和下一步动作。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">会议纪要_0421.docx</span></span></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>会议中同时出现总部和华东分部联系人，需要判断是否可以直接匹配 CRM。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">客户联系人表.xlsx</span><span class="learning-sample-attachment">会议纪要_0424.docx</span></span></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>金额、合同状态和商机阶段涉及受控字段，低置信度时必须进入人工确认。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">CRM 字段字典.pdf</span><span class="learning-sample-attachment">写入规范.md</span></span></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>将跨部门会议中的客户异议归并为 CRM 下一步行动，并标记需要销售确认的事项。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">会议录音转写.txt</span></span></span></label>
-                    <label class="learning-sample active"><input type="checkbox" checked><span><b>预算审批缺失但客户要求推进交付排期，需要输出待确认字段和阻断原因。</b><span class="learning-sample-attachments"><span class="learning-sample-attachment">项目排期.xlsx</span><span class="learning-sample-attachment">审批记录.pdf</span></span></span></label>
-                  </div>
+                  <div class="learning-sample-list" id="learningSampleList" data-sample-count="5"></div>
+                  <div class="field ideal-standard-field"><label for="idealResultStandard">理想结果标准<span class="field-optional">选填</span></label><textarea class="textarea" id="idealResultStandard" placeholder="例如：字段必须可直接映射至 CRM；不确定信息明确标记待确认；输出包含可执行的下一步动作。"></textarea></div>
+                  <div class="create-panel-actions"><button class="btn btn-primary" id="startLearningAnnotation" type="button">开始学习标注</button></div>
                 </section>
 
                 <section class="card skill-create-card skill-create-panel" data-create-panel="2">
-                  <div class="card-head"><div><div class="card-title">设定理想标准</div><div class="skill-meta">选填，用于约束输出结构、风险边界和业务偏好。</div></div></div>
-                  <textarea class="textarea" id="idealSkillStandard" placeholder="例如：必须输出 CRM 字段映射；低置信度客户匹配必须阻断写入；金额、合同状态和商机阶段必须给出人工确认问题。"></textarea>
+                  <div class="card-head learning-annotation-head"><div><div class="card-title">学习标注</div><div class="skill-meta">先判断 Prompt 属于开放式或封闭式问题，再按对应规则完成标注。</div></div><span class="pill" id="learningAnnotationProgress">已完成 0/5</span></div>
+                  <div class="annotation-type-label">模型候选生成设置</div>
+                  <label class="learning-retrieval-config" for="learningWebRetrieval">
+                    <input id="learningWebRetrieval" type="checkbox" checked>
+                    <span class="learning-retrieval-switch" aria-hidden="true"></span>
+                    <span class="learning-retrieval-copy"><b>允许模型按需联网检索</b><span class="retrieval-tooltip" tabindex="0" role="img" aria-label="查看联网检索说明"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6M12 7h.01"></path></svg><span class="retrieval-tooltip-copy">三个模型会根据当前 Prompt 自主判断是否检索、检索什么，单题最多 3 轮；任务材料已包含全部依据时通常不会检索。关闭后仅使用模型自身知识。</span></span></span>
+                  </label>
+                  <div class="learning-annotation-layout">
+                    <aside class="annotation-queue" id="annotationQueue" aria-label="学习样本列表"></aside>
+                    <div class="annotation-workspace">
+                      <div class="annotation-prompt"><span class="annotation-kicker" id="annotationPromptIndex">学习 Prompt 1</span><p id="annotationPromptText"></p><div class="learning-sample-attachments" id="annotationPromptAttachments"></div></div>
+                      <div class="annotation-type-label">判断 Prompt 类型<span class="field-required">必选</span></div><div class="annotation-mode" id="annotationMode" role="tablist" aria-label="题目类型"><button type="button" data-annotation-mode="ranking" role="tab" aria-selected="false">开放式问题</button><button type="button" data-annotation-mode="answer" role="tab" aria-selected="false">封闭式问题</button></div>
+                      <div class="annotation-mode-panel" data-annotation-panel="ranking"><div class="annotation-help">开放式问题没有唯一正确答案。<span id="learningRetrievalStatus"></span>拖动模型卡片调整名次，并选择第 1 名和第 3 名的主要差异维度。</div><div class="model-response-grid" id="modelResponseGrid"></div><section class="learning-supplement-feedback"><h4>补充反馈</h4><p>说明第 1 名和第 3 名的关键差别，并明确下一版的改进方向。</p><div class="field"><label>第 1 名和第 3 名的主要差异维度<span class="field-required">必选</span></label><div class="annotation-dimensions" id="annotationDimensions"><button type="button" data-annotation-dimension="事实准确性">事实准确性</button><button type="button" data-annotation-dimension="覆盖完整度">覆盖完整度</button><button type="button" data-annotation-dimension="定位精确度">定位精确度</button><button type="button" data-annotation-dimension="严重度判断">严重度判断</button><button type="button" data-annotation-dimension="可执行性">可执行性</button><button type="button" data-annotation-dimension="格式与规范">格式与规范</button><button type="button" data-annotation-dimension="幻觉与编造">幻觉与编造</button></div></div><div class="annotation-feedback-fields"><div class="field"><label for="rankingDifference">第 1 名和第 3 名的差异说明<span class="field-optional">选填</span></label><textarea class="textarea" id="rankingDifference" placeholder="说明第一名优于最后一名的关键原因。"></textarea></div><div class="field"><label for="rankingExpectation">期望怎么改<span class="field-optional">选填</span></label><textarea class="textarea" id="rankingExpectation" placeholder="说明希望下一版技能如何改进。"></textarea></div></div></section></div>
+                      <div class="annotation-mode-panel" data-annotation-panel="answer"><div class="field"><label for="standardAnswer">标准答案<span class="field-required">必填</span></label><textarea class="textarea" id="standardAnswer" placeholder="写出面对这条 Prompt 时，技能应该给出的理想结果。"></textarea></div><div class="field"><label for="keyPoints">考点与约束<span class="field-optional">选填</span></label><input class="input" id="keyPoints" placeholder="例如：预算状态、决策人、低置信度阻断写入"></div></div>
+                      <div class="annotation-actions"><span id="annotationStatus">尚未完成标注</span><button class="btn btn-soft" id="nextLearningSample" type="button">下一条</button></div>
+                    </div>
+                  </div>
                 </section>
 
                 <section class="card skill-create-card skill-create-panel skill-draft-card" id="skillDraftCard" data-create-panel="3">
@@ -3917,6 +4003,7 @@
 
     function switchView(name) {
       localStorage.setItem("skillpilot-current-view", name);
+      if (name === "scene-detail" || name === "generate") setSidebarCollapsed(true);
       const currentPageHeaderTitle = document.getElementById("pageHeaderTitle");
       const currentReviewHeader = document.getElementById("reviewHeader");
       const currentDebugHeaderBack = document.getElementById("debugHeaderBack");
@@ -4640,6 +4727,24 @@
     });
 
     let createSkillSceneCard = null;
+    const learningPromptPool = [
+      { id: "meeting-decision", prompt: "客户确认下周三前完成试点，需要提取预算状态、决策人和下一步动作。", attachments: ["会议纪要_0421.docx"] },
+      { id: "contact-match", prompt: "会议中同时出现总部和华东分部联系人，需要判断是否可以直接匹配 CRM。", attachments: ["客户联系人表.xlsx", "会议纪要_0424.docx"] },
+      { id: "controlled-fields", prompt: "金额、合同状态和商机阶段涉及受控字段，低置信度时必须进入人工确认。", attachments: ["CRM 字段字典.pdf", "写入规范.md"] },
+      { id: "objection-action", prompt: "将跨部门会议中的客户异议归并为 CRM 下一步行动，并标记需要销售确认的事项。", attachments: ["会议录音转写.txt"] },
+      { id: "budget-blocker", prompt: "预算审批缺失但客户要求推进交付排期，需要输出待确认字段和阻断原因。", attachments: ["项目排期.xlsx", "审批记录.pdf"] },
+      { id: "renewal-risk", prompt: "客户续约意愿较低，要求识别流失风险、负责人和需要升级处理的事项。", attachments: ["客户回访纪要.docx", "续约台账.xlsx"] },
+      { id: "multi-opportunity", prompt: "同一客户的两个商机在会议中被同时讨论，需要分别归档阶段、金额和下一步。", attachments: ["商机清单.xlsx"] },
+      { id: "missing-owner", prompt: "客户提出技术验证需求，但会议未明确内部负责人，输出待确认项和跟进建议。", attachments: ["技术沟通纪要.md"] }
+    ];
+    const modelOutputTemplates = [
+      ["识别客户为华东区试点项目，预算状态为待确认；决策人信息缺失。建议创建跟进任务并阻断金额写入。", "客户计划下周三完成试点，可推进机会至验证阶段，并记录销售继续跟进。", "输出客户需求、下一步动作和风险提示；对缺失字段统一标记为待补充。"],
+      ["列出候选联系人和所属组织，因总部与华东分部存在歧义，要求人工确认后再匹配 CRM。", "优先匹配最近活跃联系人；若名称一致则自动合并到客户档案。", "提取联系人姓名与职位，并提示存在组织归属冲突。"]
+    ];
+    let learningSamples = [];
+    let learningAnnotations = {};
+    let activeLearningSampleIndex = 0;
+    let draggedLearningModelIndex = "";
     function syncCreateSkillContext() {
       const sceneName = createSkillSceneCard?.dataset.scene || activeSceneCard?.dataset.scene || "销售会议纪要入 CRM";
       document.getElementById("createSceneContext").textContent = sceneName;
@@ -4652,27 +4757,139 @@
       const totalPrompts = selectedDatasets.reduce((sum, input) => sum + Number(input.dataset.datasetSize || 0), 0);
       return { selectedDatasets, totalPrompts };
     }
-    function getSamplingMode() {
-      return document.querySelector("#samplingMode [data-sampling-mode].active")?.dataset.samplingMode || "smart";
-    }
     function getLearningSampleCount() {
       const { selectedDatasets, totalPrompts } = getLearningDatasetStats();
       if (!selectedDatasets.length) return 0;
-      const mode = getSamplingMode();
       const value = Math.max(1, Number(document.getElementById("samplingValue").value || 1));
-      if (mode === "percent") return Math.max(1, Math.min(200, Math.round(totalPrompts * value / 100)));
-      return Math.max(1, Math.min(200, value, totalPrompts));
+      return Math.min(value, totalPrompts);
     }
     function updateLearningSelectionSummary() {
-      const { selectedDatasets } = getLearningDatasetStats();
+      const { selectedDatasets, totalPrompts } = getLearningDatasetStats();
       const sampleCount = getLearningSampleCount();
-      const mode = getSamplingMode();
-      const modeText = mode === "smart" ? "智能抽样" : mode === "count" ? "随机抽样" : "按比例抽样";
-      document.getElementById("learningSampleCount").textContent = selectedDatasets.length ? `${modeText} ${sampleCount} 条` : "未选择数据集";
+      document.getElementById("samplingValue").max = String(totalPrompts || 1);
+      document.getElementById("learningSampleCount").textContent = selectedDatasets.length ? `随机抽取 ${sampleCount} 条` : "未选择学习集";
       document.getElementById("sampleBasketSummary").textContent = selectedDatasets.length
-        ? `来自 ${selectedDatasets.length} 个数据集，预览 5 条代表性 Prompt`
-        : "请先选择至少 1 个可学习数据集";
+        ? `来自 ${selectedDatasets.length} 个学习集，共抽取 ${sampleCount} 条 Prompt`
+        : "请先选择至少 1 个学习集";
       document.getElementById("learningSampleList").dataset.sampleCount = String(sampleCount);
+    }
+    function getSampleAnnotation(sample) {
+      return learningAnnotations[sample.id] || { mode: "", ranks: { 0: 1, 1: 2, 2: 3 }, modelFeedback: {}, dimensions: [], difference: "", expectation: "", answer: "", points: "" };
+    }
+    function isLearningAnnotationComplete(sample) {
+      const annotation = getSampleAnnotation(sample);
+      if (annotation.mode === "ranking") return Object.keys(annotation.ranks).length === 3 && annotation.dimensions.length > 0;
+      if (annotation.mode === "answer") return Boolean(annotation.answer.trim());
+      return false;
+    }
+    function updateLearningAnnotationProgress() {
+      const completed = learningSamples.filter(isLearningAnnotationComplete).length;
+      document.getElementById("learningAnnotationProgress").textContent = `已完成 ${completed}/${learningSamples.length}`;
+      return completed;
+    }
+    function showCreateStepHint(button, message) {
+      promptTooltip.textContent = message;
+      promptTooltip.classList.add("show");
+      const rect = button.getBoundingClientRect();
+      promptTooltip.style.left = `${Math.max(14, Math.min(rect.left, window.innerWidth - 300))}px`;
+      promptTooltip.style.top = `${Math.min(window.innerHeight - 54, rect.bottom + 8)}px`;
+      clearTimeout(showCreateStepHint.timer);
+      showCreateStepHint.timer = setTimeout(() => promptTooltip.classList.remove("show"), 2400);
+    }
+    function renderLearningSamples() {
+      document.getElementById("learningSampleList").innerHTML = learningSamples.map(sample => `<div class="learning-sample preview active"><span><b>${escapeHtml(sample.prompt)}</b><span class="learning-sample-attachments">${sample.attachments.map(file => `<span class="learning-sample-attachment">${escapeHtml(file)}</span>`).join("")}</span></span></div>`).join("");
+    }
+    function drawLearningSamples() {
+      const count = getLearningSampleCount();
+      const shuffled = [...learningPromptPool].sort(() => Math.random() - .5);
+      learningSamples = count ? Array.from({ length: count }, (_, index) => ({ ...shuffled[index % shuffled.length], id: `${shuffled[index % shuffled.length].id}-${index}` })) : [];
+      learningAnnotations = {};
+      activeLearningSampleIndex = 0;
+      renderLearningSamples();
+      renderAnnotationWorkspace();
+    }
+    function moveLearningModelToRank(modelIndex, nextRank) {
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (!sample) return;
+      const annotation = getSampleAnnotation(sample);
+      const ordered = [0, 1, 2].sort((a, b) => annotation.ranks[a] - annotation.ranks[b]);
+      ordered.splice(ordered.indexOf(Number(modelIndex)), 1);
+      ordered.splice(Math.max(0, Math.min(nextRank - 1, ordered.length)), 0, Number(modelIndex));
+      ordered.forEach((id, index) => { annotation.ranks[id] = index + 1; });
+      learningAnnotations[sample.id] = annotation;
+      renderAnnotationWorkspace();
+    }
+    function bindLearningModelDrag(grid) {
+      grid.querySelectorAll("[data-learning-model-card]").forEach(card => {
+        card.querySelectorAll("[data-model-feedback]").forEach(field => {
+          field.addEventListener("input", () => {
+            const sample = learningSamples[activeLearningSampleIndex];
+            if (!sample) return;
+            const annotation = getSampleAnnotation(sample);
+            const modelIndex = card.dataset.learningModelCard;
+            annotation.modelFeedback[modelIndex] = { ...(annotation.modelFeedback[modelIndex] || {}), [field.dataset.modelFeedback]: field.value };
+            learningAnnotations[sample.id] = annotation;
+          });
+          field.addEventListener("dragstart", event => event.preventDefault());
+        });
+        card.addEventListener("dragstart", event => {
+          if (event.target.closest("textarea")) { event.preventDefault(); return; }
+          draggedLearningModelIndex = card.dataset.learningModelCard;
+          card.classList.add("dragging");
+          event.dataTransfer.effectAllowed = "move";
+        });
+        card.addEventListener("dragover", event => { event.preventDefault(); if (card.dataset.learningModelCard !== draggedLearningModelIndex) card.classList.add("drag-over"); });
+        card.addEventListener("dragleave", () => card.classList.remove("drag-over"));
+        card.addEventListener("drop", event => {
+          event.preventDefault();
+          card.classList.remove("drag-over");
+          if (!draggedLearningModelIndex || draggedLearningModelIndex === card.dataset.learningModelCard) return;
+          const cards = [...grid.querySelectorAll("[data-learning-model-card]")];
+          const targetIndex = cards.indexOf(card);
+          moveLearningModelToRank(draggedLearningModelIndex, targetIndex + 1 + (event.clientX > card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2 ? 1 : 0));
+        });
+        card.addEventListener("dragend", () => { draggedLearningModelIndex = ""; grid.querySelectorAll("[data-learning-model-card]").forEach(item => item.classList.remove("dragging", "drag-over")); });
+      });
+    }
+    function renderAnnotationWorkspace() {
+      const sample = learningSamples[activeLearningSampleIndex];
+      updateLearningAnnotationProgress();
+      if (!sample) { document.getElementById("annotationQueue").innerHTML = ""; return; }
+      const annotation = getSampleAnnotation(sample);
+      learningAnnotations[sample.id] = annotation;
+      document.getElementById("annotationQueue").innerHTML = learningSamples.map((item, index) => {
+        const itemAnnotation = getSampleAnnotation(item);
+        const complete = isLearningAnnotationComplete(item);
+        const state = complete ? (itemAnnotation.mode === "ranking" ? "已完成开放式标注" : "已完成标准答案") : !itemAnnotation.mode ? "待选择题型" : itemAnnotation.mode === "ranking" && !itemAnnotation.dimensions.length ? "待选差异维度" : "待写标准答案";
+        return `<button class="annotation-queue-item${index === activeLearningSampleIndex ? " active" : ""}${complete ? " complete" : ""}" type="button" data-learning-sample-index="${index}"><span class="annotation-queue-number">${index + 1}</span><span class="annotation-queue-copy"><b>${escapeHtml(item.prompt)}</b><small>${state}</small></span></button>`;
+      }).join("");
+      document.getElementById("annotationPromptIndex").textContent = `学习 Prompt ${activeLearningSampleIndex + 1}`;
+      document.getElementById("annotationPromptText").textContent = sample.prompt;
+      document.getElementById("annotationPromptAttachments").innerHTML = sample.attachments.map(file => `<span class="learning-sample-attachment">${escapeHtml(file)}</span>`).join("");
+      document.getElementById("learningRetrievalStatus").textContent = document.getElementById("learningWebRetrieval").checked
+        ? "三个模型可按需联网检索（最多 3 轮）。"
+        : "三个模型仅使用自身知识。";
+      document.querySelectorAll("#annotationMode [data-annotation-mode]").forEach(button => { const active = button.dataset.annotationMode === annotation.mode; button.classList.toggle("active", active); button.setAttribute("aria-selected", String(active)); });
+      document.querySelectorAll("[data-annotation-panel]").forEach(panel => panel.classList.toggle("active", panel.dataset.annotationPanel === annotation.mode));
+      const outputs = modelOutputTemplates[activeLearningSampleIndex % modelOutputTemplates.length];
+      const grid = document.getElementById("modelResponseGrid");
+      grid.innerHTML = [0, 1, 2].sort((a, b) => annotation.ranks[a] - annotation.ranks[b]).map((modelIndex, position) => {
+        const feedback = annotation.modelFeedback[modelIndex] || {};
+        return `<article class="model-response" draggable="true" data-learning-model-card="${modelIndex}"><div class="model-response-head"><span class="model-response-name">${["模型 A", "模型 B", "模型 C"][modelIndex]}</span><span class="model-response-rank">第 ${position + 1} 名</span></div><p>${escapeHtml(outputs[modelIndex])}</p><div class="model-feedback"><label>优点<textarea draggable="false" class="textarea" data-model-feedback="pros" placeholder="选填：补充这个回答做得好的地方">${escapeHtml(feedback.pros || "")}</textarea></label><label>缺点<textarea draggable="false" class="textarea" data-model-feedback="cons" placeholder="选填：补充这个回答需要修正的地方">${escapeHtml(feedback.cons || "")}</textarea></label></div></article>`;
+      }).join("");
+      bindLearningModelDrag(grid);
+      document.querySelectorAll("#annotationDimensions [data-annotation-dimension]").forEach(button => button.classList.toggle("active", annotation.dimensions.includes(button.dataset.annotationDimension)));
+      document.getElementById("rankingDifference").value = annotation.difference;
+      document.getElementById("rankingExpectation").value = annotation.expectation;
+      document.getElementById("standardAnswer").value = annotation.answer;
+      document.getElementById("keyPoints").value = annotation.points;
+      document.getElementById("annotationStatus").textContent = isLearningAnnotationComplete(sample)
+        ? `已完成${annotation.mode === "ranking" ? "开放式标注" : "标准答案标注"}`
+        : !annotation.mode ? "请判断 Prompt 类型"
+        : annotation.mode === "ranking" && !annotation.dimensions.length ? "请选择至少一个差异维度"
+        : "请填写标准答案";
+      const allComplete = learningSamples.length > 0 && learningSamples.every(isLearningAnnotationComplete);
+      document.getElementById("nextLearningSample").textContent = allComplete ? "进入第三步生成技能" : activeLearningSampleIndex === learningSamples.length - 1 ? "返回第一条" : "下一条";
     }
     function setCreateStep(step) {
       const currentStep = Number(step);
@@ -4687,21 +4904,16 @@
       });
     }
     function resetCreateSkillPage() {
-      document.querySelectorAll("#learningDatasetList .learning-dataset:not(.disabled)").forEach(dataset => {
+      setSidebarCollapsed(true);
+      document.querySelectorAll("#learningDatasetList .learning-dataset").forEach(dataset => {
         dataset.classList.add("active");
         dataset.querySelector("input").checked = true;
       });
-      document.querySelectorAll("#samplingMode [data-sampling-mode]").forEach(button => button.classList.toggle("active", button.dataset.samplingMode === "smart"));
       const samplingValue = document.getElementById("samplingValue");
-      samplingValue.value = "50";
-      samplingValue.max = "200";
+      samplingValue.value = "5";
       samplingValue.setAttribute("aria-label", "抽样数量");
-      document.querySelectorAll("#learningSampleList .learning-sample").forEach(sample => {
-        sample.classList.add("active");
-        sample.querySelector("input").checked = true;
-      });
       updateLearningSampleCount();
-      document.getElementById("idealSkillStandard").value = "";
+      drawLearningSamples();
       document.getElementById("skillDraftEmpty").hidden = false;
       document.getElementById("skillDraftContent").hidden = true;
       syncCreateSkillContext();
@@ -4733,11 +4945,16 @@
     }
     document.getElementById("backToSceneSkills").addEventListener("click", returnToSceneSkills);
     document.querySelectorAll("[data-create-step]").forEach(button => {
-      button.addEventListener("click", () => setCreateStep(button.dataset.createStep));
-    });
-    document.querySelectorAll("#learningSampleList input").forEach(input => {
-      input.addEventListener("change", () => {
-        input.closest(".learning-sample").classList.toggle("active", input.checked);
+      button.addEventListener("click", () => {
+        const step = Number(button.dataset.createStep);
+        if (step === 3) {
+          const completed = learningSamples.filter(isLearningAnnotationComplete).length;
+          if (!learningSamples.length || completed < learningSamples.length) {
+            showCreateStepHint(button, !learningSamples.length ? "请先抽取学习 Prompt 并完成学习标注" : `第 2 步尚未完成：已完成 ${completed}/${learningSamples.length} 条学习标注`);
+            return;
+          }
+        }
+        setCreateStep(step);
       });
     });
     document.querySelectorAll("#learningDatasetList input").forEach(input => {
@@ -4746,26 +4963,90 @@
         updateLearningSelectionSummary();
       });
     });
-    document.getElementById("samplingMode").addEventListener("click", event => {
-      const mode = event.target.closest("[data-sampling-mode]");
-      if (!mode) return;
-      document.querySelectorAll("#samplingMode [data-sampling-mode]").forEach(button => button.classList.toggle("active", button === mode));
-      const samplingValue = document.getElementById("samplingValue");
-      if (mode.dataset.samplingMode === "percent") {
-        samplingValue.value = "10";
-        samplingValue.max = "100";
-        samplingValue.setAttribute("aria-label", "抽样比例");
-      } else {
-        samplingValue.value = "50";
-        samplingValue.max = "200";
-        samplingValue.setAttribute("aria-label", "抽样数量");
-      }
-      updateLearningSelectionSummary();
-    });
     document.getElementById("samplingValue").addEventListener("input", updateLearningSelectionSummary);
     document.getElementById("rerollLearningSamples").addEventListener("click", () => {
       updateLearningSelectionSummary();
-      showToast("已重新抽取学习样本篮");
+      drawLearningSamples();
+      showToast("已重新抽取学习 Prompt");
+    });
+    document.getElementById("learningWebRetrieval").addEventListener("change", () => {
+      if (Number(document.querySelector(".skill-create-step.active")?.dataset.createStep) === 2) renderAnnotationWorkspace();
+    });
+    document.getElementById("startLearningAnnotation").addEventListener("click", () => {
+      const requestedCount = getLearningSampleCount();
+      if (!requestedCount) return showToast("请至少选择一个学习集并抽取 Prompt");
+      if (learningSamples.length !== requestedCount) drawLearningSamples();
+      setCreateStep(2);
+    });
+    document.getElementById("annotationQueue").addEventListener("click", event => {
+      const item = event.target.closest("[data-learning-sample-index]");
+      if (!item) return;
+      activeLearningSampleIndex = Number(item.dataset.learningSampleIndex);
+      renderAnnotationWorkspace();
+    });
+    document.getElementById("annotationMode").addEventListener("click", event => {
+      const button = event.target.closest("[data-annotation-mode]");
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (!button || !sample) return;
+      learningAnnotations[sample.id] = { ...getSampleAnnotation(sample), mode: button.dataset.annotationMode };
+      renderAnnotationWorkspace();
+    });
+    document.getElementById("annotationDimensions").addEventListener("click", event => {
+      const button = event.target.closest("[data-annotation-dimension]");
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (!button || !sample) return;
+      const annotation = getSampleAnnotation(sample);
+      const dimension = button.dataset.annotationDimension;
+      annotation.dimensions = annotation.dimensions.includes(dimension)
+        ? annotation.dimensions.filter(item => item !== dimension)
+        : [...annotation.dimensions, dimension];
+      learningAnnotations[sample.id] = annotation;
+      renderAnnotationWorkspace();
+    });
+    document.getElementById("rankingDifference").addEventListener("input", event => {
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (sample) learningAnnotations[sample.id] = { ...getSampleAnnotation(sample), difference: event.target.value };
+    });
+    document.getElementById("rankingExpectation").addEventListener("input", event => {
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (sample) learningAnnotations[sample.id] = { ...getSampleAnnotation(sample), expectation: event.target.value };
+    });
+    const rankingFeedbackInputs = [
+      document.getElementById("rankingDifference"),
+      document.getElementById("rankingExpectation")
+    ];
+    let syncingRankingFeedbackHeight = false;
+    const rankingFeedbackResizeObserver = new ResizeObserver(entries => {
+      if (syncingRankingFeedbackHeight || !entries.length) return;
+      const source = entries[entries.length - 1].target;
+      const height = Math.ceil(source.getBoundingClientRect().height);
+      syncingRankingFeedbackHeight = true;
+      rankingFeedbackInputs.forEach(input => {
+        if (input !== source) input.style.height = `${height}px`;
+      });
+      window.requestAnimationFrame(() => { syncingRankingFeedbackHeight = false; });
+    });
+    rankingFeedbackInputs.forEach(input => rankingFeedbackResizeObserver.observe(input));
+    document.getElementById("standardAnswer").addEventListener("input", event => {
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (!sample) return;
+      learningAnnotations[sample.id] = { ...getSampleAnnotation(sample), answer: event.target.value };
+      updateLearningAnnotationProgress();
+      document.getElementById("annotationStatus").textContent = event.target.value.trim() ? "已完成标准答案标注" : "尚未完成标注";
+      const allComplete = learningSamples.length > 0 && learningSamples.every(isLearningAnnotationComplete);
+      document.getElementById("nextLearningSample").textContent = allComplete ? "进入第三步生成技能" : activeLearningSampleIndex === learningSamples.length - 1 ? "返回第一条" : "下一条";
+    });
+    document.getElementById("keyPoints").addEventListener("input", event => {
+      const sample = learningSamples[activeLearningSampleIndex];
+      if (sample) learningAnnotations[sample.id] = { ...getSampleAnnotation(sample), points: event.target.value };
+    });
+    document.getElementById("nextLearningSample").addEventListener("click", () => {
+      if (learningSamples.length && learningSamples.every(isLearningAnnotationComplete)) {
+        setCreateStep(3);
+        return;
+      }
+      activeLearningSampleIndex = (activeLearningSampleIndex + 1) % learningSamples.length;
+      renderAnnotationWorkspace();
     });
     function runCreateDraft() {
       const { selectedDatasets } = getLearningDatasetStats();
@@ -4774,13 +5055,22 @@
         showToast("请至少选择一个可学习数据集");
         return;
       }
-      const standard = document.getElementById("idealSkillStandard").value.trim();
+      const completed = updateLearningAnnotationProgress();
+      if (completed < learningSamples.length) {
+        setCreateStep(2);
+        showToast(`请完成全部学习标注（${completed}/${learningSamples.length}）`);
+        return;
+      }
+      const ranked = learningSamples.filter(sample => isLearningAnnotationComplete(sample) && getSampleAnnotation(sample).mode === "ranking").length;
+      const answered = learningSamples.filter(sample => isLearningAnnotationComplete(sample) && getSampleAnnotation(sample).mode === "answer").length;
       const referenceModels = "GPT-5.5、Seed-Reasoner、Claude Sonnet 4";
       const sceneName = document.getElementById("createSceneContext").textContent.trim();
       const samplingText = document.getElementById("learningSampleCount").textContent.trim();
+      const idealResultStandard = document.getElementById("idealResultStandard").value.trim();
+      const retrievalEnabled = document.getElementById("learningWebRetrieval").checked;
       document.getElementById("newSkillName").value = "extract_sales_meeting_context";
       document.getElementById("newSkillPurpose").value = "基于销售会议纪要提取客户需求、预算状态、决策人、CRM 字段映射和后续跟进动作。";
-      document.getElementById("newSkillDraftCode").textContent = `# extract_sales_meeting_context\n\n## Scene\n${sceneName}\n\n## Learning Data\n- ${samplingText}\n- 数据集：${selectedDatasets.map(input => input.closest(".learning-dataset").querySelector("b").textContent).join("、")}\n\n## SOTA Reference\n自动参考 ${referenceModels} 的优质输出：字段映射明确、风险原因可追溯、下一步动作可执行。\n\n## Ideal Standard\n${standard || "未额外设定，沿用场景数据集、SOTA 优质输出和场景知识库。"}\n\n## Scene Knowledge Base\n自动带入当前场景知识库：CRM 客户字段字典、销售会议纪要规范、业务规则与 SOP。\n\n## Inputs\n- 场景绑定数据集抽取的代表性 Prompt\n- GPT-5.5、Seed-Reasoner、Claude Sonnet 4 的优质输出\n- 当前场景知识库中的字段字典、规则与 SOP\n\n## Guardrails\n- 低置信度客户匹配必须阻断写入。\n- 金额、合同状态和商机阶段必须给出人工确认问题。\n- 不补充输入中不存在的事实。`;
+      document.getElementById("newSkillDraftCode").textContent = `# extract_sales_meeting_context\n\n## Scene\n${sceneName}\n\n## Learning Data\n- ${samplingText}\n- 数据集：${selectedDatasets.map(input => input.closest(".learning-dataset").querySelector("b").textContent).join("、")}\n\n## Learning Signals\n- 已完成 ${completed}/${learningSamples.length} 条标注\n- 模型偏好排序：${ranked} 条\n- 人工标准答案：${answered} 条\n\n## SOTA Reference\n- 候选模型：${referenceModels}\n- 学习阶段联网检索：${retrievalEnabled ? "允许模型自主判断是否检索、检索什么，单题最多 3 轮" : "关闭，仅使用模型自身知识"}\n- 人工偏好和标准答案作为学习依据。\n\n## Ideal Result Standard\n${idealResultStandard || "未额外设置；以学习标注、场景规则和知识库作为质量标准。"}\n\n## Domain Research\n合成前执行领域调研，补充当前场景的术语、规范与业务背景；该环节不受学习阶段联网检索设置影响。\n\n## Scene Knowledge Base\n自动带入当前场景知识库：CRM 客户字段字典、销售会议纪要规范、业务规则与 SOP。\n\n## Inputs\n- 随机抽取的学习集 Prompt\n- 三个 SOTA 模型的候选输出与人工偏好排序\n- 用户填写的标准答案和考点\n- 当前场景知识库中的字段字典、规则与 SOP\n\n## Guardrails\n- 低置信度客户匹配必须阻断写入。\n- 金额、合同状态和商机阶段必须给出人工确认问题。\n- 不补充输入中不存在的事实。`;
       document.getElementById("skillDraftEmpty").hidden = true;
       document.getElementById("skillDraftContent").hidden = false;
       setCreateStep(3);
@@ -7086,6 +7376,7 @@
       }
       switchView(savedView);
     }
+    if (document.getElementById("view-generate").classList.contains("active")) setSidebarCollapsed(true);
   </script>
 </body>
 </html>
